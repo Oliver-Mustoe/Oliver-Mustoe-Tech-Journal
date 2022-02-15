@@ -16,10 +16,14 @@
     # Query "dbconn" and get all of the values from "testexample"
     $rs = pg_query($dbconn, "SELECT * FROM testexample") or die("Cannot execute query \n");
     
-    # Query, get values, then display them on the webpage
-    while ($R = pg_fetch_row($rs)) {
-        echo "$R[0] $R[1] $R[2]\n";
-      }
+    # Query, fetch the values as an associative array, then display them on the webpage using the key values
+    while ($row = pg_fetch_assoc($rs)) {
+        echo $row['Class Number'] . " " . $row['Class'] . " " . $row['Class Time'];
+        echo "\n";
+    }
+
+    # Close Connection
+    pg_close($dbconn);
     ?>
 </body>
 </html>

@@ -13,3 +13,15 @@ https://zhao-li.medium.com/getting-started-with-postgresql-using-docker-compose-
 https://zetcode.com/db/postgresqlphp/read/ 
 
 https://www.php.net/manual/en/pgsql.examples-basic.php 
+
+https://docs.opennms.com/horizon/29/deployment/core/getting-started.html
+
+https://www.tutorialworks.com/container-networking/#:~:text=To%20allow%20two%20Docker%20containers,tables%20on%20your%20operating%20system.
+
+https://forums.docker.com/t/send-commands-to-container/44385
+
+https://stackoverflow.com/questions/34496882/get-docker-container-id-from-container-name
+
+https://www.postgresqltutorial.com/import-csv-file-into-posgresql-table/
+
+https://dataschool.com/learn-sql/importing-data-from-csv-in-postgresql/

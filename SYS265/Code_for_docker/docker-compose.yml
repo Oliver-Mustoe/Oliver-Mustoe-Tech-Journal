@@ -2,9 +2,10 @@
  # Github link if need be: 
 version: "3.9"
 services:
-# Names the postgresql
+# Section for the postgresql setup
   database: 
     image: postgres:14
+    container_name: 'posgresql'
     # Options put into posgresql at start up
     environment:
         - POSTGRES_USER=postgres
@@ -13,9 +14,10 @@ services:
     # Assigns volumes inside the container to outside the container so the data persists and can be easily accessible
     volumes:
       - /var/lib/postgresql/data:/var/lib/postgresql/data
-# Names our PHP image & apache included
+# Secion for PHP image & apache included
   webserver:
     image: php:8.1-apache
+    container_name: 'apache'
     restart: always
     # Assigns volumes inside the container to outside the container so the data persists and can be easily accessible
     volumes:
