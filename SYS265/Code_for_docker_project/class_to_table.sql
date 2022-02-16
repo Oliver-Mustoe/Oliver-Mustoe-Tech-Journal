@@ -5,4 +5,4 @@ CREATE TABLE DataToDisplay (
     Class_Time VARCHAR(50),
     PRIMARY KEY (id)
 )
-COPY DataToDisplay(Class_Number,Class,Class_Time) FROM '/var/lib/postgresql/data/class_info.csv' WITH DELIMITER ',' CSV HEADER;
+\copy DataToDisplay(Class_Number,Class,Class_Time) FROM '/var/lib/postgresql/data/class_info.csv' WITH DELIMITER ',' CSV

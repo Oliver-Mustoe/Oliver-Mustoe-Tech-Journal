@@ -16,7 +16,7 @@ services:
       - /var/lib/postgresql/data:/var/lib/postgresql/data
 # Secion for PHP image & apache included
   webserver:
-    image: php:8.1-apache
+    build: .
     container_name: 'apache'
     restart: always
     # Assigns volumes inside the container to outside the container so the data persists and can be easily accessible
