@@ -18,7 +18,7 @@
     
     # Query, fetch the values as an array of strings, which will display them on the webpage
     while ($row = pg_fetch_row($rs)) {
-        echo "$row[0] $row[1] $row[2]\n";
+        echo "$row[0] $row[1] $row[2] \n";
       }
 
     # Close Connection
