@@ -20,8 +20,8 @@ https://www.tutorialworks.com/container-networking/#:~:text=To%20allow%20two%20D
 
 https://forums.docker.com/t/send-commands-to-container/44385
 
-https://stackoverflow.com/questions/34496882/get-docker-container-id-from-container-name
-
 https://www.postgresqltutorial.com/import-csv-file-into-posgresql-table/
 
 https://dataschool.com/learn-sql/importing-data-from-csv-in-postgresql/
+
+https://stackoverflow.com/questions/34688465/how-do-i-run-a-sql-file-of-inserts-through-docker-run
