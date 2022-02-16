@@ -16,7 +16,7 @@ cat ./class_to_table.sql | docker exec -i postgresql psql -U postgres -d testDB
 # Populate it with my class data
 
 # Copy .php file to the apache container
-docker cp ./index.php apache:/var/www/html/index.php
+docker cp ./index.php apache:./var/www/html/index.php
 
 # Open port for apache
 sudo ufw allow 1492/tcp
