@@ -14,14 +14,26 @@ https://zetcode.com/db/postgresqlphp/read/
 
 https://www.php.net/manual/en/pgsql.examples-basic.php 
 
+https://www.guru99.com/create-drop-table-postgresql.html
+
 https://docs.opennms.com/horizon/29/deployment/core/getting-started.html
 
-https://www.tutorialworks.com/container-networking/#:~:text=To%20allow%20two%20Docker%20containers,tables%20on%20your%20operating%20system.
+https://www.tutorialworks.com/container-networking/#:~:text=To%20allow%20two%20Docker%20containers,tables%20on%20your%20operating%20system. 
 
-https://forums.docker.com/t/send-commands-to-container/44385
+https://forums.docker.com/t/send-commands-to-container/44385 
 
-https://www.postgresqltutorial.com/import-csv-file-into-posgresql-table/
+https://stackoverflow.com/questions/34496882/get-docker-container-id-from-container-name 
 
-https://dataschool.com/learn-sql/importing-data-from-csv-in-postgresql/
+https://www.postgresqltutorial.com/import-csv-file-into-posgresql-table/ 
 
-https://stackoverflow.com/questions/34688465/how-do-i-run-a-sql-file-of-inserts-through-docker-run
+https://dataschool.com/learn-sql/importing-data-from-csv-in-postgresql/ 
+
+https://stackoverflow.com/questions/48692741/how-can-i-make-all-line-endings-eols-in-all-files-in-visual-studio-code-unix
+
+https://docs.docker.com/engine/reference/commandline/network_rm/
+
+https://stackoverflow.com/questions/34688465/how-do-i-run-a-sql-file-of-inserts-through-docker-run 
+
+https://gist.github.com/ben-albon/3c33628662dcd4120bf4 
+
+https://benpetering.com/posts/2020/10/25/php-and-postgres-with-docker.html 

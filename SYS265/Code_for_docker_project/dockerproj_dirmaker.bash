@@ -7,4 +7,6 @@ mkdir -p ~/dockerproject/var/lib/postgresql/data
 mkdir -p ~/dockerproject/var/www/html
 # Make main Apache logging structure
 mkdir -p ~/dockerproject/var/log/apache2
+# Copy all files to the project folder
+cp * ~/dockerproject
 # NOTE: It may generate errors about "\r", from testing this does not seem to affect the wanted outcome of the directory structure
