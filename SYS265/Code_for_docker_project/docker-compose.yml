@@ -16,6 +16,7 @@ services:
       - ./var/lib/postgresql/data:/var/lib/postgresql/data
 # Secion for PHP image & apache included
   webserver:
+  # Build from the Dockerfile
     build: .
     container_name: 'apache'
     restart: always
