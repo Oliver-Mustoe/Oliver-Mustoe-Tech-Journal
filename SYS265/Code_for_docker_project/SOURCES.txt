@@ -1,4 +1,4 @@
-Below are the links to the sources that were used in the creation of the code in this repository:
+Below are the links to the sources that were used in the creation of the code in the "Code_for_docker_project" folder:
 
 https://github.com/zhao-lin-li/postgresql-with-docker-compose/blob/master/docker-compose.yml 
 

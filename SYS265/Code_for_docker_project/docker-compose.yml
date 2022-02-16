@@ -1,5 +1,5 @@
- # Make sure to have created the project folder structure that is talked about on the github
- # Github link if need be: 
+# 2
+# Make sure to have created the project folder structure that is talked about on the github and have moved this file to ~/dockerproject
 version: "3.9"
 services:
 # Section for the postgresql setup
