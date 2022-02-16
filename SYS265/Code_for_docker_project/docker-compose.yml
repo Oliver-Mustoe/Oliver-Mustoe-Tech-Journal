@@ -13,7 +13,7 @@ services:
         - POSTGRES_DB=testDB
     # Assigns volumes inside the container to outside the container so the data persists and can be easily accessible
     volumes:
-      - /var/lib/postgresql/data:/var/lib/postgresql/data
+      - ./var/lib/postgresql/data:/var/lib/postgresql/data
 # Secion for PHP image & apache included
   webserver:
     build: .
@@ -21,8 +21,8 @@ services:
     restart: always
     # Assigns volumes inside the container to outside the container so the data persists and can be easily accessible
     volumes:
-       - /var/www/html:/var/www/html
-       - /var/log/apache2:/var/log/apache2
+       - ./var/www/html:/var/www/html
+       - ./var/log/apache2:/var/log/apache2
     # Assigns port (a host port to : a container port)
     ports:
       - "1492:80"
