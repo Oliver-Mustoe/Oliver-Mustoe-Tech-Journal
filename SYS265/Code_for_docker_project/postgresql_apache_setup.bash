@@ -1,7 +1,7 @@
 #!/bin/bash
 # 3
 # Must have: run dockerproj_dirmaker.bash, have run docker-compose in the projects directory
-# Create a network for the two containers to function in, connect them to it, create table and run .sql file against database, copy needed file to mapped web server directory, open ports
+# Create a network for the two containers to function in, connect them to it, create table and run .sql file against database, copy needed file to mapped web server directory, open port
 # Creates network
 docker network create webdata-network
 
@@ -15,7 +15,7 @@ cat ./class_to_table.sql | docker exec -i postgresql psql -U postgres -d testDB
 # Create a table inside postgresql named "datatodisplay"
 # Populate it with my data (my class data)
 
-# Copy .php file to the mapped web server directory
+# Copy .php file to the mappedc web server directory
 docker cp ./index.php apache:/var/www/html/index.php
 
 # Open port for apache
