@@ -6,12 +6,13 @@
 </header>
 
 <body>
+    <center>
     <p>
         Below is the values entered into the database "testDB" in the table "datatodisplay" :) <br>
-        id|class|class_time| <br>
-        -------------------
     </p>
     <?php
+    echo nl2br( "id|class|class_time| \n
+    -------------------")
     # Contact database made in "docker-compose"
     $dbconn = pg_connect("host=postgresql dbname=testDB user=postgres password=postgres1") or die('Could not connect');
 
@@ -26,5 +27,6 @@
     # Close Connection
     pg_close($dbconn);
     ?>
+    </center>
 </body>
 </html>
