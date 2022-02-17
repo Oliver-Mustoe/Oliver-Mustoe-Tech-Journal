@@ -1,7 +1,7 @@
 #!/bin/bash
 # 3
 # Must have: run dockerproj_dirmaker.bash, have run docker-compose in the projects directory
-# Create a network for the two containers to function in, connect them to it, create table and run .sql file against database, copy needed file to mapped web server directory, open port
+# Create a network for the two containers to function in, connect them to it, run .sql file against database which creates a table with data, copy needed file to mapped web server directory, open port
 # Creates network
 docker network create webdata-network
 
