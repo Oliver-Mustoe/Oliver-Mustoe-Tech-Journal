@@ -26,4 +26,4 @@ services:
        - ./var/log/apache2:/var/log/apache2
     # Assigns port (a host port to : a container port)
     ports:
-      - "1492:80"
+      - "8008:80"

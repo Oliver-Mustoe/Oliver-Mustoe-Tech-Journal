@@ -15,8 +15,8 @@ cat ./class_to_table.sql | docker exec -i postgresql psql -U postgres -d testDB
 # Create a table inside postgresql named "datatodisplay"
 # Populate it with my data (my class data)
 
-# Copy .php file to the mappedc web server directory
+# Copy .php file to the mapped web server directory
 docker cp ./index.php apache:/var/www/html/index.php
 
 # Open port for apache
-sudo ufw allow 1492/tcp
+sudo ufw allow 8008/tcp
