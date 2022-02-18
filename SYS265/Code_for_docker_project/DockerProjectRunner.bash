@@ -9,4 +9,4 @@ cd ~/dockerproject
 # Runs docker-compose (with sudo)
 sudo docker-compose up -d
 # Runs postgresql_apache_setup
-bash postgresql_apache_setup
+bash postgresql_apache_setup.bash
