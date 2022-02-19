@@ -1,6 +1,6 @@
 #!/bin/bash
 # 1
-# Code makes the directory structure used in the project
+# Code makes the directory structure used in the projects
 # Make postgresql structure (-p to make parent directories)
 mkdir -p ~/dockerproject/var/lib/postgresql/data
 # Make main Apache structure
