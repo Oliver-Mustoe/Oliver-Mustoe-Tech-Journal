@@ -1,0 +1,9 @@
+[D78]
+ansible1-oliver
+[webmin]
+ansible2-oliver
+[windows]
+mgmt01-oliver
+wks01-oliver
+[windows:vars]
+ansible_shell_type=powershell
