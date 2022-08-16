@@ -12,7 +12,7 @@ rootssh=${prootssh^^}
 if [[ $rootssh == "Y" ]] || [[ $rootssh == "YES" ]]
 then
     #- use sed to replace a certain string, after first /, with another string to not allow root login, after second /, to ssh_config
-    sudo sed -i 's/#PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
+    sudo sed -i 's/#PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config.d
     # After this process, restart sshd service
     sudo /etc/init.d/sshd restart
 fi
@@ -40,6 +40,7 @@ then
 
 # Test if the result of the command "$(which apt)" as a string is non-zero, -n, if so do yum installation
 elif [[ -n "$(which apt)" ]]
+then
     # Install and start webserver; setup firewall with port 80 open; and make an example "index.html" file as sudo
     sudo su -c "apt update && \
     apt install apache2 && \
