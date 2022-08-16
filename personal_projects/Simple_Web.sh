@@ -12,7 +12,7 @@ rootssh=${prootssh^^}
 if [[ $rootssh == "Y" ]] || [[ $rootssh == "YES" ]]
 then
     #- use sed to replace a certain string, after first /, with another string to not allow root login, after second /, to ssh_config
-    sudo sed -i 's/#PermitRootLogin yes/PermitRootLogin no' /etc/ssh/sshd_config
+    sudo sed -i 's/#PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config
     # After this process, restart sshd service
     sudo /etc/init.d/sshd restart
 fi
