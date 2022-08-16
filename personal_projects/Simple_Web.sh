@@ -11,9 +11,8 @@ rootssh=${prootssh^^}
 # If user answers "Y" or "YES" -
 if [[ $rootssh == "Y" ]] || [[ $rootssh == "YES" ]]
 then
-    #- use sed to replace a certain string, after first /, with another string to not allow root login, after second /, to a tmp copy of "sshd_config", then make that copy and make it the original, delete the copy
-    sudo su -c "sed 's/#PermitRootLogin yes/PermitRootLogin no/' /etc/ssh/sshd_config > /etc/ssh/sshd_config.tmp && mv /etc/ssh/sshd_config.tmp /etc/ssh/sshd_config && rm -f /etc/ssh/sshd_config.tmp"
-    # ^ needs to be done this way for sed to work
+    #- use sed to replace a certain string, after first /, with another string to not allow root login, after second /y (".*" regex for any amount of characters after made string)
+    sudo sed -i 's/#PermitRootLogin .*/PermitRootLogin no/' /etc/ssh/sshd_config
     # After this process, restart sshd service
     sudo /etc/init.d/sshd restart
 fi
@@ -22,7 +21,7 @@ fi
 if [[ -n "$(which yum)" ]]
 then
     # Install and start webserver; setup firewall with port 80 open; and make an example "index.html" file as sudo
-    sudo su -c "yum install httpd && \
+    sudo su -c "yum install httpd -y&& \
     systemctl start httpd && \
     firewall-cmd --permanent --add-port=80/tcp && \
     firewall-cmd --reload && \
@@ -44,7 +43,7 @@ elif [[ -n "$(which apt)" ]]
 then
     # Install and start webserver; setup firewall with port 80 open; and make an example "index.html" file as sudo
     sudo su -c "apt update && \
-    apt install apache2 && \
+    apt install apache2 -y&& \
     ufw enable && ufw allow 'Apache' && \
     echo '<html>
     <head>
