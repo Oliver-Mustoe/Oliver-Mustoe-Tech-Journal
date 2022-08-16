@@ -1,6 +1,6 @@
 #!/bin/bash
 # Version 0.1
-# Description: Creates a simple Apache web server on a CentOS system
+# Description: Creates a simple Apache web server on a CentOS & Ubunut server systems
 
 # Ask whether to disable root SSH
 read -p "Would you like to disable root SSH? y/N: " prootssh
@@ -17,20 +17,56 @@ then
     sudo /etc/init.d/sshd restart
 fi
 
-# Install and start webserver; setup firewall with port 80 open; and make an example "index.html" file as sudo
-sudo su -c "yum install httpd && \
-systemctl start httpd && \
-firewall-cmd --permanent --add-port=80/tcp && \
-firewall-cmd --reload && \
-echo '<html>
-<head>
-<style>
-h1 {text-align: center;}
-p {text-align: center;}
-</style>
-</head>
-<h1>TEST FOR WEBSITE</h1>
-<p>If you are seeing this the webserver works!!!</p>
-</html>
+# Test if the result of the command "$(which yum)" as a string is non-zero, -n, if so do yum installation
+if [[ -n "$(which yum)" ]]
+then
+    # Install and start webserver; setup firewall with port 80 open; and make an example "index.html" file as sudo
+    sudo su -c "yum install httpd && \
+    systemctl start httpd && \
+    firewall-cmd --permanent --add-port=80/tcp && \
+    firewall-cmd --reload && \
+    echo '<html>
+    <head>
+    <style>
+    h1 {text-align: center;}
+    p {text-align: center;}
+    </style>
+    </head>
+    <h1>TEST FOR WEBSITE</h1>
+    <p>If you are seeing this the webserver works!!!</p>
+    </html>
 
-' > /var/www/html/index.html"
+    ' > /var/www/html/index.html"
+
+# Test if the result of the command "$(which apt)" as a string is non-zero, -n, if so do yum installation
+elif [[ -n "$(which apt)" ]]
+    # Install and start webserver; setup firewall with port 80 open; and make an example "index.html" file as sudo
+    sudo su -c "apt update && \
+    apt install apache2 && \
+    ufw enable && ufw allow 'Apache' && \
+    echo '<html>
+    <head>
+    <style>
+    h1 {text-align: center;}
+    p {text-align: center;}
+    </style>
+    </head>
+    <h1>TEST FOR WEBSITE</h1>
+    <p>If you are seeing this the webserver works!!!</p>
+    </html>
+
+    ' > /var/www/html/index.html"
+
+else
+echo "ERROR: not running a supported OS, Debian or "
+fi
+
+# Find full IPv4 & IPV6, then cut using space in the first instance (which will leave us with just IPv4)
+hostip=$(hostname -I | cut -d " " -f 1)
+
+echo "
+
+
+
+Website should now be accessible @ 'http://${hostip}'
+"
