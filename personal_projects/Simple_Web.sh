@@ -1,6 +1,6 @@
 #!/bin/bash
-# Version 1
-# Description: Creates a simple Apache web server on a CentOS & Ubuntu server systems
+# Version 1.0
+# Description: Creates a simple Apache web server on a CentOS & Ubuntu server systems (currently only tested on Ubuntu)
 
 # Ask whether to disable root SSH
 read -p "Would you like to disable root SSH? y/N: " prootssh
