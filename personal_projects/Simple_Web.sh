@@ -1,6 +1,6 @@
 #!/bin/bash
-# Version 0.7
-# Description: Creates a simple Apache web server on a CentOS & Ubunut server systems
+# Version 1
+# Description: Creates a simple Apache web server on a CentOS & Ubuntu server systems
 
 # Ask whether to disable root SSH
 read -p "Would you like to disable root SSH? y/N: " prootssh
@@ -14,7 +14,7 @@ then
     #- use sed to replace a certain string, after first /, with another string to not allow root login, after second /y (".*" regex for any amount of characters after made string)
     sudo sed -i 's/#PermitRootLogin .*/PermitRootLogin no/' /etc/ssh/sshd_config
     # After this process, restart sshd service
-    sudo /etc/init.d/sshd restart
+    sudo systemctl restart sshd
 fi
 
 # Test if the result of the command "$(which yum)" as a string is non-zero, -n, if so do yum installation
@@ -59,7 +59,7 @@ then
     ' > /var/www/html/index.html"
 
 else
-echo "ERROR: not running a supported OS, Debian or "
+echo "ERROR: not running a supported package manager/OS"
 fi
 
 # Find full IPv4 & IPV6, then cut using space in the first instance (which will leave us with just IPv4)
