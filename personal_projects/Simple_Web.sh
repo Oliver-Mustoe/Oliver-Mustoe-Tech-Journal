@@ -21,7 +21,7 @@ fi
 if [[ -n "$(which yum)" ]]
 then
     # Install and start webserver; setup firewall with port 80 open; and make an example "index.html" file as sudo
-    sudo su -c "yum install httpd -y&& \
+    sudo su -c "yum install httpd -y && \
     systemctl start httpd && \
     firewall-cmd --permanent --add-port=80/tcp && \
     firewall-cmd --reload && \
@@ -62,7 +62,7 @@ else
 echo "ERROR: not running a supported package manager/OS"
 fi
 
-# Find full IPv4 & IPV6, then cut using space in the first instance (which will leave us with just IPv4)
+# Find full IPv4 & IPV6, then cut using the delimiter space, only save the first field (which will be just IPv4)
 hostip=$(hostname -I | cut -d " " -f 1)
 
 echo "
