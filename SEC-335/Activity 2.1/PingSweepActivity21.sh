@@ -1,7 +1,5 @@
 #!/bin/bash
 # Script to ping range of 10.0.5.2-10.0.5.50
-echo "up ip addresses" >> ./sweep.txt
-
 # For each item in the sequence
 for ip in $(seq 2 50) 
 do
