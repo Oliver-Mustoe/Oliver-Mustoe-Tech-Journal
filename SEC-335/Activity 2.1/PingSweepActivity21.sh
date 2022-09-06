@@ -6,7 +6,7 @@ echo "up ip addresses" >> ./sweep.txt
 for ip in $(seq 2 50) 
 do
 	# Ping ips, grep if response contains "From"
-	IsUp=$(ping -c 1 -i .02 10.0.5.$ip | grep "Destination Host Unreachable")
+	IsUp=$(ping -c 1 -i .02 10.0.5.$ip | grep "100% packet loss")
 	# If the variable is empty (indicates no from, so successful ping)
 	if [[ -z $IsUp ]]
 	then
