@@ -5,7 +5,7 @@ for ip in $(seq 2 50)
 do
 	# Ping ips, grep if response contains certain string
 	IsUp=$(ping -c 1 -i .02 10.0.5.$ip | grep "100% packet loss")
-	# If the variable is empty (indicates no from, so successful ping)
+	# If the variable is empty (indicates no packet loss, so successful ping)
 	if [[ -z $IsUp ]]
 	then
 		echo "10.0.5.$ip" >> ./sweep.txt
