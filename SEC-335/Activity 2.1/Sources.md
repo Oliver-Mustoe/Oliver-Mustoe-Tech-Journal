@@ -5,7 +5,7 @@
 * https://linuxize.com/post/bash-append-to-file/
 * https://serverfault.com/questions/200468/how-can-i-set-a-short-timeout-with-the-ping-command
 * https://linux.die.net/man/8/ping
-* 
+
 ### Fping one liner/FPingSweepActivity21.sh:
 * https://www.linuxquestions.org/questions/linux-networking-3/fping-usage-to-show-only-reachble-hosts-718380/
 * https://askubuntu.com/questions/350208/what-does-2-dev-null-mean
