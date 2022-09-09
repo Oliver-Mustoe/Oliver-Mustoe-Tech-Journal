@@ -2,7 +2,7 @@
 # Author: Oliver Mustoe
 # Improvements:
 # 1. Changed output to look more about listing ports open per host
-# 2. Check for having two paramaters entered
+# 2. Check for having two parameters entered
 # 3. Make .csv file if wanted
 
 
