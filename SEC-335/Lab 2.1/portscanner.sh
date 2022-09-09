@@ -1,13 +1,8 @@
 #!/bin/bash
 # Author: Oliver Mustoe
 # Improvements:
-<<<<<<< HEAD
 # 1. Changed output to be listing ports open per host
 # 2. Check for having two files entered
-=======
-# 1. Changed output to look more about listing ports open per host
-# 2. Check for having two parameters entered
->>>>>>> 05f3438f07e62c670db117632c7c7656cbc62dea
 # 3. Make .csv file if wanted
 
 
