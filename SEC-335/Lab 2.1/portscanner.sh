@@ -43,7 +43,6 @@ for host in $(cat $hostfile); do
 	done # End of portfile loop
 	# Echo open ports, use sed to substitute last "," for open space
 	echo "OPEN PORTS: $PortsOpen" | sed 's/,$//'	
-	echo "---"
 done # End of hostfile loop
 
 
