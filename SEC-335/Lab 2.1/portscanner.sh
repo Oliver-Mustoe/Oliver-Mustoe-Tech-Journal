@@ -1,13 +1,13 @@
 #!/bin/bash
 # Author: Oliver Mustoe
 # Improvements:
-# 1. Changed output to look more about listing ports open per host
-# 2. Check for having two paramaters entered
+# 1. Changed output to be listing ports open per host
+# 2. Check for having two files entered
 # 3. Make .csv file if wanted
 
 
 # Check if 2 parameters are inputted
-if [[ -n $1 && -n $2 ]]; then
+if [[ -n $1 ]] && [[ -n $2 ]]; then
 
 # Read input for whether to make .csv or not
 read -p "Would you like to export this as a .csv?[y/N] " FileOrNo
@@ -43,6 +43,7 @@ for host in $(cat $hostfile); do
 	done # End of portfile loop
 	# Echo open ports, use sed to substitute last "," for open space
 	echo "OPEN PORTS: $PortsOpen" | sed 's/,$//'	
+	echo "---"
 done # End of hostfile loop
 
 
