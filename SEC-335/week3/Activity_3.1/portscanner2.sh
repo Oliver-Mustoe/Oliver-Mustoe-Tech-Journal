@@ -12,7 +12,7 @@ FileOrNoUP=${FileOrNo^^}
 
 # If .csv yes, echo certain results to console and screen
 if [[ $FileOrNoUP ==  "Y" ]] || [[ $FileOrNoUP == "YES" ]]; then
-	echo "Saving result to 'DNScanresult.csv'"
+	echo "Saving result to 'Scanresult.csv'"
 	echo "host,port" >> Scanresult.csv 
 fi
 
