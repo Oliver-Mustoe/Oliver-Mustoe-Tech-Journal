@@ -16,3 +16,9 @@ for ($prefix=1;$prefix -lt 255;$prefix++){
     }# End of If statement
 
 }# End of for loop
+
+# Sources:
+# https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_variables?view=powershell-7.2
+# https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_for?view=powershell-7.2
+# https://stackoverflow.com/questions/48216173/how-can-i-use-a-shebang-in-a-powershell-script
+# https://docs.microsoft.com/en-us/answers/questions/92154/how-to-check-a-value-is-that-null-in-powershell-sc.html
