@@ -1,5 +1,3 @@
-#!/usr/bin/env pwsh
-
 # Take network prefix and dns server
 # Example run: .\dns-resolver.ps1 192.168.3 192.168.4.5
 param($netprefix,$dns)
