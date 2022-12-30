@@ -1,4 +1,5 @@
 This page contains personal notes while creating my projects
+<!--
 # Entry 10/15/22 & 10/16/22
 ## The Moving of the Github: Part 1
 Began working on the migration of my Github from wiki to repo. My first roadblock is that most of my wiki files contain ':' in the name and windows cannot download those files, so moving into my repo would be dangerous.
@@ -144,8 +145,6 @@ Hope to soon move into the file parsing, and the actual move!!!
 https://linuxize.com/post/bash-case-statement/
 
 
-<!--
-# Entry 10/17/22
-## The Moving of the Github: Part 2
-Todays code
+
+# Put the stuff here
 >
