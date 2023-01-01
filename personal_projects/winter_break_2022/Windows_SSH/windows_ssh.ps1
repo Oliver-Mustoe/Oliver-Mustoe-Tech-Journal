@@ -31,8 +31,12 @@ function main {
         if (Test-Path ssh/id_rsa.pub) {
             Write-Output "[Setting up passwordless SSH on $remote_ip]"
 
-            Write-Output "[Connecting to $remote_ip]..."
             PasswordLessSSH -remote_session $remote_session
+
+            Write-Output "Should now be able to connect with passwordless SSH after running the following:"
+            Write-Output "eval \$(ssh-agent)"
+            Write-Output "ssh-add -t 20000 # 2000 can be changed to any number you want"
+            Write-Output "ssh $cred_user@$remote_ip"
         }
     }
 
@@ -115,22 +119,26 @@ function PasswordLessSSH {
         $remote_session
     )
     
-    Write-Output "[]"
+    Write-Output "[Copying public key over to target]..."
     # Copy public SSH key to Windows host
     Copy-Item -Path "ssh/id_rsa.pub" -Destination $Global:remote_ssh_path -ToSession $remote_session
 
+    Write-Output "[Connecting to the target]..."
     Invoke-Command -Session $remote_session -ScriptBlock {
-        # Copy the public key to  
+        Write-Output "[Creating a authorized key with permissions]..."
+        # Copy the public key to programdata
         Get-Content ($Global:remote_ssh_path + "\id_rsa.pub") >> ($Global:remote_ssh_path + "\administrators_authorized_keys")
 
         # Set proper access control on the key
         icacls.exe "C:\ProgramData\ssh\administrators_authorized_keys" /inheritance:r /grant "Administrators:F" /grant "SYSTEM:F"
         icacls.exe "C:\ProgramData\ssh\administrators_authorized_keys" /remove "NT AUTHORITY\Authenticated Users"
+        Write-Output "[Restarting SSH and cleaning up]..."
         # Restart Services
         Restart-Service -Name sshd -Force
 
         Remove-Item -Path ($Global:remote_ssh_path + "\id_rsa.pub") -Force
     }
 
+    Write-Output "[PASSWORDLESS SSH COMPLETE]..."
 }
 main
