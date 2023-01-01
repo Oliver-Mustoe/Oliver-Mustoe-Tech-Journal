@@ -5,4 +5,4 @@
 # Builds container
 sudo docker build -t Powershell-NTLM Docker_files\PasswordLessSSH-Container
 # Runs the container
-sudo docker run -it --mount type=bind,src=$(pwd),dst=/tmp2 --mount type=bind,src=~/.ssh/,dst=/ssh Powershell-NTLM /tmp2/PasswordLessSSH.ps1
+sudo docker run -it --mount type=bind,src=$(pwd),dst=/tmp2 --mount type=bind,src=~/.ssh/,dst=/ssh Powershell-NTLM /tmp2/windows_ssh.ps1

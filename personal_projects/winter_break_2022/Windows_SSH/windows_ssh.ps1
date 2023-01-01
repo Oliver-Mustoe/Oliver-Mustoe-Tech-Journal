@@ -33,7 +33,6 @@ function main {
 
             Write-Output "[Connecting to $remote_ip]..."
             PasswordLessSSH -remote_session $remote_session
-
         }
     }
 
@@ -116,6 +115,7 @@ function PasswordLessSSH {
         $remote_session
     )
     
+    Write-Output "[]"
     # Copy public SSH key to Windows host
     Copy-Item -Path "ssh/id_rsa.pub" -Destination $Global:remote_ssh_path -ToSession $remote_session
 
