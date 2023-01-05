@@ -13,8 +13,4 @@ RUN dnf -y install powershell
 SHELL [ "/usr/bin/pwsh", "-command" ]
 RUN Install-Module -Name PSWSMan -Force
 RUN Install-WSMan
-# Install needed powershell module
-RUN Install-Module -Name Posh-SSH -Force
-# Creates needed directory structure
-RUN mkdir tmp2 ssh
-ENTRYPOINT [ "/usr/bin/pwsh", "-command" ]
+ENTRYPOINT [ "/usr/bin/pwsh" ]
