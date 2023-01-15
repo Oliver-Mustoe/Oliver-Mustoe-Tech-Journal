@@ -222,4 +222,6 @@ def planuml_encode(planuml_data):
     # Return compressed UML
     return encoded_uml
 
-main()
+# Check whether importing (__name__ will equal import name) or run itself (will have "__main__" value)
+if __name__ == "__main__":
+    main()
