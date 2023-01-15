@@ -1,9 +1,13 @@
 #!/usr/bin/python3
+
+# Imports (might cleanup in future, like just get the needed imports from argparse/nmap/requests)
 import argparse
 import nmap
 import requests
 from zlib import compress
 from base64 import b64encode
+
+
 
 def main():
     """
@@ -24,10 +28,11 @@ def main():
     pass
 
 
+
 def args():
     """
     A function to gather arguments for parsing
-    :return: Populated namespace of argument values
+    :return: args: Populated namespace of argument values
     """
     # Setup basic parser
     arg_parser = argparse.ArgumentParser(
@@ -66,13 +71,13 @@ def args():
     return args
 
 
+
 def runnmap(args):
     """
-    A function that runs nmap, may have variables to define IP's
+    A function that runs nmap
     :param: Populated namespace of argument values
     :return: Json formatted results of nmap
     """
-
     # Take the list of target ips from arguments and join them
     ipaddrs = " ".join(args.TargetIPAddress)
     nm = nmap.PortScanner()
@@ -80,13 +85,14 @@ def runnmap(args):
     scan_results = cleanscan(nm.scan(hosts=ipaddrs))
 
     return scan_results
-    
+
+
 
 def cleanscan(scan):
     """
-    A function to cleanup nmap scan results with default nmap settings
-    :param: scan, raw nmap scan results
-    :return: List with clean nmap scan results/scan timers
+    A function to cleanup nmap scan results with default nmap console settings
+    :param: scan: Dict of raw nmap scan results
+    :return: results: List with clean nmap scan results/scan timers
     """
     # Parse the scan and gather values from certain keys for planuml formatting
     clean_results = scan['scan']
@@ -99,9 +105,10 @@ def cleanscan(scan):
 
 def toplanuml(nmap_json,scan_time,args):
     """
-    A function to convert Json formmatted results of nmap into planttext uml
-    :param: nmap_json, clean json formmatted nmap results
-    :param: args, Populated namespace of argument values
+    A function to convert Dict formmatted results of nmap into planuml
+    :param: nmap_json: Dict formmatted nmap scan results
+    :param: scan_time: Dict of formmated nmap scan time results
+    :param: args: Populated namespace of argument values
     :return: None
     """
 
@@ -198,9 +205,12 @@ frame "Uphosts" {{\n"""
     # print(f"Link to the generated scan on PlanUML: https://www.plantuml.com/plantuml/uml/{compressed_uml}")
     print(f"Link to the generated scan on PlanUML: {uml_link}/uml/{compressed_uml}")
 
+
+
 def planuml_encode(planuml_data):
     """
-    A function to encode planuml data (currently hex, may be deflate in future), heavily inspired by https://github.com/dougn/python-plantuml/blob/master/plantuml.py
+    A function to encode planuml data, heavily inspired by https://github.com/dougn/python-plantuml/blob/master/plantuml.py
+    :param: planuml_data: String of planuml input
     :return: String of compressed values
     """
     # Take UML, encode with UTF-8, convert bytes to hex
