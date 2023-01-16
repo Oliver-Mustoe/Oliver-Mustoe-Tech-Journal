@@ -12,7 +12,7 @@ Current VyOS config -- [1-16-23](https://github.com/Oliver-Mustoe/Oliver-Mustoe-
 Old VyOS configs:
 - None
 
-Configuration acquired with:
+Configuration acquired with running the following on a VyOS system:
 ```
 show configuration commands | grep -v "syslog\|ntp\|login\|console\|config\|hw-id\|loopback\|conntrack"
 ```

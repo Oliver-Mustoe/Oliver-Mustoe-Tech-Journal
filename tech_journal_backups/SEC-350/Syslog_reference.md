@@ -1,12 +1,12 @@
-# rsyslog reference
+# Syslog reference
 This page contains configurations/tips on working with the rsyslog. Periodically, journaling notes that contain setup involving VyOS will also be linked on this page.
 
 **Table of contents**
-1. [Configuring rsyslog service on logging host](#configuring-rsyslog-service-on-logging-host)
-2. [Configuring rsyslog service on logging host](#configuring-rsyslog-service-on-logging-client)
+1. [Configuring syslog service on logging host](#configuring-syslog-service-on-logging-host)
+2. [Configuring syslog service on logging host](#configuring-syslog-service-on-logging-client)
 
-## Configuring rsyslog service on logging host
-First, on the logging host, install rsyslog from your repository. Then, enable port 514/tcp/udp. For example on a Redhat host, the following commands would be used to install, setup firewall, and check:
+## Configuring syslog service on logging host
+First, on the logging host, install "rsyslog" from your repository. Then, enable port 514/tcp/udp. For example on a Redhat host, the following commands would be used to install, setup firewall, and check:
 ```
 sudo dnf install rsyslog  
 firewall-cmd --permanent --zone=public --add-port=514/tcp  
