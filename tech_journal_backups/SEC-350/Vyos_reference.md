@@ -74,7 +74,7 @@ commit
 save
 ```
 
-#### Setup DNS forwarding:
+### Setup DNS forwarding:
 ```
 configure  
 set service dns forwarding listening-address {DMZ_GATEWAY_IP} 
