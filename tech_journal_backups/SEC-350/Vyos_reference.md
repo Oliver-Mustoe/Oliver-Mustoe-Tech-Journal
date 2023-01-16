@@ -2,7 +2,7 @@
 This page contains configurations/tips on working with the VyOS. Periodically, journaling notes that contain setup involving VyOS will also be linked on this page.
 
 **Table of contents**
-1. [[Vyos_reference#Vyos configs:|Vyos configs]]
+1. [Vyos configs](#vyos-configs)
 2. [Commands](#commands)
 3. [Linked journals](#linked-journals)
 
