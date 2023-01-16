@@ -47,3 +47,9 @@ user.notice @{LOG_HOST_IP}
 
 To test this, run the command `logger -t test SOMETHING` from your logging client. This should appear in the hosts `/var/log/messages` file. Below is a test showing the logging host "log01-oliver" recieving the test "TESTFROMWEB01TOLOG01" from "web01-oliver", a logging client:
 ![image](https://user-images.githubusercontent.com/71083461/212769825-b12dfe85-7b96-46f6-9c12-1355314d2d61.png)
+
+
+## Sources:
+- https://firewalld.org/documentation/howto/open-a-port-or-service.html
+- https://firewalld.org/documentation/howto/reload-firewalld.html
+- https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/security_guide/sec-viewing_current_status_and_settings_of_firewalld
