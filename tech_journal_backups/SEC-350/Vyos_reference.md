@@ -4,7 +4,6 @@ This page contains configurations/tips on working with the VyOS. Periodically, j
 **Table of contents**
 1. [Vyos configs](#vyos-configs)
 2. [Commands](#commands)
-3. [Linked journals](#linked-journals)
 
 ## Vyos configs:
 Current VyOS config -- [1-16-23](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-350/Vyos_configs/1-16-23.md)
