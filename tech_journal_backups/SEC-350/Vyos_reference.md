@@ -1,5 +1,5 @@
 # Vyos reference
-This page contains configurations/tips on working with the VyOS. Periodically, journaling notes that contain setup involving VyOS will also be linked on this page.
+This page contains configurations/tips on working with the VyOS.
 
 **Table of contents**
 1. [Vyos configs](#vyos-configs)
@@ -20,7 +20,7 @@ show configuration commands | grep -v "syslog\|ntp\|login\|console\|config\|hw-i
 **BEFORE DOING ANYTHING** -- Ensure that the correct network adapters are set.
 
 ### Note about basic command structure:
-Basic command structure in VyOS begins with enter config mode, ``configure``, the doing the commands. To commit the configuration to the system, use `commit`, then to save so that the configuratoin will stay on reboot, use `save`.
+Basic command structure in VyOS begins with enter config mode, ``configure``, then doing the commands. To commit the configuration to the system, use `commit`, then to save so that the configuratoin will stay on reboot, use `save`.
 
 
 ## Commands
@@ -29,7 +29,7 @@ Below are commands to setup certain functions of VyOS. Anything that contains a 
 ### Change password (for vyos user)
 ```
 configure
-set system login user vyos authentication plaintext-password {INSERT_PASS_HERE}
+set system login user vyos authentication plaintext-password {SECURE_PASS}
 commit 
 save
 ```
@@ -37,7 +37,7 @@ save
 ### Setup hostname:
 ```
 configure  
-set system host-name fw01-oliver  
+set system host-name {NAME}  
 commit  
 save  
 exit
@@ -46,12 +46,12 @@ exit
 ### Setup descriptions/addresses of interfaces
 ```
 configure
-set interfaces ethernet eth{NUMBER} description {ENTER_DESCRIPTION_HERE}
-set interfaces ethernet eth{NUMBER} address {ENTER_ADDRESS_HERE}
+set interfaces ethernet eth{NUMBER} description {DESCRIPTION}
+set interfaces ethernet eth{NUMBER} address {IP_ADDRESS}/{NETMASK}
 commit
 save
 ```
-**^ NOTE FOR ABOVE:** This example is change 1 interfaces description/address. Add more `set interfaces` lines for multiple interfaces
+**^ NOTE FOR ABOVE:** This example is to set 1 interfaces description/address. Add more `set interfaces` lines for multiple interfaces.
 
 ### Setup Gateway and DNS on VyOS
 ```
@@ -66,19 +66,21 @@ save
 ```
 configure
 set nat source rule 10 description "{DESCRIPTION}"
-set nat source rule 10 outbound-interface eth{NUMBER_OF_WAN_INTERFACE}
-set nat source rule 10 source address {ADDRESS_RANGE_IN_CIDR}
+set nat source rule 10 outbound-interface eth{NUMBER}
+set nat source rule 10 source address {IP_ADDRESS}/{NETMASK}
 set nat source rule 10 translation address masquerade
 commit
 save
 ```
+**^ EXAMPLE FOR ABOVE:** If you are setting up NAT forwarding from a DMZ to a WAN, the `eth{NUMBER}` would be the number of the WAN interface, and the `source address` would be the network address in CIDR notation of the DMZ.
 
 ### Setup DNS forwarding:
 ```
 configure  
-set service dns forwarding listening-address {DMZ_GATEWAY_IP} 
-set service dns forwarding allow-from {ADDRESS_RANGE_IN_CIDR}  
+set service dns forwarding listening-address {GATEWAY_IP} 
+set service dns forwarding allow-from {IP_ADDRESS}/{NETMASK}  
 set service dns forwarding system  
 commit  
 save
 ```
+**^ NOTE FOR ABOVE:** The `{GATEWAY_IP}` would be the IP from an interface set ON THE VYOS HOST.
