@@ -83,4 +83,7 @@ set service dns forwarding system
 commit  
 save
 ```
-**^ NOTE FOR ABOVE:** The `{GATEWAY_IP}` would be the IP from an interface set ON THE VYOS HOST.
+**^ NOTE FOR ABOVE:** The `{GATEWAY_IP}` is "the local IPv4 or IPv6 addresses to bind the DNS forwarder to. The forwarder will listen on this address for incoming connections." - [VyOS Documentation](https://docs.vyos.io/en/latest/configuration/service/dns.html). The `{IP_ADDRESS}/{NETMASK}` is the allowed network for DNS forwarding.
+
+## Sources
+- https://docs.vyos.io/en/latest/configuration/service/dns.html
