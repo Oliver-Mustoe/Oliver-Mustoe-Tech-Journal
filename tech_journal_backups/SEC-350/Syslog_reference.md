@@ -7,7 +7,7 @@ This page contains configurations/tips on working with the rsyslog.
 
 ## Configuring syslog service on logging server
 First, on the logging server, install "rsyslog" from your repository. Then, enable port 514 tcp/udp. For example on a Redhat server, the following commands would be used to install, setup firewall, and check the firewall:
-```
+```bash
 sudo dnf install rsyslog  
 firewall-cmd --permanent --zone=public --add-port=514/tcp  
 firewall-cmd --permanent --zone=public --add-port=514/udp  
@@ -19,24 +19,24 @@ Then the following lines must be uncommented in `/etc/rsyslog.conf`:
 ![image](https://user-images.githubusercontent.com/71083461/212767775-7454ce85-6b1d-4ec7-b525-7fed245863f7.png)
 
 Afterwards, restart the rsyslog service with the following command:
-```
+```bash
 sudo systemctl restart rsyslog
 ```
 
 And then check if rsyslog is listening on the appropriate ports with the following command (image is desired output from a test server):
-```
+```bash
 netstat -tupan | grep 514
 ```
 ![image](https://user-images.githubusercontent.com/71083461/212768235-a94d145f-2ec0-40ef-804b-935fe4082250.png)
 
 ## Configuring syslog service on logging client
 First, on the logging client, install rsyslog. For example, on a Redhat based client the following would be run:
-```
+```bash
 sudo dnf install rsyslog 
 ```
 
 Then add the following line to a .conf file in `/etc/rsyslog.d`. For example, this tutorial will use a file called "sec350.conf". Replace `{LOG_server_IP}` with the IP of the logging server.
-```
+```bash
 user.notice @{LOG_server_IP}
 ```
 
