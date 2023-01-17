@@ -83,6 +83,3 @@ set service dns forwarding system
 commit  
 save
 ```
-
-
-## Linked journals
