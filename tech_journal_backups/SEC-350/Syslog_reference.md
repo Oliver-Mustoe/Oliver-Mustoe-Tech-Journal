@@ -3,7 +3,7 @@ This page contains configurations/tips on working with the rsyslog. Periodically
 
 **Table of contents**
 1. [Configuring syslog service on logging host](#configuring-syslog-service-on-logging-host)
-2. [Configuring syslog service on logging host](#configuring-syslog-service-on-logging-client)
+2. [Configuring syslog service on logging client](#configuring-syslog-service-on-logging-client)
 
 ## Configuring syslog service on logging host
 First, on the logging host, install "rsyslog" from your repository. Then, enable port 514/tcp/udp. For example on a Redhat host, the following commands would be used to install, setup firewall, and check:
@@ -29,7 +29,7 @@ netstat -tupan | grep 514
 ```
 ![image](https://user-images.githubusercontent.com/71083461/212768235-a94d145f-2ec0-40ef-804b-935fe4082250.png)
 
-## Configuring rsyslog service on logging client
+## Configuring syslog service on logging client
 First, on the logging client, install rsyslog. For example, on a Redhat based client the following would be run:
 ```
 sudo dnf install rsyslog 
