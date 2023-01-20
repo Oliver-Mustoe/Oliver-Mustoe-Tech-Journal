@@ -341,7 +341,7 @@ chmod +x ubuntu-desktop.sh
 
 ![image](https://user-images.githubusercontent.com/71083461/213786912-950add84-b230-443f-9f77-73d5448ccfbf.png)
 
-I then cleaned up with `rm` and shutdown the VM:
+I then cleaned up with `rm` and shutdown the VM:  
 ![image](https://user-images.githubusercontent.com/71083461/213786936-cf45749f-b627-48c7-bbfc-b53318181434.png)
 
 I would then go back to the VMs menu, select “Edit” and change the CD/DVD drive to “Host device”:
