@@ -1,5 +1,25 @@
 This page journals content related to NET/SEC/SYS-480 milestone 1.
 
+
+
+**Table of contents**
+
+1. [VM Inventory](#vm-inventory)
+
+2. [ESXi Installation](#esxi-installation)
+
+3. [ISOS and Networking](#isos-and-networking)
+
+4. [480-fw](#480-fw)
+
+5. [xubuntu and proof](#xubuntu-and-proof)
+   
+   1. [Milestone 1 proof](#milestone-1-proof)
+
+6. [Sources](#sources-for-all)
+
+
+
 ## VM Inventory
 
 - [xubuntu-wan](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/VM-Inventory/xubuntu-wan.md)
@@ -166,16 +186,10 @@ I then set the following customized settings with the following notes:
 
 ![image](https://user-images.githubusercontent.com/71083461/213784116-a5b8f085-f15f-4a69-a9a6-fbbf22d9fa09.png) ![image](https://user-images.githubusercontent.com/71083461/213784129-d6acb667-8594-4d16-ab47-f312387a201b.png)
 
-
-
 After reviewing the following matched the desired setup, clicked “FINISH”: ![image](https://user-images.githubusercontent.com/71083461/213784149-a26d0394-dd6f-4b8b-ba9c-6b02f27bf270.png)
-
-
 
 Then, from within the virtual machines menu, I selected and started the new virtual machine:
 ![image](https://user-images.githubusercontent.com/71083461/213784183-48d6c0e2-657c-4ee2-98ca-b1e6ae50fdbb.png)
-
-
 
 Then from the “Console” dropdown, I opened a console in a new tab, and logged into VyOS with the default user “vyos” with the password “vyos”. Once logged in, I started the VyOS install with the command:
 
@@ -185,14 +199,10 @@ Install image
 
 ![image](https://user-images.githubusercontent.com/71083461/213784211-dae52b64-92fd-4b9c-9d26-6148c85c9fc1.png)
 
-
-
 NOTE FOR VYOS INSTALL: By choosing default options, I mean the ones automatically selected when a user presses the Enter key at prompts (the answer within the brackets.)
 
 Along the install process, the only non-default option I would choose is the option that asks about destroying all data on /dev/sda, to which I would enter “yes”. Besides this, I answered with the Enter key:
 ![image](https://user-images.githubusercontent.com/71083461/213784233-e8f02b76-885e-4ce7-91d8-ff79aabfa32c.png)
-
-
 
 When prompted, I would then change the password for the vyos user.
 
@@ -213,8 +223,6 @@ save
 Result of above on the interfaces using the ```show interfaces``` command:
 ![image](https://user-images.githubusercontent.com/71083461/213784270-c91b5d97-cedb-4c0e-98cd-af7c9e3730f8.png)
 
-
-
 I then set eth0 to dhcp, and enabled ssh on the VM with the following commands (if already in configure mode from previous commands, skip initial “configure” command):
 
 ```
@@ -227,8 +235,6 @@ save
 
 Result of above using the `show` command:
 ![image](https://user-images.githubusercontent.com/71083461/213784325-f9c932c1-ef93-4577-85ff-7b3ada3c833c.png)
-
-
 
 Then I used the commands `exit` and `poweroff` to shutoff the VM.
 
