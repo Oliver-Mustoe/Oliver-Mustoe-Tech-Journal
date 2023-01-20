@@ -9,7 +9,7 @@ This page journals content related to NET/SEC/SYS-480 milestone 1.
 
 DNS **192.168.4.4 .5**
 
-My ESXi hostname = **super15**
+My ESXi hostname = **super15**  
 ESXI IP = **192.168.7.25**
 
 From my IPMI IP, I logged in with the user "cncs-sysadmin" (with a password I was emailed). After logging in, I went to the "Remote Control" section to access iKVM (this is shown below.)
@@ -151,22 +151,31 @@ I then set the following customized settings with the following notes:
 - Memory and Hard disk tweaked
 
 - In the Hard disk drop down menu, made sure to select “Thin provisioned” in “Disk Provisioning”
-  ○    Thin provisioning only takes the storage that it needs, and grows according to demand up to the specified amount. Thick provisioning takes all of the storage at once.
+  
+  - Thin provisioning only takes the storage that it needs, and grows according to demand up to the specified amount. Thick provisioning takes all of the storage at once.
 
 - Made sure to set the 2 network adapters to “VM Network”
-  ○    Did this since I was building a base VM, so I wanted the VM to be generic.
+  
+  - Did this since I was building a base VM, so I wanted the VM to be generic.
 
 - When selecting the “Datastore ISO file” option in CD/DVD Drive, a pop-up appeared in the “Datastore browser” where I navigated on datastore2 to the vyos-1.4 VM.
-  ○    I also could have navigated to this via using the CD/DVD Drives drop-down in the “CD/DVD Media” selection, selecting “BROWSE…”
+  
+  - I also could have navigated to this via using the CD/DVD Drives drop-down in the “CD/DVD Media” selection, selecting “BROWSE…”
 
 - Clicked “NEXT”
 
 ![image](https://user-images.githubusercontent.com/71083461/213784116-a5b8f085-f15f-4a69-a9a6-fbbf22d9fa09.png) ![image](https://user-images.githubusercontent.com/71083461/213784129-d6acb667-8594-4d16-ab47-f312387a201b.png)
 
+
+
 After reviewing the following matched the desired setup, clicked “FINISH”: ![image](https://user-images.githubusercontent.com/71083461/213784149-a26d0394-dd6f-4b8b-ba9c-6b02f27bf270.png)
+
+
 
 Then, from within the virtual machines menu, I selected and started the new virtual machine:
 ![image](https://user-images.githubusercontent.com/71083461/213784183-48d6c0e2-657c-4ee2-98ca-b1e6ae50fdbb.png)
+
+
 
 Then from the “Console” dropdown, I opened a console in a new tab, and logged into VyOS with the default user “vyos” with the password “vyos”. Once logged in, I started the VyOS install with the command:
 
@@ -176,10 +185,14 @@ Install image
 
 ![image](https://user-images.githubusercontent.com/71083461/213784211-dae52b64-92fd-4b9c-9d26-6148c85c9fc1.png)
 
+
+
 NOTE FOR VYOS INSTALL: By choosing default options, I mean the ones automatically selected when a user presses the Enter key at prompts (the answer within the brackets.)
 
 Along the install process, the only non-default option I would choose is the option that asks about destroying all data on /dev/sda, to which I would enter “yes”. Besides this, I answered with the Enter key:
 ![image](https://user-images.githubusercontent.com/71083461/213784233-e8f02b76-885e-4ce7-91d8-ff79aabfa32c.png)
+
+
 
 When prompted, I would then change the password for the vyos user.
 
@@ -200,6 +213,8 @@ save
 Result of above on the interfaces using the ```show interfaces``` command:
 ![image](https://user-images.githubusercontent.com/71083461/213784270-c91b5d97-cedb-4c0e-98cd-af7c9e3730f8.png)
 
+
+
 I then set eth0 to dhcp, and enabled ssh on the VM with the following commands (if already in configure mode from previous commands, skip initial “configure” command):
 
 ```
@@ -212,6 +227,8 @@ save
 
 Result of above using the `show` command:
 ![image](https://user-images.githubusercontent.com/71083461/213784325-f9c932c1-ef93-4577-85ff-7b3ada3c833c.png)
+
+
 
 Then I used the commands `exit` and `poweroff` to shutoff the VM.
 
@@ -296,26 +313,26 @@ Then I set the virtual machine settings as follows with the following points:
 
 I then finished, then I accessed the console for xubuntu, and followed this setup:
 
-1. Selected to install xubuntu
-   ![image](https://user-images.githubusercontent.com/71083461/213786691-b9791466-8bbf-4cd7-acab-bad84230ec0a.png)
+1. Selected to install xubuntu  
+   ![image](https://user-images.githubusercontent.com/71083461/213786691-b9791466-8bbf-4cd7-acab-bad84230ec0a.png)  
 2. Used the default keyboard layout
 3. Kept the default settings and pressed “Continue” in “Update and other software”
-4. In “Installation type, chose to “Erase disk and install Xubuntu” (default), pressed “Install Now”
-   ![image](https://user-images.githubusercontent.com/71083461/213786734-04b7384d-87eb-4fc8-b67a-31845d9d3349.png)
+4. In “Installation type, chose to “Erase disk and install Xubuntu” (default), pressed “Install Now”  
+   ![image](https://user-images.githubusercontent.com/71083461/213786734-04b7384d-87eb-4fc8-b67a-31845d9d3349.png)    
 5. When asked about disk changes, just continued on
 6. Selected “New York” timezone
-7. Setup the following user
-   ![image](https://user-images.githubusercontent.com/71083461/213786750-4b24f844-6399-45c4-a5de-2968629cd973.png)
-8. Once installation was complete, I chose to restart
-   ![image](https://user-images.githubusercontent.com/71083461/213786768-f390dbf8-d8ab-4478-9223-39ae06e4d25b.png)
+7. Setup the following user  
+   ![image](https://user-images.githubusercontent.com/71083461/213786750-4b24f844-6399-45c4-a5de-2968629cd973.png)  
+8. Once installation was complete, I chose to restart  
+   ![image](https://user-images.githubusercontent.com/71083461/213786768-f390dbf8-d8ab-4478-9223-39ae06e4d25b.png)  
    NOTE: I did have to manually turn the VM off and on from the dashboard since the Logo to Xubuntu came up like it SHOULD have loaded, but after leaving it for 5 minutes and checking the performance graph on the VMs menu, I power cycled it. This solved the issue.
 
 With all of this set, I was met with a login screen and was able to login and use the Desktop:
 ![image](https://user-images.githubusercontent.com/71083461/213786846-fe80d51b-f469-4e5b-b1ad-b65a7f9a8782.png)
 
-Then I ran the  ainstructor provided [script](https://raw.githubusercontent.com/gmcyber/RangeControl/main/src/scripts/base-vms/ubuntu-desktop.sh) to prepare ubuntu desktop for linked cloning:
+Then I ran the instructors provided [script](https://raw.githubusercontent.com/gmcyber/RangeControl/main/src/scripts/base-vms/ubuntu-desktop.sh) to prepare ubuntu desktop for linked cloning:
 
-```
+```bash
 sudo -i
 wget https://raw.githubusercontent.com/gmcyber/RangeControl/main/src/scripts/base-vms/ubuntu-desktop.sh
 chmod +x ubuntu-desktop.sh
@@ -339,18 +356,18 @@ Afterwards I would go back to the VMs menu, select “Edit”, and set the netwo
 
 I then powered on the system and ran the following commands as root to add a sudo user/add that user to the sudo group:
 
-```
+```bash
 adduser olivermustoe
 usermod -aG sudo olivermustoe
 ```
 
 Then I powercycled the VM, logged in as “olivermustoe” and removed the champuser user:
 
-```
+```bash
 sudo userdel -r champuser
 ```
 
-End result;
+End result:
 ![image](https://user-images.githubusercontent.com/71083461/213787079-8ce94884-20bf-4001-b98c-44119851002f.png)
 
 NOTE: Ran `userdel` command once before a power cycle, but it said the "champuser" account was used by a process, so I powercycled the machine again and was able to effectively remove the user with the same command.
@@ -361,7 +378,7 @@ NOTE: Make sure that Method is set to “Manual” or else even if you have an a
 
 I would also set my hostname to “xubuntu-wan” with the following command:
 
-```
+```bash
 sudo hostnamectl set-hostname xubuntu-wan
 ```
 
