@@ -15,26 +15,18 @@ ESXI IP = **192.168.7.25**
 From my IPMI IP, I logged in with the user "cncs-sysadmin" (with a password I was emailed). After logging in, I went to the "Remote Control" section to access iKVM (this is shown below.)
 ![image](https://user-images.githubusercontent.com/71083461/213762684-99fb485b-bcdb-4921-a7c9-eae1aa247a62.png)
 
-
-
 Then I used accessed iKVM, and used the Power control setting “Set power reset” to reboot the machine. Then I waited for the 2nd supermicro screen and used the virtual keyboard to press f11, from there I selected the UEFI selection of "General Udsik 5".
 
 Once selected, I would use the “Samsung SSD” storage device to install ESXI: 
 ![image](https://user-images.githubusercontent.com/71083461/213762941-6ccfce92-fa24-4211-9ba5-2437030697da.png)
 
-
-
 I would then go along with the installer, making sure that I set a root password that I saved. Afterwards, I confirmed the install and the installation progress went along:
 ![image](https://user-images.githubusercontent.com/71083461/213763029-66306a6b-26a4-46fc-8e59-c62148575249.png)
-
-
 
 Once the process is finished, I would then press enter and wait for it to restart.
 
 Once it rebooted, I used F2 to login, and used my root password at the login screen. Then using F2 again and was met with this screen:
 ![image](https://user-images.githubusercontent.com/71083461/213763088-e7502a7b-4cd0-4f68-bffb-c58eb1042f72.png)
-
-
 
 Then I went from “Configure Management Network” > “Network Adapters” and changed the selection to "vmnic1" (once I had access to a cable). Following shows this:
 
@@ -42,22 +34,15 @@ Then I went from “Configure Management Network” > “Network Adapters” and
 
 Inside the management network, I would use the following menus to setup the apprioprate network configurations for my host:
 
-
-
 **IPv4 Configuration:**  
 
 ![image](https://user-images.githubusercontent.com/71083461/213763117-99667052-2bc9-40c7-85ab-c8ae499ba547.png)
 
-
 **DNS Configuration:**![image](https://user-images.githubusercontent.com/71083461/213763175-a754b5b9-6dcc-4692-a011-4975137421cc.png)
-
 
 **Custom DNS Suffixes:**![image](https://user-images.githubusercontent.com/71083461/213763203-878bac14-2bee-4f83-a919-6c3211577e5a.png)
 
-
 With these options set, I would then use the Esc key to exit, making sure to apply and restart the management network at the popup.
-
-
 
 With this set, I went to my IP address "192.168.7.25" and I was met with the following, in which I could login with my root account/password set earlier:
 ![image](https://user-images.githubusercontent.com/71083461/213763282-2c82a291-6152-4044-9538-c6399082f2e7.png)
@@ -73,8 +58,6 @@ time to make sure that everyone was on the same page. There was also a good
 amount of time spent organizing everyone getting their production IP addresses
 working on time as well. This part of Milestone 1 was overall a good introduction to
 the basic ESXi installation.
-
- 
 
 # ISOS and Networking
 
@@ -93,12 +76,8 @@ The end screen of the creation of datastore2:
 
 A warning screen will popup about erasing the entire contents, I pressed “YES” on this.
 
-
-
 I then double clicked the newly created datastore2 from the storage menu, which opened the datastore in a a dropdown that allowed me to select datastore2 > click “Datastore browser” where I used the "Create directory" option to create a directory called “isos”:
 ![image](https://user-images.githubusercontent.com/71083461/213767535-df80b9dc-5adb-447e-9368-1875dda83540.png)
-
-
 
 I could also access the datastore browser by right clicking “Storage” in the sidebar > selecting “Browse datastores”.
 
@@ -108,8 +87,6 @@ I then enabled SSH by going to the “Host” menu > selecting “ACTIONS” > t
 **NOTE:** I would make sure to DISABLE SSH while not in use!
 
 Similarly, to the datastore browser, I could have accessed the “Services” section by right clicking the “Host” tab on the sidebar.
-
-
 
 Before SSHing, I double checked connectivity with my ESXi host with a ping:
 ![image](https://user-images.githubusercontent.com/71083461/213767749-8a8891c7-b790-4413-b7e0-59ee33f86201.png)
@@ -130,12 +107,8 @@ And I moved into the created “isos” directory located in datastore2 on the h
 
 ![image](https://user-images.githubusercontent.com/71083461/213768042-a2020900-6c7d-4332-8788-fe835d83e52a.png)
 
-
-
 I then visited “http://192.168.3.120:8000/”, and acquired the link for the iso for “vyos-1.4” by right clicking the link > selecting “Copy link address”:
 ![image](https://user-images.githubusercontent.com/71083461/213768148-c768f0c9-0981-45e2-bb62-33996db3cfd5.png)
-
-
 
 I would then used the following command to download my iso!:
 
@@ -148,18 +121,12 @@ wget http://192.168.3.120:8000/vyos-1.4-rolling-202301111512-amd64.iso
 I  would then redo this process to acquire the “xubuntu” iso (Copy link from website >  same wget command from above with a different link:
 ![image](https://user-images.githubusercontent.com/71083461/213768374-7fba4dd2-b008-4772-9818-89a65b01bbe2.png)
 
-
-
 With this completed, I went back into my ESXi Host client, selected the “Networking” menu from the sidebar > selected “Virtual switches” where I setup the following virtual switch “480-WAN” and pressed “ADD”:
 ![image](https://user-images.githubusercontent.com/71083461/213768469-7d361e88-1ae7-4113-aa42-26a7d9b90cec.png)
 NOTE: Removed the Uplink
 
-
-
 Then I added the following port group to my “480-WAN” virtual switch by, in the “Networking” menu, going to the “Port groups” section, selecting "Add port group" and setting the options below for a group called “480-WAN”. After I would click “ADD”:
 ![image](https://user-images.githubusercontent.com/71083461/213768601-525aed86-533c-49b4-a55d-c3bfe6a57826.png)
-
-
 
 With this completed, I was able to select the created WAN from the “Virtual switches” category in networking and see the following:
 ![image](https://user-images.githubusercontent.com/71083461/213768655-57553fc4-6d3d-4ce8-b90c-b053d06b37a0.png)
@@ -186,7 +153,7 @@ I then set the following customized settings with the following notes:
 - In the Hard disk drop down menu, made sure to select “Thin provisioned” in “Disk Provisioning”
   ○    Thin provisioning only takes the storage that it needs, and grows according to demand up to the specified amount. Thick provisioning takes all of the storage at once.
 
--  Made sure to set the 2 network adapters to “VM Network”
+- Made sure to set the 2 network adapters to “VM Network”
   ○    Did this since I was building a base VM, so I wanted the VM to be generic.
 
 - When selecting the “Datastore ISO file” option in CD/DVD Drive, a pop-up appeared in the “Datastore browser” where I navigated on datastore2 to the vyos-1.4 VM.
@@ -196,16 +163,10 @@ I then set the following customized settings with the following notes:
 
 ![image](https://user-images.githubusercontent.com/71083461/213784116-a5b8f085-f15f-4a69-a9a6-fbbf22d9fa09.png) ![image](https://user-images.githubusercontent.com/71083461/213784129-d6acb667-8594-4d16-ab47-f312387a201b.png)
 
-
-
 After reviewing the following matched the desired setup, clicked “FINISH”: ![image](https://user-images.githubusercontent.com/71083461/213784149-a26d0394-dd6f-4b8b-ba9c-6b02f27bf270.png)
-
-
 
 Then, from within the virtual machines menu, I selected and started the new virtual machine:
 ![image](https://user-images.githubusercontent.com/71083461/213784183-48d6c0e2-657c-4ee2-98ca-b1e6ae50fdbb.png)
-
-
 
 Then from the “Console” dropdown, I opened a console in a new tab, and logged into VyOS with the default user “vyos” with the password “vyos”. Once logged in, I started the VyOS install with the command:
 
@@ -213,21 +174,14 @@ Then from the “Console” dropdown, I opened a console in a new tab, and logge
 Install image
 ```
 
-
-
 ![image](https://user-images.githubusercontent.com/71083461/213784211-dae52b64-92fd-4b9c-9d26-6148c85c9fc1.png)
 
-
 NOTE FOR VYOS INSTALL: By choosing default options, I mean the ones automatically selected when a user presses the Enter key at prompts (the answer within the brackets.)
-
-
 
 Along the install process, the only non-default option I would choose is the option that asks about destroying all data on /dev/sda, to which I would enter “yes”. Besides this, I answered with the Enter key:
 ![image](https://user-images.githubusercontent.com/71083461/213784233-e8f02b76-885e-4ce7-91d8-ff79aabfa32c.png)
 
 When prompted, I would then change the password for the vyos user.
-
-
 
 I would answer with the Enter key for default options for the rest of the prompts.
 
@@ -246,8 +200,6 @@ save
 Result of above on the interfaces using the ```show interfaces``` command:
 ![image](https://user-images.githubusercontent.com/71083461/213784270-c91b5d97-cedb-4c0e-98cd-af7c9e3730f8.png)
 
-
-
 I then set eth0 to dhcp, and enabled ssh on the VM with the following commands (if already in configure mode from previous commands, skip initial “configure” command):
 
 ```
@@ -261,36 +213,24 @@ save
 Result of above using the `show` command:
 ![image](https://user-images.githubusercontent.com/71083461/213784325-f9c932c1-ef93-4577-85ff-7b3ada3c833c.png)
 
-
-
 Then I used the commands `exit` and `poweroff` to shutoff the VM.
 
 Then, from the ESXi dashboard, I right clicked the VM in the sidebar, clicked “Edit settings”, and changed the CD/DVD to “Host device”. After saved:
 ![image](https://user-images.githubusercontent.com/71083461/213784356-af8e228a-cdf8-416f-beba-7eb3fa9872f6.png)
 
-
-
 Again I right clicked the VM in the sidebar, hovered over “Snapshots” > Selected “Take snapshot” > named it “Base”:
 ![image](https://user-images.githubusercontent.com/71083461/213784386-13d43e31-2342-47f2-88f7-9ae192a9aa66.png)
 
-
-
 After creating the snapshot (inside the the snapshot section mentioned before, should now be options to restore/manage snapshots) I changed the second adapter on the VM to “480-WAN” (right clicked the VM in the sidebar, clicked “Edit settings”):
 ![image](https://user-images.githubusercontent.com/71083461/213784421-8aa1b64e-c0a3-4692-b076-ea9347ff6e28.png)
-
-
 
 Then I restarted the VM after saving.
 
 Once I have logged back into the firewall, I checked for an address:
 ![image](https://user-images.githubusercontent.com/71083461/213784443-55bcba8d-cd22-4990-96ff-10bacc8563e9.png)
 
-
-
 I would then SSH into the VM using the DHCP address above:
 ![image](https://user-images.githubusercontent.com/71083461/213784467-1530c893-ef3e-4620-ad48-9444057250c6.png)
-
-
 
 Then I changed the password with the following:
 
@@ -370,8 +310,6 @@ I then finished, then I accessed the console for xubuntu, and followed this setu
    ![image](https://user-images.githubusercontent.com/71083461/213786768-f390dbf8-d8ab-4478-9223-39ae06e4d25b.png)
    NOTE: I did have to manually turn the VM off and on from the dashboard since the Logo to Xubuntu came up like it SHOULD have loaded, but after leaving it for 5 minutes and checking the performance graph on the VMs menu, I power cycled it. This solved the issue.
 
-
-
 With all of this set, I was met with a login screen and was able to login and use the Desktop:
 ![image](https://user-images.githubusercontent.com/71083461/213786846-fe80d51b-f469-4e5b-b1ad-b65a7f9a8782.png)
 
@@ -396,8 +334,6 @@ And then I would select “Actions” from the VMs menu and take a Base snapshot
 ![image](https://user-images.githubusercontent.com/71083461/213786996-f4cacc3c-f4b0-4751-8bca-274693b5b805.png)
 NOTE: Seemingly anywhere on the VMs menu I can right click and get the same menu as “Actions”
 
-
-
 Afterwards I would go back to the VMs menu, select “Edit”, and set the network adapter to “480-WAN”
 ![image](https://user-images.githubusercontent.com/71083461/213787032-203fdbdb-81c3-482f-99aa-960cac6e7e9b.png)
 
@@ -419,13 +355,9 @@ End result;
 
 NOTE: Ran `userdel` command once before a power cycle, but it said the "champuser" account was used by a process, so I powercycled the machine again and was able to effectively remove the user with the same command.
 
-
-
 I then (from the network connections > wired connection 1) added the following static IP address:
 ![image](https://user-images.githubusercontent.com/71083461/213787109-360572e2-8102-469d-841f-d67310151b7d.png)
 NOTE: Make sure that Method is set to “Manual” or else even if you have an address listed, xubuntu will still try for a DHCP address.
-
-
 
 I would also set my hostname to “xubuntu-wan” with the following command:
 
