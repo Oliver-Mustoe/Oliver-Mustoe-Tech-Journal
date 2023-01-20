@@ -1,4 +1,4 @@
-Page contains VM setup for {VM_NAME}
+Page contains the VM setup for {VM_NAME}
 
 ## Milestone X
 
