@@ -77,7 +77,7 @@ save
 ### Setup DNS forwarding:
 ```
 configure  
-set service dns forwarding listening-address {GATEWAY_IP} 
+set service dns forwarding listen-address {GATEWAY_IP} 
 set service dns forwarding allow-from {IP_ADDRESS}/{NETMASK}  
 set service dns forwarding system  
 commit  
