@@ -1,7 +1,5 @@
 This page journals content related to NET/SEC/SYS-480 milestone 1.
 
-
-
 **Table of contents**
 
 1. [VM Inventory](#vm-inventory)
@@ -18,8 +16,6 @@ This page journals content related to NET/SEC/SYS-480 milestone 1.
 
 6. [Sources](#sources-for-all)
 
-
-
 ## VM Inventory
 
 - [xubuntu-wan](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/VM-Inventory/xubuntu-wan.md)
@@ -35,20 +31,20 @@ ESXI IP = **192.168.7.25**
 From my IPMI IP, I logged in with the user "cncs-sysadmin" (with a password I was emailed). After logging in, I went to the "Remote Control" section to access iKVM (this is shown below.)
 ![image](https://user-images.githubusercontent.com/71083461/213762684-99fb485b-bcdb-4921-a7c9-eae1aa247a62.png)
 
-Then I used accessed iKVM, and used the Power control setting “Set power reset” to reboot the machine. Then I waited for the 2nd supermicro screen and used the virtual keyboard to press f11, from there I selected the UEFI selection of "General Udsik 5".
+Then I used accessed iKVM, and used the Power control setting “Set power reset” to reboot the machine. Then I waited for the 2nd supermicro screen and used the virtual keyboard to press F11, from there I selected the UEFI selection of "General Udisk 5".
 
-Once selected, I would use the “Samsung SSD” storage device to install ESXI: 
+Once selected, I waited and then I would use the “Samsung SSD” storage device to install ESXI: 
 ![image](https://user-images.githubusercontent.com/71083461/213762941-6ccfce92-fa24-4211-9ba5-2437030697da.png)
 
 I would then go along with the installer, making sure that I set a root password that I saved. Afterwards, I confirmed the install and the installation progress went along:
 ![image](https://user-images.githubusercontent.com/71083461/213763029-66306a6b-26a4-46fc-8e59-c62148575249.png)
 
-Once the process is finished, I would then press enter and wait for it to restart.
+Once the process is finished, I would then press enter and wait for it to reboot.
 
 Once it rebooted, I used F2 to login, and used my root password at the login screen. Then using F2 again and was met with this screen:
 ![image](https://user-images.githubusercontent.com/71083461/213763088-e7502a7b-4cd0-4f68-bffb-c58eb1042f72.png)
 
-Then I went from “Configure Management Network” > “Network Adapters” and changed the selection to "vmnic1" (once I had access to a cable). Following shows this:
+Then I went from “Configure Management Network” > “Network Adapters” and changed the selection to "vmnic1" (once I had access to a cable) and pressed Enter. Following shows this:
 
 ![image](https://user-images.githubusercontent.com/71083461/213763228-f85ff5f8-e66a-4058-adc3-be748361c3bb.png)
 
@@ -69,15 +65,7 @@ With this set, I went to my IP address "192.168.7.25" and I was met with the fol
 ![image](https://user-images.githubusercontent.com/71083461/213763291-9c8bcb6a-f890-4f5d-8e04-abf9b11c7d3f.png)
 
 **Reflection:**
-The setup of ESXi was a very cool and
-enlightening experience for me. Having not worked with this technology before,
-I was expecting a harder installation process. The process was fairly self-explanatory,
-and besides having to wait for certain cables, took very little time. I also
-appreciated my colleagues during this time, as the more experienced ones took
-time to make sure that everyone was on the same page. There was also a good
-amount of time spent organizing everyone getting their production IP addresses
-working on time as well. This part of Milestone 1 was overall a good introduction to
-the basic ESXi installation.
+The setup of ESXi was a very cool and enlightening experience for me. Having not worked with this technology before, I was expecting a harder installation process. The process was fairly self-explanatory, and besides having to wait for certain cables, took very little time. I also appreciated my colleagues during this time, as the more experienced ones took time to make sure that everyone was on the same page. There was also a good amount of time spent organizing everyone getting their production IP addresses working on time as well. This part of Milestone 1 was overall a good introduction to the basic ESXi installation.
 
 # ISOS and Networking
 
@@ -143,23 +131,23 @@ I  would then redo this process to acquire the “xubuntu” iso (Copy link from
 
 With this completed, I went back into my ESXi Host client, selected the “Networking” menu from the sidebar > selected “Virtual switches” where I setup the following virtual switch “480-WAN” and pressed “ADD”:
 ![image](https://user-images.githubusercontent.com/71083461/213768469-7d361e88-1ae7-4113-aa42-26a7d9b90cec.png)
-NOTE: Removed the Uplink
+**NOTE:** Removed the Uplink
 
 Then I added the following port group to my “480-WAN” virtual switch by, in the “Networking” menu, going to the “Port groups” section, selecting "Add port group" and setting the options below for a group called “480-WAN”. After I would click “ADD”:
 ![image](https://user-images.githubusercontent.com/71083461/213768601-525aed86-533c-49b4-a55d-c3bfe6a57826.png)
 
-With this completed, I was able to select the created WAN from the “Virtual switches” category in networking and see the following:
+With this completed, I was able to select the created switch from the “Virtual switches” category in networking and see the following:
 ![image](https://user-images.githubusercontent.com/71083461/213768655-57553fc4-6d3d-4ce8-b90c-b053d06b37a0.png)
 
 Reflection:
-Having never worked with ESXi before this, learning about basic datastores and the beginning of networking was very interesting. A major note I have about this step is that a lot of the actions I made can be accomplished by right clicking on the sidebar and selecting one of the options. As I move through the course, I will make sure to explore this as it might be faster than going into the menu/category. The introduction to networking I worked on during this step was also very enlightening, even though I don't fully understand the virtual switches/port groups yet. I will later research to resolve the ambiguity for myself!
+Having never worked with ESXi before this, learning about basic datastores and the beginning of networking was very interesting. A major note I have about this step is that a lot of the actions I made can be accomplished by right clicking on the sidebar and selecting one of the options. As I move through the course, I will make sure to explore this as it might be faster than going into the menu/category. The introduction to networking during this step was also very enlightening, even though I don't fully understand the virtual switches/port groups yet. I will later research to resolve the ambiguity for myself!
 
 # 480-fw
 
 From inside the “Virtual Machines” menu, I selected the “Create / Register VM” option > then I selected the default creation type, and gave the VM the name “480-fw” and set the following options. Clicked “NEXT”:
 ![image](https://user-images.githubusercontent.com/71083461/213783986-3f50750a-c30f-444d-96b1-cd95c35b5b95.png)
 
-NOTE ABOUT COMPATIBILITY: Even though the ESXi host I am working on is ESXi 8, it is recommended to set the compatibility to the lowest common denominator among a group of ESXi hosts (like if you have a mix of 6,7 and 8s, you would choose 6) to not have hardware compatibility issues.
+**NOTE ABOUT COMPATIBILITY:** Even though the ESXi host I am working on is ESXi 8, it is recommended to set the compatibility to the lowest common denominator among a group of ESXi hosts (like if you have a mix of 6,7 and 8s, you would choose 6) to not have hardware compatibility issues.
 
 Then I selected datastore2 as the storage for the VM. Clicked “NEXT”:
 ![image](https://user-images.githubusercontent.com/71083461/213784055-c9721035-b5c0-437f-8fdd-44c8e3aeee12.png)
@@ -199,7 +187,7 @@ Install image
 
 ![image](https://user-images.githubusercontent.com/71083461/213784211-dae52b64-92fd-4b9c-9d26-6148c85c9fc1.png)
 
-NOTE FOR VYOS INSTALL: By choosing default options, I mean the ones automatically selected when a user presses the Enter key at prompts (the answer within the brackets.)
+**NOTE FOR VYOS INSTALL:** By choosing default options, I mean the ones automatically selected when a user presses the Enter key at prompts (the answer within the brackets.)
 
 Along the install process, the only non-default option I would choose is the option that asks about destroying all data on /dev/sda, to which I would enter “yes”. Besides this, I answered with the Enter key:
 ![image](https://user-images.githubusercontent.com/71083461/213784233-e8f02b76-885e-4ce7-91d8-ff79aabfa32c.png)
@@ -295,7 +283,7 @@ After the commit, my SSH session closed. So I resumed using the web console from
 ![image](https://user-images.githubusercontent.com/71083461/213784535-bd71d887-5de8-47cd-a646-8c776b74d6ca.png)
 
 **Reflection:**
-Having used VMs on Vcenter, it was nice to see what the backend setupof it looks like. By doing so, I feel I have a deeper understanding and appreciation for the VMs that I use at Champlain everyday. I have in previous courses worked with the idea of VMware cloning, so setting VyOS to be a base image very much made sense to me. My experience in VyOS in other classes was also very handy in this setup of the firewall. Getting experience with ESXi so far has been a very fun and rewarding experience!
+Having used VMs on Vcenter, it was nice to see what the backend setup of it looks like. By doing so, I feel I have a deeper understanding and appreciation for the VMs that I use at Champlain everyday. I have in previous courses worked with the idea of VMware cloning, so setting VyOS as a base image very much made sense to me. My experience in VyOS in other classes was also very handy in this setup of the firewall. Getting experience with ESXi so far has been a very fun and rewarding experience!
 
 # xubuntu and proof
 
@@ -308,7 +296,7 @@ With this I would use the default creation type, set the name to “xubuntu-wan�
 I would select to place it onto datastore2:
 ![image](https://user-images.githubusercontent.com/71083461/213786545-73a788d3-406b-480a-af9f-2d2c04f5ecce.png)
 
-Then I set the virtual machine settings as follows with the following points:
+Then I set the virtual machine settings as follows with the following points (same points from VyOS VM setup apply EXCEPT for anything regarding the extra network adapter!):
 
 - Use thin provisioning
 
@@ -323,7 +311,7 @@ I then finished, then I accessed the console for xubuntu, and followed this setu
    ![image](https://user-images.githubusercontent.com/71083461/213786691-b9791466-8bbf-4cd7-acab-bad84230ec0a.png)  
 2. Used the default keyboard layout
 3. Kept the default settings and pressed “Continue” in “Update and other software”
-4. In “Installation type, chose to “Erase disk and install Xubuntu” (default), pressed “Install Now”  
+4. In “Installation type", chose to “Erase disk and install Xubuntu” (default), pressed “Install Now”  
    ![image](https://user-images.githubusercontent.com/71083461/213786734-04b7384d-87eb-4fc8-b67a-31845d9d3349.png)    
 5. When asked about disk changes, just continued on
 6. Selected “New York” timezone
@@ -331,7 +319,7 @@ I then finished, then I accessed the console for xubuntu, and followed this setu
    ![image](https://user-images.githubusercontent.com/71083461/213786750-4b24f844-6399-45c4-a5de-2968629cd973.png)  
 8. Once installation was complete, I chose to restart  
    ![image](https://user-images.githubusercontent.com/71083461/213786768-f390dbf8-d8ab-4478-9223-39ae06e4d25b.png)  
-   NOTE: I did have to manually turn the VM off and on from the dashboard since the Logo to Xubuntu came up like it SHOULD have loaded, but after leaving it for 5 minutes and checking the performance graph on the VMs menu, I power cycled it. This solved the issue.
+   **NOTE:** I did have to manually turn the VM off and on from the dashboard since the Logo to Xubuntu came up like it SHOULD have loaded, but after leaving it for 5 minutes and checking the performance graph on the VMs menu, I power cycled it. This solved the issue.
 
 With all of this set, I was met with a login screen and was able to login and use the Desktop:
 ![image](https://user-images.githubusercontent.com/71083461/213786846-fe80d51b-f469-4e5b-b1ad-b65a7f9a8782.png)
@@ -355,9 +343,9 @@ I would then go back to the VMs menu, select “Edit” and change the CD/DVD dr
 
 And then I would select “Actions” from the VMs menu and take a Base snapshot like the following:
 ![image](https://user-images.githubusercontent.com/71083461/213786996-f4cacc3c-f4b0-4751-8bca-274693b5b805.png)
-NOTE: Seemingly anywhere on the VMs menu I can right click and get the same menu as “Actions”
+**NOTE:** Seemingly anywhere on the VMs menu I can right click and get the same menu as “Actions”
 
-Afterwards I would go back to the VMs menu, select “Edit”, and set the network adapter to “480-WAN”
+Afterwards I would go back to the VMs menu, select “Edit”, and set the network adapter to “480-WAN”, saved:
 ![image](https://user-images.githubusercontent.com/71083461/213787032-203fdbdb-81c3-482f-99aa-960cac6e7e9b.png)
 
 I then powered on the system and ran the following commands as root to add a sudo user/add that user to the sudo group:
@@ -376,11 +364,11 @@ sudo userdel -r champuser
 End result:
 ![image](https://user-images.githubusercontent.com/71083461/213787079-8ce94884-20bf-4001-b98c-44119851002f.png)
 
-NOTE: Ran `userdel` command once before a power cycle, but it said the "champuser" account was used by a process, so I powercycled the machine again and was able to effectively remove the user with the same command.
+**NOTE:** Ran `userdel` command once before a power cycle, but it said the "champuser" account was used by a process, so I powercycled the machine again and was able to effectively remove the user with the same command.
 
 I then (from the network connections > wired connection 1) added the following static IP address:
 ![image](https://user-images.githubusercontent.com/71083461/213787109-360572e2-8102-469d-841f-d67310151b7d.png)
-NOTE: Make sure that Method is set to “Manual” or else even if you have an address listed, xubuntu will still try for a DHCP address.
+**NOTE:** Make sure that Method is set to “Manual” or else even if you have an address listed, xubuntu will still try for a DHCP address.
 
 I would also set my hostname to “xubuntu-wan” with the following command:
 
@@ -390,7 +378,7 @@ sudo hostnamectl set-hostname xubuntu-wan
 
 **Reflection:**
 
-Having only setup 2 VMs, I can say that the process of manually setting up VMs can be a fun, but time-consuming process on ESXi. The install of xubuntu was very smooth, except for when I tried to restart the VM, it froze on startup. This may have been due to the installation media still being install?!? But after checking that the VM was not consuming resources for a good amount of time, I decided to power cycle it and it worked flawlessly from there! The instructore provided script was also very interesting to me, as I wonder if there are guides that exist to prep VMs for this, or it is just general Linux knowledge. As I go through the course, I might develop a resource for this if it becomes a bigger part of the course. With the base setup done, I can't wait to see any more additions we make to it/how we start automating the process in future weeks!
+Having only setup 2 VMs, I can say that the process of manually setting up VMs can be a fun, but time-consuming process on ESXi. The install of xubuntu was very smooth, except for when I tried to restart the VM, it froze on startup. This may have been due to the installation media still being inside?!? But after checking that the VM was not consuming resources for a good amount of time, I decided to power cycle it and it worked flawlessly from there! The instructore provided script was also very interesting to me, as I wonder if there are guides that exist to prep VMs for this, or it is just general Linux knowledge. As I go through the course, I might develop a resource for this if it becomes a bigger part of the course. With the base setup done, I can't wait to see any more additions we make to it/how we start automating the process in future weeks!
 
 #### Milestone 1 proof:
 
