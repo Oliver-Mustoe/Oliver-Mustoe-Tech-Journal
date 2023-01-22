@@ -139,7 +139,7 @@ Then I added the following port group to my “480-WAN” virtual switch by, in 
 With this completed, I was able to select the created switch from the “Virtual switches” category in networking and see the following:
 ![image](https://user-images.githubusercontent.com/71083461/213768655-57553fc4-6d3d-4ce8-b90c-b053d06b37a0.png)
 
-Reflection:
+**Reflection:**
 Having never worked with ESXi before this, learning about basic datastores and the beginning of networking was very interesting. A major note I have about this step is that a lot of the actions I made can be accomplished by right clicking on the sidebar and selecting one of the options. As I move through the course, I will make sure to explore this as it might be faster than going into the menu/category. The introduction to networking during this step was also very enlightening, even though I don't fully understand the virtual switches/port groups yet. I will later research to resolve the ambiguity for myself!
 
 # 480-fw
