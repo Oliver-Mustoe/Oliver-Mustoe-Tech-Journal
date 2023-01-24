@@ -31,7 +31,7 @@ ESXI IP = **192.168.7.25**
 From my IPMI IP, I logged in with the user "cncs-sysadmin" (with a password I was emailed). After logging in, I went to the "Remote Control" section to access iKVM (this is shown below.)
 ![image](https://user-images.githubusercontent.com/71083461/213762684-99fb485b-bcdb-4921-a7c9-eae1aa247a62.png)
 
-Then I used accessed iKVM, and used the Power control setting “Set power reset” to reboot the machine. Then I waited for the 2nd supermicro screen and used the virtual keyboard to press F11, from there I selected the UEFI selection of "General Udisk 5".
+Then I accessed iKVM, and used the Power control setting “Set power reset” to reboot the machine. Then I waited for the 2nd supermicro screen and used the virtual keyboard to press F11, from there I selected the UEFI selection of "General Udisk 5".
 
 Once selected, I waited and then I would use the “Samsung SSD” storage device to install ESXI: 
 ![image](https://user-images.githubusercontent.com/71083461/213762941-6ccfce92-fa24-4211-9ba5-2437030697da.png)
