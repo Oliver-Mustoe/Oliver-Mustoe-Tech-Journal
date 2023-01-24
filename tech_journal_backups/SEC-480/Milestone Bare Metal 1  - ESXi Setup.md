@@ -39,7 +39,7 @@ Once selected, I waited and then I would use the “Samsung SSD” storage devic
 I would then go along with the installer, making sure that I set a root password that I saved. Afterwards, I confirmed the install and the installation progress went along:
 ![image](https://user-images.githubusercontent.com/71083461/213763029-66306a6b-26a4-46fc-8e59-c62148575249.png)
 
-Once the process is finished, I would then press enter and wait for it to reboot.
+Once the process is finished, I would then press Enter and wait for it to reboot.
 
 Once it rebooted, I used F2 to login, and used my root password at the login screen. Then using F2 again and was met with this screen:
 ![image](https://user-images.githubusercontent.com/71083461/213763088-e7502a7b-4cd0-4f68-bffb-c58eb1042f72.png)
@@ -71,7 +71,7 @@ The setup of ESXi was a very cool and enlightening experience for me. Having not
 
 Devin-jump IP:port = 192.168.3.120:8000
 
-After logging into my ESXi host, I then went into the storage menu of my dashboard, right-clicked "datastore1", and selected to "Rename" the datastore to “datastore1-super15”:
+After logging into my ESXi host, I then went into the storage menu of my sidebar, right-clicked "datastore1", and selected to "Rename" the datastore to “datastore1-super15”:
 ![image](https://user-images.githubusercontent.com/71083461/213767184-d1d9a9a3-c49e-4b4c-947c-51191519ae91.png)
 ![image](https://user-images.githubusercontent.com/71083461/213767233-c63007cd-a708-4c27-8115-00cef933e41b.png)
 
