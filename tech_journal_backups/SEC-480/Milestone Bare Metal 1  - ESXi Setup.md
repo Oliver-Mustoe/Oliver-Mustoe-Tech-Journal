@@ -48,7 +48,7 @@ Then I went from “Configure Management Network” > “Network Adapters” and
 
 ![image](https://user-images.githubusercontent.com/71083461/213763228-f85ff5f8-e66a-4058-adc3-be748361c3bb.png)
 
-Inside the management network, I would use the following menus to setup the apprioprate network configurations for my host:
+Inside the management network, I would use the following menus to setup the appropriate network configurations for my host:
 
 **IPv4 Configuration:**  
 
