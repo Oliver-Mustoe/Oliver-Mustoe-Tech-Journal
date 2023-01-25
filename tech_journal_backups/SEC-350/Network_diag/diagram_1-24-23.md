@@ -1,6 +1,6 @@
 Below is the network diagram for SEC-350 architecture circa 1/24/23:
 
-![image](https://user-images.githubusercontent.com/71083461/214442814-a69c7e6f-0ca3-46fa-b819-47b309938dce.png)
+![image](https://user-images.githubusercontent.com/71083461/214452058-99c48dfd-db0a-42e6-b804-2f7401fa46eb.png)
 
 <details>
 <summary>Code</summary>
@@ -14,8 +14,6 @@ title Oliver Routing and DMZ Architecture -- SEC-350
 header Updated 1/24/23
 
 ' devices/networks
-queue "CYBER-DATACENTER 192.168.4.0/24" as CYBER #deepskyblue;line:darkblue;line.bold;text:black
-
 rectangle "GW SEC350-01" as GW
 
 queue "SEC350-01-WAN 10.0.17.0/24" as WAN #pink;line:red;line.bold;text:black
@@ -58,10 +56,5 @@ WAN -[#red]- rw01: ".25"
 
 @enduml
 ```
+
 </details>
-
-
-
-
-
-
