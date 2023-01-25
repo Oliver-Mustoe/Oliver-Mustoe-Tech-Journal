@@ -8,8 +8,6 @@ Below is the network diagram for SEC-350 architecture circa 1/24/23:
 ```
 @startuml
 
-'TODO: Double-check info
-
 title Oliver Routing and DMZ Architecture -- SEC-350 
 header Updated 1/24/23
 
