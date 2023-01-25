@@ -63,7 +63,7 @@ Example configuration (file should be edited with proper permissions!):
 To test Syslog, run the command `logger -t test SOMETHING` from your logging client. This should appear in the logging server's `/var/log/messages` file. Below is a test showing the logging server "log01-oliver" receiving the test "TESTFROMWEB01TOLOG01" from "web01-oliver", a logging client:
 ![image](https://user-images.githubusercontent.com/71083461/212769825-b12dfe85-7b96-46f6-9c12-1355314d2d61.png)
 
-# Custom log organization
+## Custom log organization
 
 First, on the logging server, comment out the following lines inside "/etc/rsyslog.conf":
 
