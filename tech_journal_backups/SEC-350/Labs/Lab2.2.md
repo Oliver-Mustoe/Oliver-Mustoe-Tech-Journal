@@ -10,7 +10,7 @@ This technical journal will cover/link to the following information:
 
 5. [Describe how to forward authentication events from vyos to a remote syslog server](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/wiki/Vyos-reference#forward-authentication-messages-to-rsyslog)
 
-6. t[Make sure to capture any difficulties or observations as reflections](#reflection)
+6. [Make sure to capture any difficulties or observations as reflections](#reflection)
 
 # SSH keybased authentication setup
 
