@@ -69,7 +69,7 @@ First, on the logging server, comment out the following lines inside "/etc/rsysl
 
 ![image](https://user-images.githubusercontent.com/71083461/214687950-57827681-960f-41fd-83ef-268275c863fe.png)  
 
-Then create a .conf file, such as “03-sec350.conf”, in /etc/rsyslog.d **AS ROOT**. Give it the following [instructor provided content](https://raw.githubusercontent.com/gmcyber/sec350-share/main/03-sec350.conf):
+Then create a .conf file, such as “03-sec350.conf”, in /etc/rsyslog.d **AS ROOT**. Gave it the following [instructor provided content](https://raw.githubusercontent.com/gmcyber/sec350-share/main/03-sec350.conf):
 
 ```
 module(load="imudp")
