@@ -35,7 +35,7 @@ Below shows the process of setting up SSH keybased authentication to a host with
 
 **Prereqs**: Following information expects a [syslog client setup](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/wiki/Syslog-reference#configuring-syslog-service-on-logging-client). Output of logs will be set according to the settings outlined in [Time settings](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/wiki/Time-settings).
 
-Inside "/etc/rsyslod.d", add the following to the .conf file, such as "sec350-client.conf". (First line should already exist)
+Inside "/etc/rsyslod.d", add the following to the .conf file, in this case "sec350-client.conf". (First line should already exist)
 
 ```
 authpriv.* @{LOG_server_IP}
