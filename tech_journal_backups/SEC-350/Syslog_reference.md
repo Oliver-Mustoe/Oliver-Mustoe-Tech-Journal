@@ -88,7 +88,7 @@ Then, restart syslog, and from the logging client, execute the test seen in the 
 
 ![image](https://user-images.githubusercontent.com/71083461/214688669-8fbfa865-8083-4908-af01-05c1712ce1cf.png)
 
-Which will result in the message logged (after second command) in a folder for the clients hostname (shown in first command):
+Which will result in the message logged (shown after second command) in a folder for the clients hostname (shown after first command):
 
 ![image](https://user-images.githubusercontent.com/71083461/214689060-4af191b9-72d0-4120-b709-09409e925229.png)  
 
