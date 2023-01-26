@@ -6,7 +6,7 @@ This technical journal will cover/link to the following information:
 
 3. [Address how to log authpriv messages on linux systems](#authpriv-logging-on-linux)
 
-4. [your rsyslog documentation to cover the new drop in file configuration on the server as well as the changes to the web01 client to forward authentication events.](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/wiki/Syslog-reference#custom-log-organization)
+4. [Augment your rsyslog documentation to cover the new drop in file configuration on the server as well as the changes to the web01 client to forward authentication events.](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/wiki/Syslog-reference#custom-log-organization)
 
 5. [Describe how to forward authentication events from vyos to a remote syslog server](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/wiki/Vyos-reference#forward-authentication-messages-to-rsyslog)
 
