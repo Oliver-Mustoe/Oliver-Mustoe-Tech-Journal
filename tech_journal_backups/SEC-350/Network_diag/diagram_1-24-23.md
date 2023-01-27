@@ -1,6 +1,6 @@
 Below is the network diagram for SEC-350 architecture circa 1/24/23:
 
-![image](https://user-images.githubusercontent.com/71083461/214453446-e62bfedf-eb03-45dd-a0c7-d8588ec039a4.png)
+![image](https://user-images.githubusercontent.com/71083461/214984470-1b733776-9950-4f73-93a8-900518fc3173.png)
 
 <details>
 <summary>Code</summary>
@@ -31,8 +31,8 @@ rectangle "<img:https://raw.githubusercontent.com/Roemer/plantuml-office/master/
 ' Connections
 GW -[#red]- WAN: ".2"
 
-fw01 -[#green]- LAN: ".2 (eth1)"
-fw01 -[#goldenrod]- DMZ: ".2 (eth2)"
+fw01 -[#green]- LAN: ".2 (eth2)"
+fw01 -[#goldenrod]- DMZ: ".2 (eth1)"
 
 LAN -[#green]- mgmt01: ".10"
 
