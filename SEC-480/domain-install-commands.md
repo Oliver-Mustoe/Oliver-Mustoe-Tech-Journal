@@ -1,0 +1,51 @@
+```powershell
+# Setup AD
+Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
+Install-ADDSForest -DomainName “oliver.local”
+# Wait for reboot, SSH back in as deployer, then make accounts (might want to switch to new account after creation)
+$password = Read-Host "Please enter a password for the oliver-adm.mustoe user" -AsSecureString
+New-ADUser -Name oliver-adm.mustoe -AccountPassword $password -Passwordneverexpires $true -Enabled $true
+Add-ADGroupMember -Identity "Domain Admins" -Members oliver-adm.mustoe
+Add-ADGroupMember -Identity "Enterprise Admins" -Members oliver-adm.mustoe
+# Setup DNS and make records (A/PTR)
+Install-WindowsFeature DNS -IncludeManagementTools
+Add-DnsServerPrimaryZone -NetworkID 10.0.17.0/24 -ZoneFile “17.0.10.in-addr.arpa.dns”
+Add-DnsServerResourceRecordA -CreatePtr -Name "vcenter" -ZoneName "oliver.local" -AllowUpdateAny -IPv4Address "10.0.17.3"
+Add-DnsServerResourceRecordA -CreatePtr -Name "480-fw" -ZoneName "oliver.local" -AllowUpdateAny -IPv4Address "10.0.17.2"
+Add-DnsServerResourceRecordA -CreatePtr -Name "xubuntu-wan" -ZoneName "oliver.local" -AllowUpdateAny -IPv4Address "10.0.17.100"
+Add-DnsServerResourceRecordPtr -Name "4" -ZoneName “17.0.10.in-addr.arpa” -AllowUpdateAny -AgeRecord -PtrDomainName "dc1.oliver.local."
+# Setup DHCP
+Install-WindowsFeature DHCP -IncludeManagementTools
+netsh dhcp add securitygroups
+Restart-Service dhcpserver
+Add-DHCPServerv4Scope -Name “oliver-scope” -StartRange 10.0.17.101 -EndRange 10.0.17.150 -SubnetMask 255.255.255.0 -State Active
+# In theory, lease-time flag could be added to the above command, but I did not set it first time. To ensure future running, just added below
+Set-DHCPServerv4Scope -ScopeID 10.0.17.0 -Name “oliver-scope” -State Active -LeaseDuration 1.00:00:00
+Set-DHCPServerv4OptionValue -ScopeID 10.0.17.0 -DnsDomain dc1.oliver.local -DnsServer 10.0.17.4 -Router 10.0.17.2
+# Following must be run as the new adm user
+Add-DhcpServerInDC -DnsName "dc1.oliver.local" -IpAddress 10.0.17.4
+Restart-service dhcpserverrart-service dhcpserver
+```
+
+Helpful commands
+
+```powershell
+# Removes DNS records (can change zone, type, and record)
+Remove-DnsServerResourceRecord -ZoneName "oliver.local" -RRType "A" -Name "@"
+# Checks the DNS zone
+Get-DnsServerResourceRecord -ZoneName oliver.local
+# Remove account
+Remove-ADUser -Identity oliver-adm
+```
+
+Sources:
+
+* https://malwaremily.medium.com/install-ad-ds-dns-and-dhcp-using-powershell-on-windows-server-2016-ac331e5988a7
+
+* https://www.ravenswoodtechnology.com/ad-roles-enterprise-admins-and-schema-admins/
+
+* [Add-DnsServerResourceRecordPtr (DnsServer) | Microsoft Learn](https://learn.microsoft.com/en-us/powershell/module/dnsserver/add-dnsserverresourcerecordptr?view=windowsserver2022-ps)
+
+* [Add-DnsServerPrimaryZone (DnsServer) | Microsoft Learn](https://learn.microsoft.com/en-us/powershell/module/dnsserver/add-dnsserverprimaryzone?view=windowsserver2022-ps)
+
+* [Add-DhcpServerInDC (DhcpServer) | Microsoft Learn](https://learn.microsoft.com/en-us/powershell/module/dhcpserver/add-dhcpserverindc?view=windowsserver2022-ps)

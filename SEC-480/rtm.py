@@ -39,7 +39,7 @@ def args():
 def image_replacer(arguments):
     # Expected image format: "image{number}{number}{number}.gif"
     
-    image_regex = "!.*image\d{3}.*"
+    image_regex = ".*image.*"
     image_replace_regex = "image0*"
     InputFile = arguments.InputFile
     Images = arguments.AllImages
@@ -53,22 +53,25 @@ def image_replacer(arguments):
             r_input = input.read()
             r_images = images.read()
             
-            # Turn images into list
-            image_list = re.findall(image_regex,r_images)
-            
             # Replace unneeded zeros
             r_input = re.sub(image_replace_regex,"image",r_input)
             
+            # Turn images into list
+            image_list = re.findall(image_regex,r_images)
+            
+            print(len(image_list))
+                 
             i = 1
             # For each image
             for image in image_list:
                 # Create a new image regex
-                image_regex2 = "!.*image" + str(i) + ".*"
-
+                image_regex2 = "!.*image" + str(i) + ".gif.*"
+                                
                 # Substitute based on image regex with the image
                 r_input = re.sub(image_regex2,image,r_input)
-                
+                    
                 i += 1
+            
 
     return(r_input)
 
