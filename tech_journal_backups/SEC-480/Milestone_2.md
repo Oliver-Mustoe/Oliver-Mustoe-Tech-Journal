@@ -274,7 +274,7 @@ On reboot, I would attempt to login via SSH to dc1 from xubuntu, which was succ
 
 ![image102](https://user-images.githubusercontent.com/71083461/215294860-1072dc15-a35e-4b8b-a51f-023d3be74bd1.gif)
 
-I then ran the following commands to install ADDS, DNS, and DHCP (for prompts, made safe mode password, answered with the default option for the rest.)
+I then ran the following commands to [install ADDS, DNS, and DHCP](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/domain-install-commands.md) (for prompts, made safe mode password, answered with the default option for the rest.):
 
 ```powershell
 # Setup AD
