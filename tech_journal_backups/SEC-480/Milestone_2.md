@@ -145,15 +145,15 @@ Then I used the searchbar to open powershell (opens as administrator by defa
 I then used the “sconfig” utility to set the following options:  
 ![image054](https://user-images.githubusercontent.com/71083461/215291610-e358313c-afbe-4b4b-b746-85c828942fba.gif)
 
-- 5) Windows Update Settings – set to Manual (press OK)  
+- 5 - Windows Update Settings – set to Manual (press OK)  
 
 ![image056](https://user-images.githubusercontent.com/71083461/215291612-a324be7c-5428-41a3-8a2b-5890c439b826.gif)
 
-- 9) Date and Time – set to Eastern Time (press OK)  
+- 9 – Date and Time – set to Eastern Time (press OK)  
 
 ![image058](https://user-images.githubusercontent.com/71083461/215291614-66f99be6-2b9c-400d-893c-df7512b370b2.gif)
 
-- 6) Download and Install Updates – Search for all update/do all the updates (“A” at the cmd popup prompt/s), this process takes time and multiple restarts (Make sure to check periodically for restart prompts, Windows might say it's done…but not really be done). On restarts, will need to redo the sconfig > option 6 > A > A
+- 6 – Download and Install Updates – Search for all update/do all the updates (“A” at the cmd popup prompt/s), this process takes time and multiple restarts (Make sure to check periodically for restart prompts, Windows might say it's done…but not really be done). On restarts, will need to redo the sconfig > option 6 > A > A
 
 ![image060](https://user-images.githubusercontent.com/71083461/215291616-cfed12ed-b781-4454-8617-90d4b98881eb.gif)
 
@@ -337,3 +337,9 @@ This milestone was a good introduction to the base imaging process of windows se
 - [How to install Remmina - Remmina](https://remmina.org/how-to-install-remmina/)
 
 - [How to enable Remote Desktop using PowerShell on Windows 10 - Pureinfotech](https://pureinfotech.com/enable-remote-desktop-powershell-windows-10/)
+
+
+
+****
+
+Can't find something? Look in the backup [Milestone 2](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/Milestone_2.md) page
