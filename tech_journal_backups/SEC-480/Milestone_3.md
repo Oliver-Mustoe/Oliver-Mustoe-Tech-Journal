@@ -24,25 +24,17 @@ Then, on my xubuntu-wan box, the iso will appear. I then right clicked > Mount 
 
 ![image110](https://user-images.githubusercontent.com/71083461/215294868-e4a077c1-1c4c-422c-b6b4-17e2bee686a7.gif)
 
-
-
 I then, from a terminal window, moved into the folder “/media/olivermustoe/VMware VCSA/vcsa-ui-installer/lin64” and ran the installer with `./installer`:
 
 ![image112](https://user-images.githubusercontent.com/71083461/215294870-c862ae19-e8bb-485a-8a6f-7d4968ecd93a.gif)
-
-
 
 (causes the following to appear after entering the installer)
 
 ![image114](https://user-images.githubusercontent.com/71083461/215294872-7511f017-d897-42f0-bdd6-d2ced2e40ff0.gif)
 
-
-
 (Now is a good time to double check that Milestone 2 worked with a double check of DNS)
 
 ![image116](https://user-images.githubusercontent.com/71083461/215294874-771cd2a0-789b-4a1c-b5a2-94f29a0eaa09.gif)
-
-
 
 I then followed these steps to install **(STEPS RELATE TO NUMBER IN SETUP WIZARD)**:
 
@@ -78,15 +70,11 @@ I then followed these steps to install **(STEPS RELATE TO NUMBER IN SETUP WIZARD
 
 ![image130](https://user-images.githubusercontent.com/71083461/215294888-5da22817-2e17-40c6-90e0-3227ba752d55.gif)
 
-
-
 I then waited for the installer to run and complete stage 1.  
 
 When it was finished, the following appeared:
 
 ![image132](https://user-images.githubusercontent.com/71083461/215294890-56814e02-b63c-423a-aaab-3b43da4de85f.gif)
-
-
 
 I would press continue, and follow these steps (STEPS RELATE TO NUMBER IN SETUP WIZARD):
 
@@ -108,13 +96,9 @@ I would press continue, and follow these steps (STEPS RELATE TO NUMBER IN SETUP 
 
 ![image140](https://user-images.githubusercontent.com/71083461/215294900-f1353033-e141-4c66-a8b1-cba7df0e17d4.gif)
 
-
-
 This would commence an installer. I would wait for it to run, when it did, I was met with the following:
 
 ![image142](https://user-images.githubusercontent.com/71083461/215294902-407625dc-5542-470e-8221-4df56f2642d5.gif)
-
-
 
 I was then able to access my vsphere installation by going to “[https://vcenter.oliver.local](https://vcenter.oliver.local)” , logging in with "administrator@.vsphere.local" and the administrator password let above:
 
@@ -126,8 +110,6 @@ Once logged into vsphere, should saw the following:
 
 ![image146](https://user-images.githubusercontent.com/71083461/215294906-58746eab-98b8-4d7c-9d7d-605810b89daa.gif)
 
-
-
 I then created a new datastore with the following settings (navigate by right clicking vcenter.oliver.local > New Datacenter…):
 
 ![image148](https://user-images.githubusercontent.com/71083461/215294908-3ab42438-c9f8-47f7-995a-579f997b67ab.gif)
@@ -135,8 +117,6 @@ I then created a new datastore with the following settings (navigate by right cl
 **Definitions:**
 
 Datacenter = Container for ESXi hosts, or clusters of hosts
-
-
 
 I then added a host to my datastore by following the below steps (navigate to install by right clicking “480-Devops > Add Host…)
 
@@ -162,8 +142,6 @@ I then added a host to my datastore by following the below steps (navigate to in
 
 ![image156](https://user-images.githubusercontent.com/71083461/215294916-1bdd0d21-189a-4e6c-9e94-25cbb131a690.gif)
 
-
-
 With this set, the following should appear:
 
 ![image158](https://user-images.githubusercontent.com/71083461/215294918-f85a7f29-7947-4198-9363-c026c7019556.gif)
@@ -181,3 +159,7 @@ The installation process of vCenter was actually much easier than I was expect
 - https://communities.vmware.com/t5/ESXi-Discussions/Why-vsphere-cluster-hosts-have-yellow-triangles/td-p/1735194?attachment-id=79048
 
 - [Reddit - Dive into anything](https://www.reddit.com/r/vmware/comments/yt4srt/vcsa_70u3_yellow_warning_triangle_next_to_one/)
+
+****
+
+Can't find something? Look in the backup [Milestone 3](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/Milestone_2.md) page

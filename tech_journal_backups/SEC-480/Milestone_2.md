@@ -338,8 +338,6 @@ This milestone was a good introduction to the base imaging process of windows se
 
 - [How to enable Remote Desktop using PowerShell on Windows 10 - Pureinfotech](https://pureinfotech.com/enable-remote-desktop-powershell-windows-10/)
 
-
-
 ****
 
 Can't find something? Look in the backup [Milestone 2](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/Milestone_2.md) page
