@@ -4,7 +4,7 @@ This page journals content related to NET/SEC/SYS-480 milestone 3.
 
 - [vCenter install](#vcenter-install)
 
-- [Database setup](#database-setup)
+- [Datacenter setup](#datacenter-setup)
 
 - [Reflection](#reflection-for-milestone-3)
 
@@ -20,7 +20,7 @@ Firstly I adjusted my xubuntu-wan box to point towards the VMware-VCSA iso I d
 
 ![image108](https://user-images.githubusercontent.com/71083461/215294866-1d00cb78-9135-4d61-890c-03ab9b4d51de.gif)
 
-Then, on my xubuntu-wan box, the iso will appear. I then right clicked > Mount Volume > entered password:
+Then, on my xubuntu-wan box, the iso will appeared. I then right clicked > Mount Volume > entered password:
 
 ![image110](https://user-images.githubusercontent.com/71083461/215294868-e4a077c1-1c4c-422c-b6b4-17e2bee686a7.gif)
 
@@ -84,7 +84,7 @@ I would press continue, and follow these steps (STEPS RELATE TO NUMBER IN SETUP 
 
 ![image134](https://user-images.githubusercontent.com/71083461/215294892-2cff2caf-f8d6-4d07-b060-bacb33abeb0b.gif)
 
-3. Then I set the following SSO configuration (same pass as before:
+3. Then I set the following SSO configuration (same pass as before:)
 
 ![image136](https://user-images.githubusercontent.com/71083461/215294895-499f6726-dd51-4920-a065-ddc71073bc34.gif)
 
@@ -104,7 +104,7 @@ I was then able to access my vsphere installation by going to “[https://vcen
 
 ![image144](https://user-images.githubusercontent.com/71083461/215294904-126a09d1-2488-43e9-9e51-7a3a15e77c8e.gif)
 
-## Database setup
+## Datacenter setup
 
 Once logged into vsphere, should saw the following:
 
