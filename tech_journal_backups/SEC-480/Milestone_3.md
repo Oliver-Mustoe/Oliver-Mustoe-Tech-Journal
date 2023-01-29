@@ -2,7 +2,7 @@ This page journals content related to NET/SEC/SYS-480 milestone 3.
 
 **Table of contents**
 
-- [vCenter install]((#vcenter-install))
+- [vCenter install](#vcenter-install)
 
 - [Database setup](#database-setup)
 
