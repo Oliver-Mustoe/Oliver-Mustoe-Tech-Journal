@@ -24,7 +24,7 @@ Set-DHCPServerv4Scope -ScopeID 10.0.17.0 -Name “oliver-scope” -State Active 
 Set-DHCPServerv4OptionValue -ScopeID 10.0.17.0 -DnsDomain dc1.oliver.local -DnsServer 10.0.17.4 -Router 10.0.17.2
 # Following must be run as the new adm user
 Add-DhcpServerInDC -DnsName "dc1.oliver.local" -IpAddress 10.0.17.4
-Restart-service dhcpserverrart-service dhcpserver
+Restart-service dhcpserver
 ```
 
 Helpful commands
