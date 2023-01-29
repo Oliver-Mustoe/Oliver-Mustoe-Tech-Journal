@@ -6,7 +6,7 @@ This page journals content related to NET/SEC/SYS-480 milestone 2.
 
 - [Sysprep](#sysprep)
 
-- [Domain install]((#domain-install))
+- [Domain install](#domain-install)
 
 - [Reflection](#reflection)
 
