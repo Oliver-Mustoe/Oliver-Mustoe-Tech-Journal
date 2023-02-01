@@ -9,11 +9,12 @@ This page contains configurations/tips on working with the VyOS.
 
 ## Vyos configs:
 
-Current VyOS config -- [1-25-32](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-350/Vyos_configs/1-25-23.md)
+Current VyOS config: W3 -- 1-31-23
 
 Old VyOS configs:
 
-- [1-16-23](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-350/Vyos_configs/1-16-23.md)
+- W2 -- [1-25-23](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-350/Vyos_configs/1-25-23.md)
+- W1 -- [1-16-23](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-350/Vyos_configs/1-16-23.md)
 
 Configuration acquired with running the following on a VyOS system:
 
