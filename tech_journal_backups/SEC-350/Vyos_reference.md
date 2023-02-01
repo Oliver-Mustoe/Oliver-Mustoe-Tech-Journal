@@ -114,3 +114,7 @@ save
 ## Sources
 
 - https://docs.vyos.io/en/latest/configuration/service/dns.html
+
+***
+
+Cant find something, check in the backup [Vyos reference](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-350/Vyos_reference.md)
