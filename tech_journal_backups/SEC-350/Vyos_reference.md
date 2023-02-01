@@ -9,7 +9,7 @@ This page contains configurations/tips on working with the VyOS.
 
 ## Vyos configs:
 
-Current VyOS config: W3 -- 1-31-23
+Current VyOS config (All VyOS hosts): W3 -- [1-31-23](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-350/Vyos_configs/1-31-23.md)
 
 Old VyOS configs:
 
