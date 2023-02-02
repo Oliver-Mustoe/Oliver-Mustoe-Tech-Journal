@@ -54,7 +54,7 @@ You would then set the Operating system, Version, Architecture, Wazuh Server IP,
 
 2. Wazuh server IP = 172.16.200.10
 
-3. Desginated group = linux
+3. Designated group = linux
 
 ![image4](https://user-images.githubusercontent.com/71083461/216200664-a7877451-5715-49fd-84a1-0dc81f7291d3.png)  
 
