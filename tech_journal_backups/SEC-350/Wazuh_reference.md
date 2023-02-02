@@ -93,3 +93,9 @@ For example, failed logins would be under "Security events" > Events tab > findi
 * [Local configuration (ossec.conf) - Reference · Wazuh documentation](https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/index.html#:~:text=conf%20file%20is%20the%20main,)
 
 * [Centralized configuration (agent.conf) - Reference](https://documentation.wazuh.com/current/user-manual/reference/centralized-configuration.html)
+
+
+
+---
+
+Can't find something? Look in the [Backup Wazuh reference](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-350/Wazuh_reference.md)
