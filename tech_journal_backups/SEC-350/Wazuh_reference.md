@@ -50,7 +50,7 @@ To install a Wazuh agent onto a host,  use the dropdown and goto "Agents" (below
 
 You would then set the Operating system, Version, Architecture, Wazuh Server IP, and Group. Below shows an example for a host with the following specifications:
 
-1. Rocky OS
+1. Rocky Linux OS
 
 2. Wazuh server IP = 172.16.200.10
 
