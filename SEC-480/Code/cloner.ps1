@@ -1,7 +1,7 @@
 function main {
     $vcenter=”vcenter.oliver.local”
     
-    Connect-VIServer -Server $vcenter -Credential (Get-Credential -Message "Please enter credentials to access $vcenter")
+    $viConnect = Connect-VIServer -Server $vcenter -Credential (Get-Credential -Message "Please enter credentials to access $vcenter")
 
     # Display all of the VMs, prompt user to select one by name, also get the new VM name
     Get-VM
