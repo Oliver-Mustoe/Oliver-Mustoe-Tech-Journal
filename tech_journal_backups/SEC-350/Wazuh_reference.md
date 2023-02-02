@@ -20,7 +20,7 @@ To install Wazuh onto the logging host, run the following command:
 curl -sO https://packages.wazuh.com/4.3/wazuh-install.sh && sudo bash ./wazuh-install.sh -a
 ```
 
-This should, after installation, supply you with an admin credential and password. If this password is lost, it can be recovered by extracting the file "wazuh-install-files.tar" (which will be the directory you ran the above command in), and accessing the file "wazuh-passwords.txt"  
+This should, after installation, supply you with an admin credential and password. If this password is lost, it can be recovered by extracting the file "wazuh-install-files.tar" (which will be in the directory you ran the above command in), and accessing the file "wazuh-passwords.txt"  
 
 ![image](https://user-images.githubusercontent.com/71083461/216200235-ce288a68-466e-4a11-8cb3-db4f054a8db5.png)
 
@@ -44,7 +44,7 @@ You can then press "Add new group" to add a new group:
 
 **REQUIRES A GROUP**
 
-To install a Wazuh agent onto a host,  use the dropdown and goto "Agents" (below is already navigated):
+To install a Wazuh agent onto a host, use the dropdown and go to "Agents" (below is already navigated, might need to press "Deploy new agent" if an agent is already deployed, then follow below!):
 
 ![image9](https://user-images.githubusercontent.com/71083461/216200708-917f7e14-d7c1-477e-bd73-8f8392017878.png)
 
@@ -66,7 +66,7 @@ After supplying the needed information, step 6 will supply the commands that nee
 
 ![image11](https://user-images.githubusercontent.com/71083461/216202372-16dabbad-89a5-4cd1-a421-3df5efd5ccca.png)  
 
-After the commands in step 6 are ran, do the commands in step 7. After those commands are run, the agents screen will show the following (can access previous screen by pressing "Deploy new agent"):  
+After the commands in step 6 are ran, do the commands in step 7. After those commands are run, the agents screen will show the following (can access previous agents screen by pressing "Deploy new agent"):  
 
 ![image3](https://user-images.githubusercontent.com/71083461/216200655-ac809f6b-fd08-4f17-affa-fc3365b50749.png)
 
