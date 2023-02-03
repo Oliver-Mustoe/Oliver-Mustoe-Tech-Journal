@@ -10,10 +10,11 @@ param(
 $default=Get-Content ~\Oliver-Mustoe-Tech-Journal\SEC-480\Code\defaults.json -Raw | ConvertFrom-Json
 
 # Set this way for prompt formatting
-# $vcenter = $default.vcenter
+$vcenter = $default.vcenter
+$adapter = $default.adapter
 
 # Connect to the server
-$viConnect = Connect-VIServer -Server $default.vcenter -Credential (Get-Credential -Message "Please enter credentials to access $default.vcenter")
+$viConnect = Connect-VIServer -Server $vcenter -Credential (Get-Credential -Message "Please enter credentials to access $vcenter")
 
 # If one or none of the parameters is set then...
 if ($VMName -eq "" -or $CloneVMName -eq "") {
@@ -34,7 +35,7 @@ Write-Host "[Creating $linkedClone]" -ForegroundColor Green
 $linkedvm = New-VM -LinkedClone -Name $CloneVMName -VM $vm -ReferenceSnapshot $snapshot -VMHost $vmhost -Datastore $ds -Server $viConnect
 
 # Set network adapter properly
-Write-Host "[Setting $linkedClone network adapter to $default.adapter]" -ForegroundColor Green
-$linkedvm | Get-NetworkAdapter | Set-NetworkAdapter -NetworkName $default.adapter -Confirm:$false
+Write-Host "[Setting $linkedClone network adapter to $adapter]" -ForegroundColor Green
+$linkedvm | Get-NetworkAdapter | Set-NetworkAdapter -NetworkName $adapter -Confirm:$false
 
 Write-Host "[DONE]" -ForegroundColor Green
