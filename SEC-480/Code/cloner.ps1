@@ -10,6 +10,7 @@ $vcenter=”vcenter.oliver.local”
 
 $viConnect = Connect-VIServer -Server $vcenter -Credential (Get-Credential -Message "Please enter credentials to access $vcenter")
 
+# If one or none of the parameters is set then...
 if ($VMName -eq "" -or $CloneVMName -eq "") {
     # Display all of the VMs, prompt user to select one by name, also get the new VM name
     Get-VM
@@ -34,4 +35,4 @@ $newvm = New-VM -Name $CloneVMName -VM $linkedvm -VMHost $vmhost -Datastore $ds 
 $newvm | New-Snapshot -Name “Base” -Server $viConnect
 
 # Remove the interim linked clone
-$linkedvm | Remove-VM -Confirm:$true -Server $viConnect
+$linkedvm | Remove-VM -Confirm:$false -Server $viConnect
