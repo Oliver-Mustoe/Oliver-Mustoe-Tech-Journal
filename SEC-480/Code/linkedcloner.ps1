@@ -9,8 +9,11 @@ param(
 # Find the path of the script where the default.json file is expected to be, CHANGE THE PATH FOR NON-480 USE
 $default=Get-Content ~\Oliver-Mustoe-Tech-Journal\SEC-480\Code\defaults.json -Raw | ConvertFrom-Json
 
+# Set this way for prompt formatting
+# $vcenter = $default.vcenter
+
 # Connect to the server
-$viConnect = Connect-VIServer -Server $default.vcenter -Credential (Get-Credential -Message "Please enter credentials to access $vcenter")
+$viConnect = Connect-VIServer -Server $default.vcenter -Credential (Get-Credential -Message "Please enter credentials to access $default.vcenter")
 
 # If one or none of the parameters is set then...
 if ($VMName -eq "" -or $CloneVMName -eq "") {
