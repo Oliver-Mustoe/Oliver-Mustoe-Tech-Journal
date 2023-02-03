@@ -10,7 +10,7 @@ $vcenter=”vcenter.oliver.local”
 
 $viConnect = Connect-VIServer -Server $vcenter -Credential (Get-Credential -Message "Please enter credentials to access $vcenter")
 
-if ($VM) {
+if ($VMName -eq "" -and $CloneVMName -eq "") {
     # Display all of the VMs, prompt user to select one by name, also get the new VM name
     Get-VM
     $VMName=Read-Host -Prompt "Please enter a the name of the VM to clone"
