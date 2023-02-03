@@ -25,14 +25,20 @@ $vmhost=Get-VMHost -Name "192.168.7.25" -Server $viConnect
 $ds = Get-DataStore -Name “datastore1-super15” -Server $viConnect
 $linkedClone = “{0}.linked” -f $vm.name
 
+Write-Host "[Creating $linkedClone]" -ForegroundColor Green
 # Create a new linked clone
 $linkedvm = New-VM -LinkedClone -Name $linkedClone -VM $vm -ReferenceSnapshot $snapshot -VMHost $vmhost -Datastore $ds -Server $viConnect
 
+Write-Host "[Creating $CloneVMName from $linkedClone]" -ForegroundColor Green
 # Create a new VM
 $newvm = New-VM -Name $CloneVMName -VM $linkedvm -VMHost $vmhost -Datastore $ds -Server $viConnect
 
+Write-Host "[Creating Base snapshot of $CloneVMName]" -ForegroundColor Green
 # Make a new Base snapshot
 $newvm | New-Snapshot -Name “Base” -Server $viConnect
 
+Write-Host "[Removing $linkedClone]" -ForegroundColor Green
 # Remove the interim linked clone
 $linkedvm | Remove-VM -Confirm:$false -Server $viConnect
+
+Write-Host "[DONE]" -ForegroundColor Green
