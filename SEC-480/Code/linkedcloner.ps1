@@ -30,12 +30,12 @@ $snapshot = Get-Snapshot -VM $vm -Name "Base" -Server $viConnect
 $vmhost=Get-VMHost -Name $default.host -Server $viConnect
 $ds = Get-DataStore -Name $default.datastore -Server $viConnect
 
-Write-Host "[Creating $linkedClone]" -ForegroundColor Green
+Write-Host "[Creating $CloneVMName]" -ForegroundColor Green
 # Create a new linked clone
 $linkedvm = New-VM -LinkedClone -Name $CloneVMName -VM $vm -ReferenceSnapshot $snapshot -VMHost $vmhost -Datastore $ds -Server $viConnect
 
 # Set network adapter properly
-Write-Host "[Setting $linkedClone network adapter to $adapter]" -ForegroundColor Green
+Write-Host "[Setting $CloneVMName network adapter to $adapter]" -ForegroundColor Green
 $linkedvm | Get-NetworkAdapter | Set-NetworkAdapter -NetworkName $adapter -Confirm:$false
 
 Write-Host "[DONE]" -ForegroundColor Green
