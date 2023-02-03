@@ -6,19 +6,21 @@ param(
     [string]$CloneVMName = ""
 )
 
-$default=Get-Content .\defaults.json -Raw | ConvertFrom-Json
+# Find the path of the script where the default.json file is expected to be
+$default=Get-Content ($MyInvocation.MyCommand.Path)\defaults.json -Raw | ConvertFrom-Json
 
+# Connect to the server
 $viConnect = Connect-VIServer -Server $default.vcenter -Credential (Get-Credential -Message "Please enter credentials to access $vcenter")
 
 # If one or none of the parameters is set then...
 if ($VMName -eq "" -or $CloneVMName -eq "") {
-    # Display all of the VMs, prompt user to select one by name, also get the new VM name
+    # Display all of the VMs, prompt user to select one by name, also get the linked VM name
     Get-VM
     $VMName=Read-Host -Prompt "Please enter a the name of the VM to clone"
     $CloneVMName=Read-Host -Prompt "Please enter the name for the new linked clone"
 }
 
-# Get the VM, Snapshot, VMHost, Datastore (just going to program 1 for now), and the linked name
+# Get the VM, Snapshot, VMHost, Datastore
 $vm = Get-VM -Name $VMName -Server $viConnect
 $snapshot = Get-Snapshot -VM $vm -Name "Base" -Server $viConnect
 $vmhost=Get-VMHost -Name $default.host -Server $viConnect
