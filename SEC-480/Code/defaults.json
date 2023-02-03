@@ -2,5 +2,6 @@
     "vcenter": "vcenter.oliver.local",
     "host": "192.168.7.25",
     "datastore": "datastore1-super15",
-    "adapter": "480-WAN"
+    "adapter": "480-WAN",
+    "snapshot": "Base"
 }

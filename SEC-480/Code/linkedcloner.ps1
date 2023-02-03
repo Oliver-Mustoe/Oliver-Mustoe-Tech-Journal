@@ -12,7 +12,7 @@ param(
 # Find the path of the script where the default.json file is expected to be, CHANGE THE PATH FOR NON-480 USE
 # $default=Get-Content ~\Oliver-Mustoe-Tech-Journal\SEC-480\Code\defaults.json -Raw | ConvertFrom-Json
 
-$default=Get-Content ~\Oliver-Mustoe-Tech-Journal\SEC-480\Code\defaults.json -Raw | ConvertFrom-Json
+$default=Get-Content $defaultJSON -Raw | ConvertFrom-Json
 
 # Set this way for prompt formatting
 $vcenter = $default.vcenter
@@ -32,7 +32,7 @@ if ($VMName -eq "" -or $CloneVMName -eq "" -or $defaultJSON -eq "") {
 
 # Get the VM, Snapshot, VMHost, Datastore
 $vm = Get-VM -Name $VMName -Server $viConnect
-$snapshot = Get-Snapshot -VM $vm -Name "Base" -Server $viConnect
+$snapshot = Get-Snapshot -VM $vm -Name $default.snapshot -Server $viConnect
 $vmhost=Get-VMHost -Name $default.host -Server $viConnect
 $ds = Get-DataStore -Name $default.datastore -Server $viConnect
 
