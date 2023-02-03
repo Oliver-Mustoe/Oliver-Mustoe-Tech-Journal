@@ -3,10 +3,15 @@ param(
     [string]$VMName = "",
 
     [Parameter(HelpMessage="Name for the linked clone")]
-    [string]$CloneVMName = ""
+    [string]$CloneVMName = "",
+
+    [Parameter(HelpMessage="Name for the linked clone")]
+    [string]$defaultJSON = ""
 )
 
 # Find the path of the script where the default.json file is expected to be, CHANGE THE PATH FOR NON-480 USE
+# $default=Get-Content ~\Oliver-Mustoe-Tech-Journal\SEC-480\Code\defaults.json -Raw | ConvertFrom-Json
+
 $default=Get-Content ~\Oliver-Mustoe-Tech-Journal\SEC-480\Code\defaults.json -Raw | ConvertFrom-Json
 
 # Set this way for prompt formatting
@@ -17,11 +22,12 @@ $adapter = $default.adapter
 $viConnect = Connect-VIServer -Server $vcenter -Credential (Get-Credential -Message "Please enter credentials to access $vcenter")
 
 # If one or none of the parameters is set then...
-if ($VMName -eq "" -or $CloneVMName -eq "") {
+if ($VMName -eq "" -or $CloneVMName -eq "" -or $defaultJSON -eq "") {
     # Display all of the VMs, prompt user to select one by name, also get the linked VM name
     Get-VM
     $VMName=Read-Host -Prompt "Please enter a the name of the VM to clone"
     $CloneVMName=Read-Host -Prompt "Please enter the name for the new linked clone"
+    $defaultJSON = Read-Host -Prompt "Please enter the path for the default JSON config"
 }
 
 # Get the VM, Snapshot, VMHost, Datastore
