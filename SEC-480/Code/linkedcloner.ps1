@@ -7,7 +7,7 @@ param(
 )
 
 # Find the path of the script where the default.json file is expected to be
-$default=Get-Content ($MyInvocation.MyCommand.Path)\defaults.json -Raw | ConvertFrom-Json
+$default=Get-Content ~\Oliver-Mustoe-Tech-Journal\SEC-480\defaults.json -Raw | ConvertFrom-Json
 
 # Connect to the server
 $viConnect = Connect-VIServer -Server $default.vcenter -Credential (Get-Credential -Message "Please enter credentials to access $vcenter")
