@@ -580,3 +580,9 @@ This milestone was a fun learning experience that carried over a lot from the pr
 - [VMware Knowledge Base](https://kb.vmware.com/s/article/82229)
 - https://manpages.ubuntu.com/manpages/bionic/man5/machine-id.5.html#:~:text=The%20%2Fetc%2Fmachine%2Did,may%20not%20be%20all%20zeros.
 - https://greenmountaincyber.com/docs/topics/vmware/base-vms/ubuntu-server
+
+
+
+---
+
+Can't find something? Look in the backup [Milestone 4](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/Milestone_4.md#reflection-for-43)
