@@ -2,7 +2,7 @@ This page journals content related to NET/SEC/SYS-480 milestone 4.
 
 **Table of contents**
 
-- [Milestone 4.1 – Active Directory LDAPs SSO Provider](#milestone-41–active-directory-ldaps-sso-provider)
+- [Milestone 4.1 – Active Directory LDAPs SSO Provider](#milestone-41--active-directory-ldaps-sso-provider)
   
   - [CA and SSO setup and initialization](#ca-and-sso-setup-and-initialization)
   
@@ -40,15 +40,15 @@ This page journals content related to NET/SEC/SYS-480 milestone 4.
 
 ## VM Inventory
 
-- desktop.xubuntu.gui.base
-- server.2019.gui.base
-- server.vyos.base
-- ubuntu.22.04.1.base
-- awx
+- [desktop.xubuntu.gui.base](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/VM-Inventory/desktop.xubuntu.gui.base.md)
+- [server.2019.gui.base](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/VM-Inventory/server.2019.gui.base.md)
+- [server.vyos.base](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/VM-Inventory/server.vyos.base.md)
+- [ubuntu.22.04.1.base](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/VM-Inventory/ubuntu.22.04.1.base.md)
+- [awx](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/VM-Inventory/awx.md)
 
 ## Milestone 4.1 – Active Directory LDAPs SSO Provider
 
-I powercyc’d my xubuntu-wan VM, as it was acting really funny with chrome remote desktop. After that it worked fine.
+I powercycle'd my xubuntu-wan VM, as it was acting really funny with chrome remote desktop. After that it worked fine.
 
 ### CA and SSO setup and initialization
 
@@ -248,7 +248,7 @@ Then rebooted computer AND IT WORKS WOOOOOOOOOOOOOOOOOOO. Above, I corrected t
 
 - [How to Add User to Group in PowerShell with Add-ADGroupMember](https://lazyadmin.nl/powershell/add-user-to-group-add-adgroupmember/#:~:text=To%20add%20users%20to%20a,groups%20to%20an%20AD%20Group).
 
-## Milestone 4.2
+## Milestone 4.2 Powershell, PowerCLI and Our First Clone
 
 ### Dependency installation:
 
