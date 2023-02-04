@@ -10,4 +10,4 @@ OS: Ubuntu 22.04
 
 **General information**  
 
-![](C:\Users\jakelitte\AppData\Roaming\marktext\images\2023-02-04-14-01-23-image.png)
+![image](https://user-images.githubusercontent.com/71083461/216786231-b698740a-51f9-4932-96fb-e52a22cff904.png)
