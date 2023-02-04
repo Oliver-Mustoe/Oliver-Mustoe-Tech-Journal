@@ -379,7 +379,7 @@ From there, I could use the Code dropdown > copy the SSH clone command > and use
 
 ### Reflection for 4.2:
 
-This was a really fun milestone, as it was a really good introduction to Powercli and a good place for me to flex my Powershell skills. I implemented both in script and flags for setting the name variables which was fun to learn/implement. I am really glad I did this, as in the future if I already know the names I want/need, I can directly deploy new Base clones. I also learned about using formatting in Powershell using `-f`, which was not something I was familiar with at all. Some of the output from the commands actually differs from flags/manual inputs, but that does not seem to have any effect on the output. I will monitor this and decide if it needs changing. I am very much enjoying Powercli at the moment, and I hope the final part of this milestone has a little left to do of it!
+This was a really fun milestone, as it was a really good introduction to Powercli and a good place for me to flex my Powershell skills. I implemented both in script and flags for setting the name variables which was fun to learn/implement. I am really glad I did this, as in the future if I already know the names I want/need, I can directly deploy new Base clones. I also learned about using formatting in Powershell using `-f`, which was not something I was familiar with at all. Some of the output from the commands actually differs from flags/manual inputs, but that does not seem to have any effect on the output. I will monitor this and decide if it needs changing. I am very much enjoying Powercli at the moment, and I hope the final part of this milestone has a more left to do of it!
 
 ### Sources for 4.2
 
@@ -427,7 +427,7 @@ This results in the following after the are moved (drag and drop into the folder
 
 ![image077](https://user-images.githubusercontent.com/71083461/216636100-0d40a987-6aaa-43e0-811a-9068fd30f7f5.gif)
 
-I the used the process outlined in https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/wiki/Milestone-Bare-Metal-1---ESXi-Setup#isos-and-networking to download ubuntu-22.04 (the only change is that I enabled SSH through clicking on the host > Configure > System > Services:)
+I the used the process outlined in [Milestone 1](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/wiki/Milestone-Bare-Metal-1---ESXi-Setup#isos-and-networking) to download ubuntu-22.04 (the only change is that I enabled SSH through clicking on the host > Configure > System > Services:)
 
 ![image079](https://user-images.githubusercontent.com/71083461/216636106-63b0571a-e6a1-4f7b-bf28-24380615ef64.gif)
 
