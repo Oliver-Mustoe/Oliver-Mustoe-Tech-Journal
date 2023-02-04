@@ -536,14 +536,12 @@ I would then right click the VM > Snapshots > Take Snapshots… > Name it “Bas
 I then used my own script to create a linked clone named “awx”, [LINK HERE.](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/Code/linkedcloner.ps1) Ran like the following (see [troubleshooting #2](#troubleshooting-2)):
 
 ```powershell
-./Oliver-Mustoe-Tech-Journal/SEC-480/Code/linkedcloner.ps1 -VMName ubuntu.22.04.1.base -CloneVMName awx -defaultJSON ./Oliver-Mustoe-Tech-Journal/SEC-480/Code/defaults.json
+./linkedcloner.ps1 -VMName ubuntu.22.04.1.base -CloneVMName awx -defaultJSON defaults.json
 ```
 
-![image](https://user-images.githubusercontent.com/71083461/216711140-0d1ab6b4-172a-4ef9-9c4d-124eb287a0fc.png)
+![image](https://user-images.githubusercontent.com/71083461/216784930-430d2f0d-625f-4047-8765-784b6b747df6.png)
 
 With the linked clone created, on the right network adapter, I booted it up, logged in as rangeuser, and saw that I gained an IP from DHCP:  
-
-![image](https://user-images.githubusercontent.com/71083461/216782827-f7550559-045c-48de-860b-baebd231dce4.png)
 
 ### Troubleshooting #2
 
@@ -580,8 +578,6 @@ This milestone was a fun learning experience that carried over a lot from the pr
 - [VMware Knowledge Base](https://kb.vmware.com/s/article/82229)
 - https://manpages.ubuntu.com/manpages/bionic/man5/machine-id.5.html#:~:text=The%20%2Fetc%2Fmachine%2Did,may%20not%20be%20all%20zeros.
 - https://greenmountaincyber.com/docs/topics/vmware/base-vms/ubuntu-server
-
-
 
 ---
 

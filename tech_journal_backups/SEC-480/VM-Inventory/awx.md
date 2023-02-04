@@ -6,8 +6,8 @@ OS: Ubuntu 22.04
 
 **VM Setup**  
 
-![image](https://user-images.githubusercontent.com/71083461/216783590-fe8bc85c-5ebf-46e1-8285-38ff3138daf4.png)  
+![image](https://user-images.githubusercontent.com/71083461/216784885-9c445307-dead-4c74-85e5-22f5efc02a4c.png)  
 
 **General information**  
 
-![image](https://user-images.githubusercontent.com/71083461/216783605-1dcfe503-502e-4ada-b979-ed72046b488c.png)
+![](C:\Users\jakelitte\AppData\Roaming\marktext\images\2023-02-04-14-01-23-image.png)
