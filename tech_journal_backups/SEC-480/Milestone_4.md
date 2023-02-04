@@ -2,15 +2,17 @@ This page journals content related to NET/SEC/SYS-480 milestone 4.
 
 **Table of contents**
 
-- [Milestone 4.1 – Active Directory LDAPs SSO Provider](#milestone-4.1–active-directory-ldaps-sso-provider)
+- [Milestone 4.1 – Active Directory LDAPs SSO Provider](#milestone-41–active-directory-ldaps-sso-provider)
   
-  - [CA and SSO setup and initialization](#ca-and-sso-setup-and-initalization)
+  - [CA and SSO setup and initialization](#ca-and-sso-setup-and-initialization)
   
-  - [Reflection](#reflection-for-4.1)
+  - [Reflection](#reflection-for-41)
   
-  - [Troubleshooting #1](#troubleshooting-#1)
+  - [Troubleshooting #1](#troubleshooting-1)
+  
+  - [Sources](#sources-for-41)
 
-- [Milestone 4.2 Powershell, PowerCLI and Our First Clone](#milestone-4.2-powershell-powercli-and-our-first-clone)
+- [Milestone 4.2 Powershell, PowerCLI and Our First Clone](#milestone-42-powershell-powercli-and-our-first-clone)
   
   - [Dependency installation](#dependency-installation)
   
@@ -18,11 +20,11 @@ This page journals content related to NET/SEC/SYS-480 milestone 4.
   
   - [Github setup](#github-setup)
   
-  - [Reflection](#reflection-for-4.2)
+  - [Reflection](#reflection-for-42)
   
-  - [Sources](#sources-for-4.2)
+  - [Sources](#sources-for-42)
 
-- [Milestone 4.3 Ubuntu Server Base VM and Linked Clone](#milestone-4.3-ubuntu-server-base-vm-and-linked-clone)
+- [Milestone 4.3 Ubuntu Server Base VM and Linked Clone](#milestone-43-ubuntu-server-base-vm-and-linked-clone)
   
   - [Folder management](#folder-management)
   
@@ -30,11 +32,19 @@ This page journals content related to NET/SEC/SYS-480 milestone 4.
   
   - [Cloning](#cloning)
   
-  - [Troubleshooting #2](#troubleshooting-#2)
+  - [Troubleshooting #2](#troubleshooting-2)
   
-  - [Reflection](#reflection-for-4.3)
+  - [Reflection](#reflection-for-43)
   
-  - [Sources](#sources-for-4.3)
+  - [Sources](#sources-for-43)
+
+## VM Inventory
+
+- desktop.xubuntu.gui.base
+- server.2019.gui.base
+- server.vyos.base
+- ubuntu.22.04.1.base
+- awx
 
 ## Milestone 4.1 – Active Directory LDAPs SSO Provider
 
@@ -42,7 +52,7 @@ I powercyc’d my xubuntu-wan VM, as it was acting really funny with chrome re
 
 ### CA and SSO setup and initialization
 
-Then I SSH’d into dc1 as my named administrative user and used the following powershell commands to install Certification Authority features and configure the Active Directory Certificate Services with an Enterprise Root CA (see Troubleshooting #1):
+Then I SSH’d into dc1 as my named administrative user and used the following powershell commands to install Certification Authority features and configure the Active Directory Certificate Services with an Enterprise Root CA (see [Troubleshooting #1](#troubleshooting-1)):
 
 ```powershell
 Install-WindowsFeature ADCS-Cert-Authority -IncludeManagementTools
@@ -503,7 +513,7 @@ wget https://raw.githubusercontent.com/gmcyber/RangeControl/main/src/scripts/ba
 
 **NOTE:** Did once try to run the bash command as a non-root user, which resulted in a bunch of issues with permissions. Just stopped the command and added sudo to the command! Also, a screen pop-up came asking for restarting services, I just pressed enter and it worked fine.
 
-Then I ran the following **AS ROOT** (originally ran after completion of the assignment, see troubleshooting #2):
+Then I ran the following **AS ROOT** (originally ran after completion of the assignment, see [troubleshooting #2](#troubleshooting-2)):
 
 ```bash
 echo -n > /etc/machine-id
@@ -523,7 +533,7 @@ I would then right click the VM > Snapshots > Take Snapshots… > Name it “Bas
 
 ### Cloning
 
-I then used my own script to create a linked clone named “awx”, [LINK HERE.](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/Code/linkedcloner.ps1) Ran like the following (see troubleshooting #2):
+I then used my own script to create a linked clone named “awx”, [LINK HERE.](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/Code/linkedcloner.ps1) Ran like the following (see [troubleshooting #2](#troubleshooting-2)):
 
 ```powershell
 ./Oliver-Mustoe-Tech-Journal/SEC-480/Code/linkedcloner.ps1 -VMName ubuntu.22.04.1.base -CloneVMName awx -defaultJSON ./Oliver-Mustoe-Tech-Journal/SEC-480/Code/defaults.json
