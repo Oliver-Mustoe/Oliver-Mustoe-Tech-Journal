@@ -543,6 +543,8 @@ I then used my own script to create a linked clone named “awx”, [LINK HERE.
 
 With the linked clone created, on the right network adapter, I booted it up, logged in as rangeuser, and saw that I gained an IP from DHCP:  
 
+![image](https://user-images.githubusercontent.com/71083461/216785484-33810120-aa4d-45a5-b28a-976d471feaef.png)
+
 ### Troubleshooting #2
 
 After completing the Milestone, I went back to my VM and tested making a second linked clone. It worked successfully, but unfortunetly, I got the same DHCP address on the second linked clone. I, after researching, found that Ubuntu uses machine-id for DHCP, but I believed that it got trunacated in the instructors script. To try to get to the bottom of this, I powered on my base image and re-ran the instructors script from above/double-checked the machine-id was truncated (empty) with `cat`, then I shutdown the box.
