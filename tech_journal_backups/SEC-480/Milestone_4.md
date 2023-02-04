@@ -2,41 +2,45 @@ This page journals content related to NET/SEC/SYS-480 milestone 4.
 
 **Table of contents**
 
-- Milestone 4.1 – Active Directory LDAPs SSO Provider
+- [Milestone 4.1 – Active Directory LDAPs SSO Provider](#milestone-4.1–active-directory-ldaps-sso-provider)
   
-  - Reflection
+  - [CA and SSO setup and initialization](#ca-and-sso-setup-and-initalization)
   
-  - Troubleshooting #1
+  - [Reflection](#reflection-for-4.1)
+  
+  - [Troubleshooting #1](#troubleshooting-#1)
 
-- Milestone 4.2 Powershell, PowerCLI and Our First Clone
+- [Milestone 4.2 Powershell, PowerCLI and Our First Clone](#milestone-4.2-powershell-powercli-and-our-first-clone)
   
-  - Dependency installation
+  - [Dependency installation](#dependency-installation)
   
-  - Powercli
+  - [Powercli](#powercli)
   
-  - Github setup
+  - [Github setup](#github-setup)
   
-  - Reflection
+  - [Reflection](#reflection-for-4.2)
   
-  - Sources
+  - [Sources](#sources-for-4.2)
 
-- Milestone 4.3 Ubuntu Server Base VM and Linked Clone
+- [Milestone 4.3 Ubuntu Server Base VM and Linked Clone](#milestone-4.3-ubuntu-server-base-vm-and-linked-clone)
   
-  - Folder management
+  - [Folder management](#folder-management)
   
-  - ubuntu server base installation
+  - [Ubuntu server base installation](#ubuntu-server-base-installation)
   
-  - Cloning
+  - [Cloning](#cloning)
   
-  - Troubleshooting #2
+  - [Troubleshooting #2](#troubleshooting-#2)
   
-  - Reflection
+  - [Reflection](#reflection-for-4.3)
   
-  - Sources
+  - [Sources](#sources-for-4.3)
 
 ## Milestone 4.1 – Active Directory LDAPs SSO Provider
 
 I powercyc’d my xubuntu-wan VM, as it was acting really funny with chrome remote desktop. After that it worked fine.
+
+### CA and SSO setup and initialization
 
 Then I SSH’d into dc1 as my named administrative user and used the following powershell commands to install Certification Authority features and configure the Active Directory Certificate Services with an Enterprise Root CA (see Troubleshooting #1):
 
@@ -189,7 +193,7 @@ I would later find where the keys are (at least I believe):
 
 I would then go down a very long road in which my CA still didn’t work, but I found the solution, which is that I need to add “-credential” to the install command for install an enterprise root CA. So I did the following to cleanup the other 2 CA’s and install another “oliver-DC1-CA:
 
-Ran `Uninstall-AdcsCertificationAuthority`, rebooted, and deleted the certificates in “Manage computer certificates” following shows cleaned certificates folder, deleted 2 certificates named “oliver-DC1-CA” and “olivermustoe-DC1-CA” (essentially removed the old CA’s names):
+Ran `Uninstall-AdcsCertificationAuthority`, rebooted, and deleted the certificates in “Manage computer certificates”. Following shows cleaned certificates folder, deleted 2 certificates named “oliver-DC1-CA” and “olivermustoe-DC1-CA” (essentially removed the old CA’s names):
 
 ![image048](https://user-images.githubusercontent.com/71083461/216636055-13c991c7-e2f7-47c0-a680-46784ddcdd5f.gif)
 
@@ -208,7 +212,7 @@ Install-AdcsCertificationAuthority -CACommonName "oliver-DC1-CA" -CAType Enterpr
 
 Then rebooted computer AND IT WORKS WOOOOOOOOOOOOOOOOOOO. Above, I corrected the main documentation to reflect the correct process :).
 
-Sources:
+### Sources for 4.1:
 
 - [How to install Active Directory Certificate Services on Windows server 2012 | Dell Canada](https://www.dell.com/support/kbdoc/en-ca/000121419/how-to-install-active-directory-certificate-services)
 
@@ -258,7 +262,7 @@ The I installed powershell with the following command:
 sudo snap install powershell --classic
 ```
 
-Ensuring that I can access powershell with ‘pwsh’ and that my versioning is correct with ‘Write-Host $PSVersionTable’:
+Ensuring that I can access powershell with `pwsh` and that my versioning is correct with `Write-Host $PSVersionTable`:
 
 ![image055](https://user-images.githubusercontent.com/71083461/216636063-f5491a56-9727-4dfe-afe1-c99c3fb5e833.gif)
 
@@ -273,7 +277,7 @@ Set-PowerCLIConfiguration -Scope User -ParticipateInCEIP $false
 
 ### Powercli
 
-After entering my Powershell instance on xubuntu-wan with ‘pwsh’, I could connect to vcenter by entering the following:
+After entering my Powershell instance on xubuntu-wan with `pwsh`, I could connect to vcenter by entering the following:
 
 ```powershell
 $vcenter=”vcenter.oliver.local”
@@ -306,7 +310,7 @@ I would then setup my ‘$linkedvm’ variable to create a linked clone with the
 $linkedvm = New-VM -LinkedClone -Name $linkedClone -VM $vm -ReferenceSnapshot $snapshot -VMHost $vmhost -Datastore $ds
 ```
 
-And the I created a new VM with the ‘$newvm’ clone:
+And then I created a new VM with the ‘$newvm’ clone:
 
 ```powershell
 $newvm = New-VM -Name “server.2019.gui.base” -VM $linkedvm -VMHost $vmhost -Datastore $ds
@@ -318,21 +322,21 @@ Results from above:
 
 I then created a new snapshot on my new VM:
 
-```
+```powershell
 $newvm | New-Snapshot -Name “Base”
 ```
 
  And removed the linked clone:
 
-```
+```powershell
 $linkedvm | Remove-VM
 ```
 
-[I would then create a script to automate this process.](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/Code/cloner.ps1) I would make use of Github, see setup below, for transporting my script between my main host and xubuntu-wan. With the script, I would create the following base VMs:
+[I would then create a script to automate this process.](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/Code/cloner.ps1) I would make use of Github, [see setup below](#github-setup), for transporting my script between my main host and xubuntu-wan. With the script, I would create the following base VMs:
 
-●       “desktop.xubuntu.gui.base” from xubuntu-wan
+- “desktop.xubuntu.gui.base” from xubuntu-wan
 
-●       “server.vyos.base” from 480-wan
+- “server.vyos.base” from 480-wan
 
 ![image063](https://user-images.githubusercontent.com/71083461/216636074-50f5fcec-f540-422a-96dc-cba19dd24bd6.gif)
 
@@ -357,9 +361,9 @@ ssh-keygen -t ed25519
 ssh-add ~/.ssh/id_ed25519
 ```
 
-Then I went to my account on github > dropdown > Settings > SSH and GPG keys on the sidebar > New SSH key > where I would add my public key!
+Then I went to my account on github > dropdown > Settings > SSH and GPG keys on the sidebar > New SSH key > where I would add my public key!  
 
-![](D3%20--running%20log%20(1)_files/image69.jpg)
+![image](https://user-images.githubusercontent.com/71083461/216782693-ea7a93f2-4cb2-4f73-a880-80e8cbf134fd.png)  
 
 From there, I could use the Code dropdown > copy the SSH clone command > and use `git clone {SSH_CODE}` to access my repository!
 
@@ -367,11 +371,11 @@ From there, I could use the Code dropdown > copy the SSH clone command > and use
 
 This was a really fun milestone, as it was a really good introduction to Powercli and a good place for me to flex my Powershell skills. I implemented both in script and flags for setting the name variables which was fun to learn/implement. I am really glad I did this, as in the future if I already know the names I want/need, I can directly deploy new Base clones. I also learned about using formatting in Powershell using `-f`, which was not something I was familiar with at all. Some of the output from the commands actually differs from flags/manual inputs, but that does not seem to have any effect on the output. I will monitor this and decide if it needs changing. I am very much enjoying Powercli at the moment, and I hope the final part of this milestone has a little left to do of it!
 
-### Sources
+### Sources for 4.2
 
-●       https://groupe-sii.github.io/cheat-sheets/powercli/index.html
+- https://groupe-sii.github.io/cheat-sheets/powercli/index.html 
 
-●       [Understanding PowerShell and Basic String Formatting - Scripting Blog](https://devblogs.microsoft.com/scripting/understanding-powershell-and-basic-string-formatting/)
+- [Understanding PowerShell and Basic String Formatting - Scripting Blog](https://devblogs.microsoft.com/scripting/understanding-powershell-and-basic-string-formatting/)
 
 ## Milestone 4.3 Ubuntu Server Base VM and Linked Clone
 
@@ -491,15 +495,15 @@ sudo sysctl -w net.ipv6.conf.lo.disable_ipv6=1
 
 ![image109](https://user-images.githubusercontent.com/71083461/216651482-da1e5034-cd80-479c-bcbf-5fdd2013dedc.gif)
 
-Then I downloaded and ran the following the instructor provided script (https://raw.githubusercontent.com/gmcyber/RangeControl/main/src/scripts/base-vms/ubuntu-server.sh):
+Then I downloaded and ran the following the [instructor provided script:](https://raw.githubusercontent.com/gmcyber/RangeControl/main/src/scripts/base-vms/ubuntu-server.sh)
 
 ```bash
 wget https://raw.githubusercontent.com/gmcyber/RangeControl/main/src/scripts/base-vms/ubuntu-server.sh && sudo bash ubuntu-server.sh
 ```
 
-NOTE: Did once try to run the bash command as a non-root user, which resulted in a bunch of issues with permissions. Just stopped the command and added sudo to the command! Also, a screen pop-up came asking for restarting services, I just pressed enter and it worked fine.
+**NOTE:** Did once try to run the bash command as a non-root user, which resulted in a bunch of issues with permissions. Just stopped the command and added sudo to the command! Also, a screen pop-up came asking for restarting services, I just pressed enter and it worked fine.
 
-Then I ran the following **AS ROOT** (originall ran after completetion of the assignment, see troubleshooting #2):
+Then I ran the following **AS ROOT** (originally ran after completion of the assignment, see troubleshooting #2):
 
 ```bash
 echo -n > /etc/machine-id
@@ -529,7 +533,7 @@ I then used my own script to create a linked clone named “awx”, [LINK HERE.
 
 With the linked clone created, on the right network adapter, I booted it up, logged in as rangeuser, and saw that I gained an IP from DHCP:  
 
-![image](https://user-images.githubusercontent.com/71083461/216711650-47d28ea0-ec8a-4d7a-9094-08e8d24cb036.png)
+![image](https://user-images.githubusercontent.com/71083461/216782827-f7550559-045c-48de-860b-baebd231dce4.png)
 
 ### Troubleshooting #2
 
@@ -557,11 +561,12 @@ ln -s /etc/machine-id /var/lib/dbus/machine-id
 
 Shutdown > "Base2" snapshot > 2 more linked clones **AND THIS FIXED IT**. So I removed my "Base" snapshot > renamed "Base2" to "Base" and deleted all of my linked clones and recreated "awx" using the prescribed command. I updated the above documentation to reflect what the correct process for cloning would be.
 
-### Reflection
+### Reflection for 4.3
 
 This milestone was a fun learning experience that carried over a lot from the previous part of the milestone. The Powershell was mostly the same, and I was able to take my cloner.ps1 script and edit it slightly to accommodate linked clones. I also implemented using a json file to store “default” variables such as the vcenter address. As I explore more Powercli, I plan to make the script more robust/add in items to defaults.json. I did some independent testing for this milestone and actually experimented with creating another awx clone “awx2” to see the behavior of the networking.. I found that while the 2 clones had different MAC addresses, they would still get the same IP “.101”. Initially I thought this was related to hostname, but I found via research that to correct this behavior I had to run the commands designated in VMware documentation. I very much enjoyed having flags for my .ps1 files in this milestone, as it meant I could very quickly run a command to spin up a new base/linked clone when I wanted. Overall, a very interesting, learning heavy milestone with automation scripts that I will use/improve over the course.
 
-### Sources
+### Sources for 4.3
 
 - [VMware Knowledge Base](https://kb.vmware.com/s/article/82229)
 - https://manpages.ubuntu.com/manpages/bionic/man5/machine-id.5.html#:~:text=The%20%2Fetc%2Fmachine%2Did,may%20not%20be%20all%20zeros.
+- https://greenmountaincyber.com/docs/topics/vmware/base-vms/ubuntu-server
