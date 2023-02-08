@@ -12,6 +12,8 @@ This technical journal will cover/link to the following information:
 
 6. [Exporting vyos configurations](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/wiki/Vyos-reference#vyos-configs)
 
-7. Reflection
+7. [Reflection](#reflection)
 
 # Reflection
+
+

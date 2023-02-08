@@ -19,7 +19,7 @@ Old VyOS configs:
 - W2 -- [1-25-23](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-350/Vyos_configs/1-25-23.md)
 - W1 -- [1-16-23](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-350/Vyos_configs/1-16-23.md)
 
-Configuration acquired by running the following on a VyOS system or running [my script](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-350/FirewallExporter.sh) with `./FirewallExporter.sh 192.168.1.1 192.168.1.2`:
+Configuration acquired by running the following on a VyOS system or running [my script](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-350/FirewallExporter.sh) with `./FirewallExporter.sh 172.16.150.2 172.16.150.3`:
 
 ```
 show configuration commands | grep -v "syslog\|ntp\|login\|console\|config\|hw-id\|loopback\|conntrack"
