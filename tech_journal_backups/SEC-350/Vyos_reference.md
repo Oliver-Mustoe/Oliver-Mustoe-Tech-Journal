@@ -113,8 +113,6 @@ save
 
   **^ NOTE FOR ABOVE:** `{LOGGING_SERVER_IP}` is the IP of the server you wish to forward syslog messages too. For more information about setting up a syslog logging server, see [here](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/wiki/Syslog-reference)
 
-
-
 ### Configure RIP:
 
 ```
@@ -126,8 +124,6 @@ save
 ```
 
 **^ NOTE FOR ABOVE:** First set command enables RIP on the interface AND sets the network configured for the interface to be advertised, second sets what additional network to advertise
-
-
 
 ### Create Firewall Zones:
 
@@ -152,8 +148,6 @@ save
 ```
 
 **^ NOTE FOR ABOVE:** Create one zone per interface, for example with a WAN, LAN, DMZ setup you would run the above command with the name, `WAN` for example, set to the interface it is supposed to go to, `eth0` for example. Number of firewalls should be zone*2 (two interfaces/zone = 2 firewalls, three interfaces/zones = 6 firewalls, etc.)
-
-
 
 ### Create Firewall Rules:
 
@@ -198,19 +192,13 @@ Below is a collection of helpful firewall rules, each of these should be began w
       set firewall name {NAME1-TO-NAME2} 1 state established enable
       ```
 
-
-
 ## Debugging
 
 ### Firewalls
 
 Firewalls can be tricky, as it can get very confusing very quickly about what is going where to who.
 
-
-
 When making firewalls/zones, make sure to use a coherent naming scheme and, for convience, name the firewalls ZONE-to-ZONE to make it easier to debug.
-
-
 
 Some debugging commands below, output will differe depending if `configure` has been run or not (found it to be more helpful in config mode!):
 
@@ -220,8 +208,6 @@ show firewall
 # Show all of the zones
 show zone
 ```
-
- 
 
 Below shows the commands needed to be run to setup fw-mgmt in my environment (see the [Current network architecture](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/wiki/SEC-350-Home#current-network-architecture-13023)) for an in production example:
 
@@ -270,8 +256,6 @@ set firewall name MGMT-to-LAN rule 20 action accept
 commit
 save
 ```
-
-
 
 ## Sources
 
