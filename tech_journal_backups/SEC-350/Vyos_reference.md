@@ -6,6 +6,8 @@ This page contains configurations/tips on working with the VyOS.
 
 1. [Vyos configs](#vyos-configs)
 2. [Commands](#commands)
+3. [Debugging](#debugging)
+   1. [Firewalls](#firewalls)
 
 ## Vyos configs:
 
@@ -111,9 +113,170 @@ save
 
   **^ NOTE FOR ABOVE:** `{LOGGING_SERVER_IP}` is the IP of the server you wish to forward syslog messages too. For more information about setting up a syslog logging server, see [here](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/wiki/Syslog-reference)
 
+
+
+### Configure RIP:
+
+```
+Configure  
+set protocols rip interface eth{NUM}
+set protocols rip network {IP_ADDRESS}/{NETMASK} 
+commit  
+save
+```
+
+**^ NOTE FOR ABOVE:** First set command enables RIP on the interface AND sets the network configured for the interface to be advertised, second sets what additional network to advertise
+
+
+
+### Create Firewall Zones:
+
+```
+configure  
+
+# Create the zones - one per interface
+set zone-policy zone {NAME} interface eth{NUM}
+
+# Create the “firewalls”: One in each direction between each zone, see note
+set firewall name {NAME1-TO-NAME2} default-action drop
+set firewall name {NAME1-TO-NAME2} enable-default-log 
+
+# Assign the firewalls to the zones (following above name scheme, from is first work)
+set zone-policy zone {NAME2} from {NAME1} firewall name {NAME1-TO-NAME2}
+
+# Create the rules in the firewalls, increment rule number by a factor (10 for example)
+set firewall name {NAME1-TO-NAME2} rule {NUM} ...
+
+commit  
+save  
+```
+
+**^ NOTE FOR ABOVE:** Create one zone per interface, for example with a WAN, LAN, DMZ setup you would run the above command with the name, `WAN` for example, set to the interface it is supposed to go to, `eth0` for example. Number of firewalls should be zone*2 (two interfaces/zone = 2 firewalls, three interfaces/zones = 6 firewalls, etc.)
+
+
+
+### Create Firewall Rules:
+
+Below is a collection of helpful firewall rules, each of these should be began with `set firewall name {NAME1-TO-NAME2} rule {NUM}` (represented by the `...` dots below). Rules are setup so that if a network packet matches a rules destination/source/protocol requirements, the action set for the rule happens. See an example of the below commands in the [Firewall debugging section](#firewalls).
+
+- Add a destination port condition to a rule
+  
+  - `...destination port {NUM}`
+
+- Add a source port condition to a rule
+  
+  - `...source port {NUM}`
+
+- Add a destination address condition to a rule 
+  
+  - `...destination address {NUM}`
+
+- Add a source address condition to a rule
+  
+  - `...source address {NUM}`
+
+- Set the protocol of a rule
+  
+  - `...protocol tcp`
+
+- Set the action to accept traffic if the conditions of a rule are fulfilled
+  
+  - `...action accept`
+
+- Add a description to a rule
+  
+  - `...description "PUT SOMETHING HERE!!!"`
+
+- Set established connections to enable for a rule
+  
+  - `...state established enable`
+    
+    - Typically rule 1 will be set to the following
+    
+    - ```
+      set firewall name {NAME1-TO-NAME2} rule 1 action accept
+      set firewall name {NAME1-TO-NAME2} 1 state established enable
+      ```
+
+
+
+## Debugging
+
+### Firewalls
+
+Firewalls can be tricky, as it can get very confusing very quickly about what is going where to who.
+
+
+
+When making firewalls/zones, make sure to use a coherent naming scheme and, for convience, name the firewalls ZONE-to-ZONE to make it easier to debug.
+
+
+
+Some debugging commands below, output will differe depending if `configure` has been run or not (found it to be more helpful in config mode!):
+
+```
+# Show all of the different firewall configurations (can specify by adding `name SOMETHING` to the end of the below command!)
+show firewall
+# Show all of the zones
+show zone
+```
+
+ 
+
+Below shows the commands needed to be run to setup fw-mgmt in my environment (see the [Current network architecture](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/wiki/SEC-350-Home#current-network-architecture-13023)) for an in production example:
+
+```
+configure
+# Setup zones
+set zone-policy zone LAN interface eth0
+set zone-policy zone MGMT interface eth1
+# Firewalls setup
+set firewall name LAN-to-MGMT default-action drop
+set firewall name MGMT-to-LAN default-action drop
+set firewall name LAN-to-MGMT enable-default-log 
+set firewall name MGMT-to-LAN enable-default-log
+# Setup zone policy
+set zone-policy zone LAN from MGMT firewall name MGMT-to-LAN
+set zone-policy zone MGMT from LAN firewall name LAN-to-MGMT
+# LAN-to-MGMT
+set firewall name LAN-to-MGMT rule 10 destination port 1514,1515
+set firewall name LAN-to-MGMT rule 10 destination address 172.16.200.10
+set firewall name LAN-to-MGMT rule 10 protocol tcp
+set firewall name LAN-to-MGMT rule 10 action accept
+set firewall name LAN-to-MGMT rule 10 description "LAN to wazuh"
+set firewall name LAN-to-MGMT rule 20 destination address 172.16.200.10
+set firewall name LAN-to-MGMT rule 20 destination port 443
+set firewall name LAN-to-MGMT rule 20 source address 172.16.150.10
+set firewall name LAN-to-MGMT rule 20 protocol tcp
+set firewall name LAN-to-MGMT rule 20 action accept
+set firewall name LAN-to-MGMT rule 20 description "HTTPs mgmt01 on LAN to wazuh"
+set firewall name LAN-to-MGMT rule 30 destination address 172.16.200.10
+set firewall name LAN-to-MGMT rule 30 destination port 22
+set firewall name LAN-to-MGMT rule 30 source address 172.16.150.10
+set firewall name LAN-to-MGMT rule 30 protocol tcp
+set firewall name LAN-to-MGMT rule 30 action accept
+set firewall name LAN-to-MGMT rule 30 description "SSH mgmt01 on LAN to wazuh"
+set firewall name LAN-to-MGMT rule 1 action accept
+set firewall name LAN-to-MGMT rule 1 state established enable
+# MGMT-to-LAN
+set firewall name MGMT-to-LAN rule 1 action accept
+set firewall name MGMT-to-LAN rule 1 state established enable
+set firewall name MGMT-to-LAN rule 10 description "Allow MGMT to DMZ"
+set firewall name MGMT-to-LAN rule 10 destination address 172.16.50.0/29
+set firewall name MGMT-to-LAN rule 10 action accept
+set firewall name MGMT-to-LAN rule 20 description "Allow MGMT to LAN"
+set firewall name MGMT-to-LAN rule 20 destination address 172.16.150.0/24
+set firewall name MGMT-to-LAN rule 20 action accept
+commit
+save
+```
+
+
+
 ## Sources
 
 - https://docs.vyos.io/en/latest/configuration/service/dns.html
+- [The night of living dead protocols: RIPv2](https://blog.vyos.io/the-night-of-living-dead-protocols-ripv2)
 
 ***
 
