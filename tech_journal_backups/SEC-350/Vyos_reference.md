@@ -11,14 +11,15 @@ This page contains configurations/tips on working with the VyOS.
 
 ## Vyos configs:
 
-Current VyOS config (All VyOS hosts): W3 -- [1-31-23](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-350/Vyos_configs/1-31-23.md)
+Current VyOS config (All VyOS hosts): W4 -- [2-8-23](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-350/Vyos_configs/2-8-23.md)
 
 Old VyOS configs:
 
+- W3 -- [1-31-23](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-350/Vyos_configs/1-31-23.md)
 - W2 -- [1-25-23](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-350/Vyos_configs/1-25-23.md)
 - W1 -- [1-16-23](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-350/Vyos_configs/1-16-23.md)
 
-Configuration acquired with running the following on a VyOS system:
+Configuration acquired by running the following on a VyOS system or running [my script](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-350/FirewallExporter.sh) with `./FirewallExporter.sh 192.168.1.1 192.168.1.2`:
 
 ```
 show configuration commands | grep -v "syslog\|ntp\|login\|console\|config\|hw-id\|loopback\|conntrack"
