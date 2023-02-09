@@ -122,23 +122,36 @@ function Add-LinkedClone([string]$VMName = "",[string]$CloneVMName = "",[string]
     # Connect to Vcenter
     480Connect -server $conf.vcenter_server
 
-    # Decide whether to select a folder interactively or use the default
-    $cfolder = Read-Host -Prompt ('Is the VM you wish to clone in the default folder "{0}" [Y/n]?' -f $conf.default_folder)
-    if ($cfolder.ToLower() -eq "n"){
-        $folder = Select-Folder
-    }
-    else{
-        Write-Host "Using default" $conf.default_folder -ForegroundColor Green
-        $folder = $conf.default_folder
-    }
+
 
     try{
-        # If one or none of the parameters is set then...
-        if ($VMName -eq "" -or $CloneVMName -eq "") {
+        # If VM name is set then...
+        if ($VMName -eq "") {
+            # Decide whether to select a folder interactively or use the default
+            $cfolder = Read-Host -Prompt ('Is the VM you wish to clone in the default folder "{0}" [Y/n]?' -f $conf.default_folder)
+            if ($cfolder.ToLower() -eq "n"){
+                $folder = Select-Folder
+            }
+            else{
+                Write-Host "Using default" $conf.default_folder -ForegroundColor Green
+                $folder = $conf.default_folder
+            }
             # Display all of the VMs, prompt user to select one by name, also get the linked VM name
             Write-Host "Please select a VM to create a linked clone of:"
             $VMName=Select-VM -folder $folder
+        }
+        else{
+            # Else skip
+            Write-Host "[VM name '$VMName' chosen, skipping selection]" -ForegroundColor Green
+        }
+
+        # If VM clone name is set then...
+        if ($CloneVMName -eq "") {
             $CloneVMName=Read-Host -Prompt "Please enter the name for the new linked clone"
+        }
+        else{
+            # Else skip
+            Write-Host "[VM clone name '$CloneVMName' chosen, skipping selection]" -ForegroundColor Green
         }
     }
     catch{
@@ -146,14 +159,18 @@ function Add-LinkedClone([string]$VMName = "",[string]$CloneVMName = "",[string]
         break
     }
 
+    # See if Clone exists
     $vmcheck = Get-VM -Name $CloneVMName -ErrorAction SilentlyContinue
 
+    # If it does...
     if($vmcheck){
+        # Tell that it is found
         Write-Host "Found $CloneVMName" -ForegroundColor Yellow
     }
     else {
+        # Else...
         try{
-            # Get the VM, Snapshot, VMHost, Datastore
+            # Get the VM, Snapshot, VMHost, Datastore (if flag not set)
             $Common = CommonParameters -VMName $VMName -conf $conf
 
             Write-Host "[Creating $CloneVMName]" -ForegroundColor Green
@@ -165,6 +182,7 @@ function Add-LinkedClone([string]$VMName = "",[string]$CloneVMName = "",[string]
             break
         }
         
+        # Double check the VM was created
         $vmcheck = Get-VM -Name $CloneVMName -ErrorAction SilentlyContinue
 
         if($vmcheck){

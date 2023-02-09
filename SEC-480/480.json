@@ -4,5 +4,5 @@
     "default_datastore": "datastore1-super15",
     "default_adapter": "480-WAN",
     "default_snapshot": "Base",
-    "default_folder": "BASEV"
+    "default_folder": "BASEVM"
 }
