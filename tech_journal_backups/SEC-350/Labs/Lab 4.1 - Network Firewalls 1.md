@@ -2,7 +2,7 @@ This technical journal will cover/link to the following information:
 
 1. [Configuring RIP](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/wiki/Vyos-reference#configure-rip)
 
-2. [Firewall Zones creation](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/wiki/Vyos-reference#create-firewall-zones)
+2. [Firewall Zones creation](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/wiki/Vyos-reference#create-firewall-rules)
 
 3. [Firewall Rule creation](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/wiki/Vyos-reference#create-firewall-zones)
 
