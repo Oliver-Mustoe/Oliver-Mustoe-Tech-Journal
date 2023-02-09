@@ -1,6 +1,6 @@
 This technical journal will cover/link to the following information:
 
-1. Updating vyos
+1. [Updating vyos](#updating-vyos)
 
 2. [Configuring RIP](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/wiki/Vyos-reference#configure-rip)
 
@@ -14,6 +14,16 @@ This technical journal will cover/link to the following information:
 
 7. [Reflection](#reflection)
 
+# Updating VyOS
+
+By running the below command, can remove a stale syslog configuration (for example "172.16.50.5")
+
+```
+delete system syslog host {SYSLOG_IP}
+```
+
 # Reflection
+
+I have learned a lot in the past 2 weeks in SEC-350. Last week, I worked a lot in and created documentation about [Wazuh.](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/wiki/Wazuh-reference) I like Wazuh, it has a simple to use gui but I sense could be used pretty well if you knew how to use the command line interfaces. So far, we have only used it for logging bad logins. I am overall excited to see what it can do in more serious cirumstances. 
 
 
