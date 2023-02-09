@@ -138,7 +138,7 @@ set zone-policy zone {NAME} interface eth{NUM}
 set firewall name {NAME1-TO-NAME2} default-action drop
 set firewall name {NAME1-TO-NAME2} enable-default-log 
 
-# Assign the firewalls to the zones (following above name scheme, from is first work)
+# Assign the firewalls to the zones (following above name scheme, from is first word)
 set zone-policy zone {NAME2} from {NAME1} firewall name {NAME1-TO-NAME2}
 
 # Create the rules in the firewalls, increment rule number by a factor (10 for example)
@@ -201,7 +201,7 @@ Firewalls can be tricky, as it can get very confusing very quickly about what is
 
 When making firewalls/zones, make sure to use a coherent naming scheme and, for convience, name the firewalls ZONE-to-ZONE to make it easier to debug.
 
-Some debugging commands below, output will differe depending if `configure` has been run or not (found it to be more helpful in config mode!):
+Some debugging commands below, output will differ depending if `configure` has been run or not (found it to be more helpful in config mode!):
 
 ```
 # Show all of the different firewall configurations (can specify by adding `name SOMETHING` to the end of the below command!)
