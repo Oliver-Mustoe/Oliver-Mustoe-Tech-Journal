@@ -1,8 +1,8 @@
 {
-    "vcenter_server": "vcenter.hermione.local",
-    "vm_folder": "BASEVM",
+    "vcenter_server": "vcenter.oliver.local",
     "esxi_server": "192.168.7.25",
     "default_datastore": "datastore1-super15",
     "default_adapter": "480-WAN",
-    "default_snapshot": "Base"
+    "default_snapshot": "Base",
+    "default_folder": "BASEV"
 }
