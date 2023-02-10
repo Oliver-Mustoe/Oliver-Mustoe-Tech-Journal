@@ -156,19 +156,19 @@ Below is a collection of helpful firewall rules, each of these should be began w
 
 - Add a destination port condition to a rule
   
-  - `...destination port {NUM}`
+  - `...destination port {PORT}`
 
 - Add a source port condition to a rule
   
-  - `...source port {NUM}`
+  - `...source port {PORT}`
 
 - Add a destination address condition to a rule 
   
-  - `...destination address {NUM}`
+  - `...destination address {IP}`
 
 - Add a source address condition to a rule
   
-  - `...source address {NUM}`
+  - `...source address {IP}`
 
 - Set the protocol of a rule
   
@@ -190,7 +190,7 @@ Below is a collection of helpful firewall rules, each of these should be began w
     
     - ```
       set firewall name {NAME1-TO-NAME2} rule 1 action accept
-      set firewall name {NAME1-TO-NAME2} 1 state established enable
+      set firewall name {NAME1-TO-NAME2} rule 1 state established enable
       ```
 
 ## Debugging
