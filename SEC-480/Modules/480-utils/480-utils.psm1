@@ -72,6 +72,7 @@ function Select-VM([string]$folder) {
     }
 }
 
+
 function Select-Folder() {
     $selected_folder=$null
 
@@ -102,15 +103,15 @@ function Select-Folder() {
     }
 }
 
-# Function to create linked clone
-
-
-
 # Function to create full clone
+
+
+
+# Function to create linked clone
 # https://developer.vmware.com/docs/powercli/latest/vmware.vimautomation.core/commands/connect-viserver/#Default
 # https://www.gngrninja.com/script-ninja/2016/6/5/powershell-getting-started-part-11-error-handling
-function Add-LinkedClone([string]$VMName = "",[string]$CloneVMName = "",[string]$defaultJSON = "") {
-    # Find the path of the script where the json file is
+function Deploy-LinkedClone([string]$VMName = "",[string]$CloneVMName = "",[string]$defaultJSON = "") {
+    # Find the path of the json file
     if ($defaultJSON -eq "") {
         $defaultJSON = Read-Host -Prompt "Please enter the path for the default JSON config"
         $conf = Get-480Config -config_path $defaultJSON
@@ -122,10 +123,8 @@ function Add-LinkedClone([string]$VMName = "",[string]$CloneVMName = "",[string]
     # Connect to Vcenter
     480Connect -server $conf.vcenter_server
 
-
-
     try{
-        # If VM name is set then...
+        # If VM name is NOT set then...
         if ($VMName -eq "") {
             # Decide whether to select a folder interactively or use the default
             $cfolder = Read-Host -Prompt ('Is the VM you wish to clone in the default folder "{0}" [Y/n]?' -f $conf.default_folder)
@@ -136,7 +135,7 @@ function Add-LinkedClone([string]$VMName = "",[string]$CloneVMName = "",[string]
                 Write-Host "Using default" $conf.default_folder -ForegroundColor Green
                 $folder = $conf.default_folder
             }
-            # Display all of the VMs, prompt user to select one by name, also get the linked VM name
+            # Display all of the VMs, prompt user to select one by name
             Write-Host "Please select a VM to create a linked clone of:"
             $VMName=Select-VM -folder $folder
         }
@@ -145,7 +144,7 @@ function Add-LinkedClone([string]$VMName = "",[string]$CloneVMName = "",[string]
             Write-Host "[VM name '$VMName' chosen, skipping selection]" -ForegroundColor Green
         }
 
-        # If VM clone name is set then...
+        # If VM clone name is NOT set then...
         if ($CloneVMName -eq "") {
             $CloneVMName=Read-Host -Prompt "Please enter the name for the new linked clone"
         }
@@ -187,16 +186,29 @@ function Add-LinkedClone([string]$VMName = "",[string]$CloneVMName = "",[string]
 
         if($vmcheck){
             Write-Host "[Found $CloneVMName]" -ForegroundColor Green
+            # Check if the user wants to change any adapters, if they do call switch adapter function, if not, then finish.
+            if ((Read-Host -Prompt ('Do you wish to change {0}s adapters? [y/N]?' -f $linkedvm.Name)).ToLower() -eq "y"){
+                while($true){
+                    # Change adapter until user issues anything else besides y
+                    Switch-VMNetworkAdapter -vm $linkedvm
+                
+                    if((Read-Host -Prompt "Do you wish to change another adapter? [y/N]").ToLower() -ne "y"){
+                        break
+                    }
+                }
+            }
         }
         else {
             Write-Host "[Didnt find $CloneVMName]" -ForegroundColor Red
         }
+
+        Write-Host "[DONE]" -ForegroundColor Green
     }
 }
 
 # Function to set commonly found parameters for Linked and Full cloning
 function CommonParameters([string]$VMName,[array]$conf){
-    $vm = Get-VM -Name $VMName
+    $vm = Get-VM -Name $VMName -ErrorAction Stop
     #
     if ((Read-Host -Prompt ('Do you wish to use the default datastore "{0}" [Y/n]?' -f $conf.default_datastore)).ToLower() -eq "n"){
         $ds_selection = Read-Host -Prompt "Please enter a datastore"
@@ -235,12 +247,14 @@ function CommonParameters([string]$VMName,[array]$conf){
 # https://vdc-repo.vmware.com/vmwb-repository/dcr-public/6fb85470-f6ca-4341-858d-12ffd94d975e/4bee17f3-579b-474e-b51c-898e38cc0abb/doc/Get-VirtualNetwork.html
 # https://developer.vmware.com/docs/powercli/latest/vmware.vimautomation.core/commands/get-networkadapter/#VirtualDeviceGetter
 
-function Select-VMNetworkAdapter([string]$vm) {
+function Switch-VMNetworkAdapter([string]$vm) {
     try{
-        $adapters = Get-NetworkAdapter -Name $vm
+        # Go through all adapters on vm and ask user to select 1
+        Write-Host "Which network adapter would you like to change?"
+        $adapters = Get-NetworkAdapter -VM $vm
         $index=1
         foreach($adapter in $adapters){
-            Write-Host [$index] $adapters.Name
+            Write-Host ("[$index] {0}/{1}" -f $adapter.Name,$adapter.NetworkName)
             $index+=1
         }
         while($true){
@@ -253,9 +267,32 @@ function Select-VMNetworkAdapter([string]$vm) {
                 Write-Host "[ERROR: Please select an inbound index]" -ForegroundColor Red
             }
         }
-        Write-Host "You picked" $selected_adapter.name
+        Write-Host "You selected",$selected_adapter.Name,$selected_adapter.NetworkName -ForegroundColor Green
         #note this is a full on vm object that we can interact with
-        return $selected_adapter
+        
+        # Go through all available adapters and ask the user to select 1 to change it to
+        Write-Host "Which network would you like to switch",$adapter.Name,"to?"
+        $ava_adapters = Get-VirtualNetwork
+        $index=1
+        foreach($ava_adapter in $ava_adapters){
+            Write-Host ("[$index] {0}" -f $ava_adapter)
+            $index+=1
+        }
+        while($true){
+            $pick_index = Read-Host "Which index number [x] do you wish to pick?"
+            if($pick_index -le ($index - 1)) {
+                $selected_ava_adapter=$ava_adapters[$pick_index - 1]
+                break
+            }
+            else {
+                Write-Host "[ERROR: Please select an inbound index]" -ForegroundColor Red
+            }
+        }
+        Write-Host "You selected",$ava_selected_adapter -ForegroundColor Green
+
+        Write-Host ("[Setting {0} to {1}]" -f $selected_adapter.Name,$selected_ava_adapter) -ForegroundColor Green
+        Get-VM -Name $vm | Get-NetworkAdapter -Name $selected_adapter.Name | Set-NetworkAdapter -NetworkName $selected_ava_adapter
+
     }
     catch{
         Write-Host "[Invalid VM: $vm]" -ForegroundColor Red
