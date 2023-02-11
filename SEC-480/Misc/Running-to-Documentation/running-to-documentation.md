@@ -1,4 +1,4 @@
-This page details how to turn this courses running documentation recorded in Google docs to markdown documentation:
+This page details how to turn this courses running documentation recorded in Google docs to markdown documentation (refer to image fixer to fix bad images):
 
 1. Download document as a .docx file from Google drive
 
@@ -10,4 +10,4 @@ This page details how to turn this courses running documentation recorded in Goo
 
 5. In a terminal, run the `python rtm.py -I {PATH_TO_MARKDOWN} -A {PATH_TO_LIST_OF_GIT_LINKS}` (should create a new md file)
 
-TODO: Made a python program to remove the images as well
+TODO: Maybe convert over to using the way that Image_fixer does 

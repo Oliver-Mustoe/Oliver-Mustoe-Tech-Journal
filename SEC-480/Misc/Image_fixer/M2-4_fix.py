@@ -26,8 +26,14 @@ def args():
     )
     
     arg_parser.add_argument(
-        "-A","--AllImages",
-        help="Location of images",
+        "-F","--FirstLink",
+        help="First link in the dataset (folder that was uploaded to Github)",
+        required=True
+    )
+    
+    arg_parser.add_argument(
+        "-L","--LastImageNumber",
+        help="Last number from link in dataset (folder uploaded to Github)",
         required=True
     )
     
@@ -37,42 +43,32 @@ def args():
 
 
 def image_replacer(arguments):
-    # Expected image format: "image{number}{number}{number}.gif"
-    
-    image_regex = ".*image.*"
-    image_replace_regex = "image0*"
+    # Expected image format: "image{number}{number}{number}.png"
     InputFile = arguments.InputFile
-    Images = arguments.AllImages
     
     r_input = None
     
-    # Open each file in read mode (not specified as default for open())
+    # Open the markdown file in read mode (not specified as default for open())
     with open(InputFile, encoding='utf-8') as input:
-        with open(Images, encoding='utf-8') as images:
             # Read them
             r_input = input.read()
-            r_images = images.read()
-            
-            # Replace unneeded zeros
-            r_input = re.sub(image_replace_regex,"image",r_input)
-            
-            # Turn images into list
-            image_list = re.findall(image_regex,r_images)
-            
-            print(len(image_list))
-                 
-            i = 1
-            # For each image
-            for image in image_list:
+                                         
+            i = 2
+            ii = 1
+            # While the last image number hasnt been reached
+            while i <= int(arguments.LastImageNumber):
                 # Create a new image regex
-                image_regex2 = "!.*image" + str(i) + ".gif.*"
+                image_regex2 = "!.*image" + str(i).zfill(3) + ".*gif.*"
+                # Substitute based on image regex with the raw image link on github
+                r_input = re.sub(image_regex2,"![image]("+arguments.FirstLink[:-7]+str(ii).zfill(3)+".png?raw=true)",r_input)
                                 
-                # Substitute based on image regex with the image
-                r_input = re.sub(image_regex2,image,r_input)
-                    
-                i += 1
+                i += 2
+                ii+= 2
+            
             
 
     return(r_input)
 
 main()
+
+# Still need to change the data set to just be the pngs!
