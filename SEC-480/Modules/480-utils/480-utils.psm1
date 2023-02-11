@@ -30,7 +30,7 @@ function 480Connect([string]$server) {
 function Get-480Config([string]$config_path) {
     Write-Host "[Reading $config_path]"
     $conf=$null
-
+    # Get config path, alert if it doesnt exist
     if(Test-Path $config_path){
         $conf= Get-Content -Path $config_path -Raw | ConvertFrom-Json
         $msg = "[Using Configuration at {0}]" -f $config_path
@@ -48,14 +48,17 @@ function Select-VM([string]$folder) {
     try{
         $vms = Get-VM -Location $folder
         $index=1
+        # For each VM, write the index + 1 and the name
         foreach($vm in $vms){
             Write-Host [$index] $vm.Name
             $index+=1
         }
         while($true){
-            $pick_index = Read-Host "Which index number [x] do you wish to pick?"
-            # 480-TODO need to deal with invalid index
-            if($pick_index -le ($index - 1)) {
+            # Pick a integer
+            [int]$pick_index = Read-Host "Which index number [x] do you wish to pick?"
+            # See if the picked integer is less than the index variable, and greater than zero
+            if($pick_index -lt $index -and $pick_index -gt 0) {
+                # If it does, set the selected to 1 minus the picked index
                 $selected_vm=$vms[$pick_index - 1]
                 break
             }
@@ -72,7 +75,7 @@ function Select-VM([string]$folder) {
     }
 }
 
-
+# Function to select a folder, same process as select-vm
 function Select-Folder() {
     $selected_folder=$null
 
@@ -84,9 +87,10 @@ function Select-Folder() {
             $index+=1
         }
         while($true){
-            $pick_index = Read-Host "Which index number [x] do you wish to pick?"
+            [int]$pick_index = Read-Host "Which index number [x] do you wish to pick?"
             # 480-TODO need to deal with invalid index
-            if($pick_index -le ($index - 1)) {
+            # Since index adds 1 at the end, index for 4 options will have a index variable number of 5
+            if($pick_index -lt $index -and $pick_index -gt 0) {
                 $selected_folder=$folders[$pick_index - 1]
                 break
             }
@@ -104,7 +108,7 @@ function Select-Folder() {
 }
 
 
-# Function to change network adapter
+# Function to change network adapter, similiar to select-vm but with different parameters
 # https://vdc-repo.vmware.com/vmwb-repository/dcr-public/6fb85470-f6ca-4341-858d-12ffd94d975e/4bee17f3-579b-474e-b51c-898e38cc0abb/doc/Get-VirtualNetwork.html
 # https://developer.vmware.com/docs/powercli/latest/vmware.vimautomation.core/commands/get-networkadapter/#VirtualDeviceGetter
 
@@ -115,12 +119,12 @@ function Switch-VMNetworkAdapter([string]$vm) {
         $adapters = Get-NetworkAdapter -VM $vm
         $index=1
         foreach($adapter in $adapters){
-            Write-Host ("[$index] {0}/{1}" -f $adapter.Name,$adapter.NetworkName)
+            Write-Host ("[$index] {0} - {1}" -f $adapter.Name,$adapter.NetworkName)
             $index+=1
         }
         while($true){
-            $pick_index = Read-Host "Which index number [x] do you wish to pick?"
-            if($pick_index -le ($index - 1)) {
+            [int]$pick_index = Read-Host "Which index number [x] do you wish to pick?"
+            if($pick_index -lt $index -and $pick_index -gt 0) {
                 $selected_adapter=$adapters[$pick_index - 1]
                 break
             }
@@ -128,10 +132,10 @@ function Switch-VMNetworkAdapter([string]$vm) {
                 Write-Host "[ERROR: Please select an inbound index]" -ForegroundColor Red
             }
         }
-        Write-Host "You selected",$selected_adapter.Name,$selected_adapter.NetworkName -ForegroundColor Green
+        Write-Host "You selected",$selected_adapter.Name,$selected_adapter.NetworkName
         #note this is a full on vm object that we can interact with
         
-        # Go through all available adapters and ask the user to select 1 to change it to
+        # Go through all available adapters and ask the user to select 1 to change their selected adapter to
         Write-Host "Which network would you like to switch",$adapter.Name,"to?"
         $ava_adapters = Get-VirtualNetwork
         $index=1
@@ -140,8 +144,8 @@ function Switch-VMNetworkAdapter([string]$vm) {
             $index+=1
         }
         while($true){
-            $pick_index = Read-Host "Which index number [x] do you wish to pick?"
-            if($pick_index -le ($index - 1)) {
+            [int]$pick_index = Read-Host "Which index number [x] do you wish to pick?"
+            if($pick_index -lt $index -and $pick_index -gt 0) {
                 $selected_ava_adapter=$ava_adapters[$pick_index - 1]
                 break
             }
@@ -149,14 +153,15 @@ function Switch-VMNetworkAdapter([string]$vm) {
                 Write-Host "[ERROR: Please select an inbound index]" -ForegroundColor Red
             }
         }
-        Write-Host "You selected",$ava_selected_adapter -ForegroundColor Green
+        Write-Host "You selected $selected_ava_adapter"
 
+        # Set the network adapter from above selections
         Write-Host ("[Setting {0} to {1}]" -f $selected_adapter.Name,$selected_ava_adapter) -ForegroundColor Green
         Get-VM -Name $vm | Get-NetworkAdapter -Name $selected_adapter.Name | Set-NetworkAdapter -NetworkName $selected_ava_adapter
 
     }
     catch{
-        Write-Host "[Invalid VM: $vm]" -ForegroundColor Red
+        #Write-Host "[Invalid VM: $vm]" -ForegroundColor Red
     }
 }
 
@@ -165,10 +170,12 @@ function Switch-VMNetworkAdapter([string]$vm) {
 # https://williamlam.com/2017/04/how-to-determine-when-a-virtual-machine-is-ready-for-additional-operations.html
 # https://vdc-repo.vmware.com/vmwb-repository/dcr-public/f2319b2a-6378-4635-a1cd-90b14949b62a/0ac4f829-f79b-40a6-ac10-d22ec76937ec/doc/Start-VM.html
 function PowerCycle([switch]$on,[switch]$off,[string]$vm) {
+    # See if a vm is set
     if($vm -eq ""){
         Write-Error "VM NAME '$vm' IS NOT VALID"
     }
     else {
+        # See whether to turn the VM on or off, do so accordingly
         if ($on) {
             Start-VM -VM $vm -Confirm:$true
         }
@@ -181,6 +188,7 @@ function PowerCycle([switch]$on,[switch]$off,[string]$vm) {
     }
     
 }
+
 
 # Function to create clone
 # https://developer.vmware.com/docs/powercli/latest/vmware.vimautomation.core/commands/connect-viserver/#Default
@@ -254,7 +262,8 @@ function Deploy-Clone([switch]$LinkedClone=$false,[switch]$FullClone=$false,[str
         # https://stackoverflow.com/questions/17226718/how-to-get-the-line-number-of-error-in-powershell
         $e=$_.Exception.Message
         $line=$_.InvocationInfo.ScriptLineNumber
-        Write-Error "$e at line $line"
+        $name=$myInvocation.InvocationName
+        Write-Host "$name Error Message -- $e at line $line" -ForegroundColor Red
         break
     }
     ###
@@ -273,33 +282,37 @@ function Deploy-Clone([switch]$LinkedClone=$false,[switch]$FullClone=$false,[str
         try{
             ### Get the VM, Snapshot, VMHost, Datastore
             $vm = Get-VM -Name $VMName -ErrorAction Stop
+            Write-host "[Found $VMName]" -foreground Green
             #
             if ((Read-Host -Prompt ('Do you wish to use the default datastore "{0}" [Y/n]?' -f $conf.default_datastore)).ToLower() -eq "n"){
                 $ds_selection = Read-Host -Prompt "Please enter a datastore"
             }
             else{
-                Write-Host "Using default" $conf.default_datastore -ForegroundColor Green
+                Write-Host "Using default" $conf.default_datastore
                 $ds_selection = $conf.default_datastore
             }
             $ds = Get-DataStore -Name $ds_selection -ErrorAction Stop
+            Write-host "[Found $ds]" -foreground Green
             #
             if ((Read-Host -Prompt ('Do you wish to use the default snapshot "{0}" [Y/n]?' -f $conf.default_snapshot)).ToLower() -eq "n"){
                 $snapshot_selection = Read-Host -Prompt "Please enter a snapshot name"
             }
             else{
-                Write-Host "Using default" $conf.default_snapshot -ForegroundColor Green
+                Write-Host "Using default" $conf.default_snapshot
                 $snapshot_selection = $conf.default_snapshot
             }
             $snapshot = Get-Snapshot -VM $vm -Name $snapshot_selection -ErrorAction Stop
+            Write-host "[Found $snapshot]" -foreground Green
             #
             if ((Read-Host -Prompt ('Do you wish to use the default esxi server "{0}" [Y/n]?' -f $conf.esxi_server)).ToLower() -eq "n"){
                 $vmhost_selection = Read-Host -Prompt "Please enter a esxi server name"
             }
             else{
-                Write-Host "Using default" $conf.esxi_server -ForegroundColor Green
+                Write-Host "Using default" $conf.esxi_server
                 $vmhost_selection = $conf.esxi_server
             }
             $vmhost = Get-VMHost -Name $vmhost_selection -ErrorAction Stop
+            Write-host "[Found $vmhost]" -foreground Green
             ###
 
             Write-Host "[Creating $CloneVMName]" -ForegroundColor Green
@@ -333,9 +346,11 @@ function Deploy-Clone([switch]$LinkedClone=$false,[switch]$FullClone=$false,[str
         }
         catch{
             # https://stackoverflow.com/questions/17226718/how-to-get-the-line-number-of-error-in-powershell
+            # https://hostingultraso.com/help/windows/find-your-script%E2%80%99s-name-powershell#:~:text=You%20want%20to%20know%20the%20name%20of%20the%20currently%20running%20script.&text=To%20determine%20the%20name%20that,InvocationName%20variable.
             $e=$_.Exception.Message
             $line=$_.InvocationInfo.ScriptLineNumber
-            Write-Error "$e at line $line"
+            $name=$myInvocation.InvocationName
+            Write-Host "$name Error Message -- $e at line $line" -ForegroundColor Red
             break
         }
         ###
@@ -349,9 +364,10 @@ function Deploy-Clone([switch]$LinkedClone=$false,[switch]$FullClone=$false,[str
             # Check if the user wants to change any adapters, if they do call switch adapter function, if not, then finish.
             if ((Read-Host -Prompt ('Do you wish to change {0}s adapters? [y/N]?' -f $linkedvm.Name)).ToLower() -eq "y"){
                 while($true){
-                    # Change adapter until user issues anything else besides y
+                    # Change adapter
                     Switch-VMNetworkAdapter -vm $linkedvm
-                
+                    
+                    # Prompt to exit
                     if((Read-Host -Prompt "Do you wish to change another adapter? [y/N]").ToLower() -ne "y"){
                         break
                     }
@@ -367,4 +383,8 @@ function Deploy-Clone([switch]$LinkedClone=$false,[switch]$FullClone=$false,[str
 }
         ###
 
-#Planned functions: Expand folders (being able to make, select folders, also placing something in deploy clone so you can place a VM inside a folder)
+# Planned functions:
+# * Expand folders (being able to make, select folders, also placing something in deploy clone so you can place a VM inside a folder)
+# * Add powercycle to deploy-clone
+# * Remove VM (list, select, confirm, delete)
+# * Expanded get-vm (Shows folders in addition to everything else)
