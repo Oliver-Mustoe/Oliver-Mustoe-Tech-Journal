@@ -6,6 +6,6 @@ This page details how to turn this courses .gif files into the proper .png.
 
 3. Remove all of the .gif files from the folder of images that is created (search for .gif, select all, delete)
 
-4. Upload all of the images onto Github, navigate to the first image (image001), copy it
+4. Upload all of the images onto Github, navigate to the first image (image001), copy its link (NOT RAW)
 
 5. In a terminal, run the `python .\M2-4_fix.py -I {MARKDOWN_FILE} -F {FIRST_IMAGE_LINK} -L {LAST_IMAGE_NUMBER}` (should create a new md file)
