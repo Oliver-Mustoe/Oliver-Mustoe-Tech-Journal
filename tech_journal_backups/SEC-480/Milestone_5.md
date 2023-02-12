@@ -217,7 +217,7 @@ Below shows the file in action:
 
 I would file 480.json with the following:
 
-```json
+```
 {
     "vcenter_server": "vcenter.oliver.local"
 }
@@ -312,7 +312,7 @@ Example run:
 
 Then I updated 480.json again with the following:
 
-```json
+```
 {
     "vcenter_server": "vcenter.hermione.local",
     "vm_folder": "BASEVM"
