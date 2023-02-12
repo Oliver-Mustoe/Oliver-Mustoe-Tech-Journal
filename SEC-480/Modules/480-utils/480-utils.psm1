@@ -197,11 +197,11 @@ function Deploy-Clone([switch]$LinkedClone=$false,[switch]$FullClone=$false,[str
     # Determine if clone type is set
     while($true){
         if($LinkedClone){
-            Write-Host "[Linked clone selected, skipping selection]" -ForegroundColor Green
+            Write-Host "[Linked clone selected]" -ForegroundColor Green
             break
         }
         elseif($FullClone){
-            Write-Host "[Full clone selected, skipping selection]" -ForegroundColor Green
+            Write-Host "[Full clone selected]" -ForegroundColor Green
             break
         }
         else {
