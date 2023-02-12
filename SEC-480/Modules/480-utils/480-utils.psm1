@@ -161,7 +161,7 @@ function Switch-VMNetworkAdapter([string]$vm) {
 
     }
     catch{
-        #Write-Host "[Invalid VM: $vm]" -ForegroundColor Red
+        Write-Host "[Invalid VM: $vm]" -ForegroundColor Red
     }
 }
 
