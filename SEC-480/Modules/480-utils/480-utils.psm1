@@ -334,7 +334,7 @@ function Deploy-Clone([switch]$LinkedClone=$false,[switch]$FullClone=$false,[str
                 # Create a new VM
                 $newvm = New-VM -Name $CloneVMName -VM $linkedvm -VMHost $vmhost -Datastore $ds
 
-                Write-Host "[Creating Base snapshot of $lclone]" -ForegroundColor Green
+                Write-Host "[Creating Base snapshot of $CloneVMName]" -ForegroundColor Green
                 # Make a new Base snapshot
                 $newvm | New-Snapshot -Name $conf.default_snapshot
 
@@ -362,7 +362,7 @@ function Deploy-Clone([switch]$LinkedClone=$false,[switch]$FullClone=$false,[str
         if($vmcheck){
             Write-Host "[Found $CloneVMName]" -ForegroundColor Green
             # Check if the user wants to change any adapters, if they do call switch adapter function, if not, then finish.
-            if ((Read-Host -Prompt ('Do you wish to change {0}s adapters? [y/N]?' -f $linkedvm.Name)).ToLower() -eq "y"){
+            if ((Read-Host -Prompt ("Do you wish to change {0}'s adapters? [y/N]?" -f $linkedvm.Name)).ToLower() -eq "y"){
                 while($true){
                     # Change adapter
                     Switch-VMNetworkAdapter -vm $linkedvm
