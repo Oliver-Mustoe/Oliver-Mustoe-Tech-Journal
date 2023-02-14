@@ -8,9 +8,11 @@ This page contains configurations/tips on working with the Wazuh.
 
 2. [Group creation](#group-creation)
 
-3. [Config locations](#config-locations)
+3. [Agent Installation](#agent-installation)
 
-4. [Sources](#sources)
+4. [Config locations](#config-locations)
+
+5. [Sources](#sources)
 
 ## Installing Wazuh
 
@@ -86,15 +88,11 @@ For example, failed logins would be under "Security events" > Events tab > findi
 
 - **Wazuh agent configuration location:** `/var/ossec/etc/shared/agent.conf`
 
-
-
 ## Sources
 
 * [Local configuration (ossec.conf) - Reference · Wazuh documentation](https://documentation.wazuh.com/current/user-manual/reference/ossec-conf/index.html#:~:text=conf%20file%20is%20the%20main,)
 
 * [Centralized configuration (agent.conf) - Reference](https://documentation.wazuh.com/current/user-manual/reference/centralized-configuration.html)
-
-
 
 ---
 
