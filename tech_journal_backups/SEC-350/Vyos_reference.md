@@ -29,7 +29,7 @@ show configuration commands | grep -v "syslog\|ntp\|login\|console\|config\|hw-i
 
 ### Note about basic command structure:
 
-Basic command structure in VyOS begins with enter config mode, ``configure``, then doing the commands. To commit the configuration to the system, use `commit`, then to save so that the configuratoin will stay on reboot, use `save`.
+Basic command structure in VyOS begins with enter config mode, ``configure``, then doing the commands. To commit the configuration to the system, use `commit`, then to save so that the configuration will stay on reboot, use `save`. `set` is used as the way to set a configuration rule, while `delete` is used to delete a configuration rule.
 
 ## Commands
 
@@ -192,6 +192,17 @@ Below is a collection of helpful firewall rules, each of these should be began w
       set firewall name {NAME1-TO-NAME2} rule 1 action accept
       set firewall name {NAME1-TO-NAME2} rule 1 state established enable
       ```
+
+## Disable/Re-enable rule
+
+```
+configure
+# Disable
+set firewall name {NAME1-TO-NAME2} rule {NUM} disable
+# Re-enable
+set firewall name {NAME1-TO-NAME2} rule {NUM} disable
+commit 
+```
 
 ## Debugging
 
