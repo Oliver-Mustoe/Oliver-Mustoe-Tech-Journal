@@ -189,6 +189,89 @@ function PowerCycle([switch]$on,[switch]$off,[string]$vm) {
     
 }
 
+# Function to get the IP address of a VM
+# https://www.tutorialspoint.com/how-to-convert-the-integer-variable-to-the-string-variable-in-powershell
+# https://vmguru.com/2016/04/a-friday-getting-vm-network-information/
+
+function Get-VMIP ([string]$VMName = "",[string]$defaultJSON=""){
+    try {
+        # Find the path of the json file
+        if ($defaultJSON -eq "") {
+            $defaultJSON = Read-Host -Prompt "Please enter the path for the default JSON config"
+            $conf = Get-480Config -config_path $defaultJSON
+        }
+        else {
+            $conf = Get-480Config -config_path $defaultJSON
+        }
+
+        # Connect to vcenter server
+        480Connect -server $conf.vcenter_server
+
+        Write-Host "[Gathering information]"
+        # Get general information about the VM
+        $GenVmInfo = (get-vm -Name $VMName).Guest
+        # Get the VMs MAC addresses
+        $MacVmInfo = (Get-NetworkAdapter -VM $VMName).MacAddress
+    }
+    catch {
+        # https://stackoverflow.com/questions/17226718/how-to-get-the-line-number-of-error-in-powershell
+        # $e=$_.Exception.Message
+        # $line=$_.InvocationInfo.ScriptLineNumber
+        # $name=$myInvocation.InvocationName
+        # Write-Host "$name Error Message -- $e at line $line" -ForegroundColor Red
+        StandardError -err $_
+        break
+    }
+
+    # Desginated output gather certain information from general (hostname, NIC 1, IPv4 address) and the corressponding MAC information of the first network adapter (through $MacVMInfo)
+    $output = "{1} hostname={0} mac={2}" -f $GenVmInfo.HostName.ToString(), $GenVmInfo.nics.IPAddress[0].ToString(), $MacVmInfo[0].ToString()
+    Write-Host $output -ForegroundColor White
+    
+    # Via using the device array in general count ($GenVmInfo.nics.Device.Count), could setup a simple for loop to display all IP/MAC information about a VM -- future note :)
+}
+# Function to create a network (switch and portgroup)
+# https://developer.vmware.com/docs/powercli/latest/vmware.vimautomation.core/commands/new-virtualportgroup/#Default
+# https://developer.vmware.com/docs/powercli/latest/vmware.vimautomation.core/commands/new-virtualswitch/#Default
+function New-Network ([string]$NetworkName="", [string]$defaultJSON=""){
+        try {
+            # Find the path of the json file
+            if ($defaultJSON -eq "") {
+                $defaultJSON = Read-Host -Prompt "Please enter the path for the default JSON config"
+                $conf = Get-480Config -config_path $defaultJSON
+            }
+            else {
+                $conf = Get-480Config -config_path $defaultJSON
+            }
+
+            # Connect to vcenter server
+            480Connect -server $conf.vcenter_server
+
+            Write-Host "[Creating network $NetworkName]"
+            # Create the switch and port group
+            New-VirtualSwitch -Name $NetworkName -VMHost $conf.esxi_server -ErrorAction Stop
+            New-VirtualPortGroup -VirtualSwitch $NetworkName -Name $NetworkName -ErrorAction Stop
+        }
+        catch {
+            # https://stackoverflow.com/questions/17226718/how-to-get-the-line-number-of-error-in-powershell
+            # $e=$_.Exception.Message
+            # $line=$_.InvocationInfo.ScriptLineNumber
+            # $name=$myInvocation.InvocationName
+            # Write-Host "$name Error Message -- $e at line $line" -ForegroundColor Red
+            StandardError -err $_
+            break
+        }
+        
+        Write-Host "[DONE]" -ForegroundColor Green
+}
+
+# Function that contains the standard error format I wish to output
+function StandardError ([array]$err){
+    # https://stackoverflow.com/questions/17226718/how-to-get-the-line-number-of-error-in-powershell
+    $e=$err.Exception.Message
+    $line=$err.InvocationInfo.ScriptLineNumber
+    # $name=$myInvocation.InvocationName
+    Write-Host "Error -- $e at line $line" -ForegroundColor Red
+}
 
 # Function to create clone
 # https://developer.vmware.com/docs/powercli/latest/vmware.vimautomation.core/commands/connect-viserver/#Default
@@ -260,10 +343,11 @@ function Deploy-Clone([switch]$LinkedClone=$false,[switch]$FullClone=$false,[str
     }
     catch{
         # https://stackoverflow.com/questions/17226718/how-to-get-the-line-number-of-error-in-powershell
-        $e=$_.Exception.Message
-        $line=$_.InvocationInfo.ScriptLineNumber
-        $name=$myInvocation.InvocationName
-        Write-Host "$name Error Message -- $e at line $line" -ForegroundColor Red
+        # $e=$_.Exception.Message
+        # $line=$_.InvocationInfo.ScriptLineNumber
+        # $name=$myInvocation.InvocationName
+        # Write-Host "$name Error Message -- $e at line $line" -ForegroundColor Red
+        StandardError -err $_
         break
     }
     ###
@@ -347,10 +431,11 @@ function Deploy-Clone([switch]$LinkedClone=$false,[switch]$FullClone=$false,[str
         catch{
             # https://stackoverflow.com/questions/17226718/how-to-get-the-line-number-of-error-in-powershell
             # https://hostingultraso.com/help/windows/find-your-script%E2%80%99s-name-powershell#:~:text=You%20want%20to%20know%20the%20name%20of%20the%20currently%20running%20script.&text=To%20determine%20the%20name%20that,InvocationName%20variable.
-            $e=$_.Exception.Message
-            $line=$_.InvocationInfo.ScriptLineNumber
-            $name=$myInvocation.InvocationName
-            Write-Host "$name Error Message -- $e at line $line" -ForegroundColor Red
+            # $e=$_.Exception.Message
+            # $line=$_.InvocationInfo.ScriptLineNumber
+            # $name=$myInvocation.InvocationName
+            # Write-Host "$name Error Message -- $e at line $line" -ForegroundColor Red
+            StandardError -err $_
             break
         }
         ###
