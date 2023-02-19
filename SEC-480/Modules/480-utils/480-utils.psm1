@@ -191,7 +191,7 @@ function PowerCycle([switch]$on,[switch]$off,[string]$vm) {
 
 # Function to get the IP address of a VM
 # https://www.tutorialspoint.com/how-to-convert-the-integer-variable-to-the-string-variable-in-powershell
-# https://vmguru.com/2016/04/a-friday-getting-vm-network-information/
+# https://vmguru.com/2016/04/powershell-friday-getting-vm-network-information/
 
 function Get-VMIP ([string]$VMName = "",[string]$defaultJSON=""){
     try {
@@ -207,11 +207,16 @@ function Get-VMIP ([string]$VMName = "",[string]$defaultJSON=""){
         # Connect to vcenter server
         480Connect -server $conf.vcenter_server
 
-        Write-Host "[Gathering information]"
+        Write-Host "[Gathering information on $VMName]"
         # Get general information about the VM
         $GenVmInfo = (get-vm -Name $VMName).Guest
-        # Get the VMs MAC addresses
-        $MacVmInfo = (Get-NetworkAdapter -VM $VMName).MacAddress
+        # Get the VMs MAC addresses (force array since VMs with 1 mac arent arrays be default)
+        # https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_type_operators?view=powershell-7.3
+        [array]$MacVmInfo = (Get-NetworkAdapter -VM $VMName).MacAddress
+
+        # Desginated output gather certain information from general (hostname, NIC 1, IPv4 address) and the corressponding MAC information of the first network adapter (through $MacVMInfo)
+        $output = "{0} hostname={1} mac={2}" -f $GenVmInfo.nics.IPAddress[0].ToString(), $GenVmInfo.HostName.ToString(), $MacVmInfo[0].ToString()
+        Write-Host $output -ForegroundColor White
     }
     catch {
         # https://stackoverflow.com/questions/17226718/how-to-get-the-line-number-of-error-in-powershell
@@ -219,13 +224,13 @@ function Get-VMIP ([string]$VMName = "",[string]$defaultJSON=""){
         # $line=$_.InvocationInfo.ScriptLineNumber
         # $name=$myInvocation.InvocationName
         # Write-Host "$name Error Message -- $e at line $line" -ForegroundColor Red
+        Write-Host $GenVmInfo
         StandardError -err $_
+        Write-Host "LIKELY VALUE NOT SET FOR VM" -ForegroundColor Red
         break
     }
 
-    # Desginated output gather certain information from general (hostname, NIC 1, IPv4 address) and the corressponding MAC information of the first network adapter (through $MacVMInfo)
-    $output = "{1} hostname={0} mac={2}" -f $GenVmInfo.HostName.ToString(), $GenVmInfo.nics.IPAddress[0].ToString(), $MacVmInfo[0].ToString()
-    Write-Host $output -ForegroundColor White
+
     
     # Via using the device array in general count ($GenVmInfo.nics.Device.Count), could setup a simple for loop to display all IP/MAC information about a VM -- future note :)
 }
