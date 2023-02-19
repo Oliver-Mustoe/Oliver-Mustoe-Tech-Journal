@@ -136,7 +136,7 @@ function Switch-VMNetworkAdapter([string]$vm) {
         #note this is a full on vm object that we can interact with
         
         # Go through all available adapters and ask the user to select 1 to change their selected adapter to
-        Write-Host "Which network would you like to switch",$adapter.Name,"to?"
+        Write-Host "Which network would you like to switch",$selected_adapter.Name,"to?"
         $ava_adapters = Get-VirtualNetwork
         $index=1
         foreach($ava_adapter in $ava_adapters){
@@ -404,11 +404,12 @@ function Deploy-Clone([switch]$LinkedClone=$false,[switch]$FullClone=$false,[str
             Write-host "[Found $vmhost]" -foreground Green
             ###
 
-            Write-Host "[Creating $CloneVMName]" -ForegroundColor Green
+            
 
             # Determine if linked clone or full clone, execute accordingly
 
             if($LinkedClone){
+                Write-Host "[Creating $CloneVMName]" -ForegroundColor Green
                 # Create a new linked clone
                 $linkedvm = New-VM -LinkedClone -Name $CloneVMName -VM $vm -ReferenceSnapshot $snapshot -VMHost $vmhost -Datastore $ds
             }
@@ -417,11 +418,11 @@ function Deploy-Clone([switch]$LinkedClone=$false,[switch]$FullClone=$false,[str
 
                 Write-Host "[Creating $lclone]" -ForegroundColor Green
                 # Create a new linked clone
-                $linkedvm = New-VM -LinkedClone -Name $lclone -VM $vm -ReferenceSnapshot $snapshot -VMHost $vmhost -Datastore $ds
+                $templinkedvm = New-VM -LinkedClone -Name $lclone -VM $vm -ReferenceSnapshot $snapshot -VMHost $vmhost -Datastore $ds
 
                 Write-Host "[Creating $CloneVMName from $lclone]" -ForegroundColor Green
                 # Create a new VM
-                $newvm = New-VM -Name $CloneVMName -VM $linkedvm -VMHost $vmhost -Datastore $ds
+                $newvm = New-VM -Name $CloneVMName -VM $templinkedvm -VMHost $vmhost -Datastore $ds
 
                 Write-Host "[Creating Base snapshot of $CloneVMName]" -ForegroundColor Green
                 # Make a new Base snapshot
@@ -429,7 +430,10 @@ function Deploy-Clone([switch]$LinkedClone=$false,[switch]$FullClone=$false,[str
 
                 Write-Host "[Removing $lclone]" -ForegroundColor Green
                 # Remove the interim linked clone
-                $linkedvm | Remove-VM -Confirm:$false
+                $templinkedvm | Remove-VM -Confirm:$false
+
+                Write-Host "[DONE]" -ForegroundColor Green
+                break
             }
 
         }
@@ -463,6 +467,10 @@ function Deploy-Clone([switch]$LinkedClone=$false,[switch]$FullClone=$false,[str
                     }
                 }
             }
+            if ((Read-Host -Prompt ("Do you wish to turn on {0}? [y/N]?" -f $linkedvm.Name)).ToLower() -eq "y"){
+                PowerCycle -on -vm $linkedvm
+            }
+
         }
         else {
             Write-Host "[Didnt find $CloneVMName]" -ForegroundColor Red
