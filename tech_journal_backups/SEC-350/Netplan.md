@@ -5,6 +5,7 @@ This page contains configurations/tips on working with the Netplan.
 **Table of contents**
 
 1. [Basic Netplan config](#basic-netplan-config)
+2. [Sources](#sources)
 
 ## Basic Netplan Config
 
@@ -50,6 +51,6 @@ Other not listed sections:
 
 * Under the interface name, the line `dhcp4: true` can be used to enable DHCP
 
-Sources:
+# Sources:
 
 * [Canonical Netplan](https://netplan.io/examples)
