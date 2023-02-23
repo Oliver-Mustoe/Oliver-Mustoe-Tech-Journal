@@ -6,7 +6,8 @@ def main():
     arguments = args()
     
     # Open file and place the new contents inside
-    with open('new_markdown.md','w',encoding='utf-8') as nm:
+    filename = arguments.Name + '.md'
+    with open(filename,'w',encoding='utf-8') as nm:
         nm.write(image_replacer(arguments))
     
     
@@ -20,14 +21,20 @@ def args():
     
     # Add arguments
     arg_parser.add_argument(
-        "-I",'--InputFile',
+        "-i",'--InputFile',
         help="Markdown file location",
         required=True
     )
     
     arg_parser.add_argument(
-        "-A","--AllImages",
+        "-a","--AllImages",
         help="Location of images",
+        required=True
+    )
+    
+    arg_parser.add_argument(
+        "-n","--Name",
+        help="Name of the output file, no .md in name",
         required=True
     )
     
@@ -38,39 +45,38 @@ def args():
 
 def image_replacer(arguments):
     # Expected image format: "image{number}{number}{number}.png"
-    
-    image_regex = ".*image.*"
-    image_replace_regex = "image0*"
+
     InputFile = arguments.InputFile
     Images = arguments.AllImages
     
     r_input = None
     
     # Open each file in read mode (not specified as default for open())
-    with open(InputFile, encoding='utf-8') as input:
-        with open(Images, encoding='utf-8') as images:
-            # Read them
-            r_input = input.read()
-            r_images = images.read()
-            
-            # Replace unneeded zeros
-            r_input = re.sub(image_replace_regex,"image",r_input)
-            
-            # Turn images into list
-            image_list = re.findall(image_regex,r_images)
-                             
-            i = 1
-            
-            # For each image
-            while i <= len(image_list):
-                # Create a new image regex
-                image_regex2 = "!.*image" + str(i) + ".gif.*"
-                replace = image_list[i-2]
-                # Substitute based on image regex with the image, i-1 to use png image instead of gif image
-                r_input = re.sub(image_regex2,replace,r_input)
-                print(image_regex2)
-                    
-                i += 1
+    with open(InputFile, encoding='utf-8') as input, open(Images, encoding='utf-8') as images:
+        # Read them
+        r_input = input.read()
+        r_images = images.read()
+        
+        # With current method, embedded in the webpage should be .gif files in intervals of 2's, need to replace them with the png files (same amount)
+        
+        # Replace unneeded zeros
+        # r_input = re.sub(image_replace_regex,"image",r_input)
+        
+        # Turn images into list
+        image_list = r_images.splitlines()
+                            
+        i = 2
+        ii = 0
+        # For each image
+        while ii < len(image_list):
+            # Create a new image regex to search for the .gifs
+            image_regex = "!.*image" + str(i).zfill(3) + ".gif.*"
+            replace = image_list[ii]
+            # Substitute based on image regex with the .png, which happens to the index of i-2 or ii
+            r_input = re.sub(image_regex,replace,r_input)
+                
+            i += 2
+            ii += 1
             
             
 

@@ -47,8 +47,6 @@ Result:
 
 ![image5](https://user-images.githubusercontent.com/71083461/221032998-5b86eacf-083e-43e6-b530-9b36371fad33.png)
 
-
-
 ---
 
 Can't find something, look in the [backup.](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-350/Labs/Lab%206.1%20Port%20Forwarding%20and%20Jump%20Boxes.md)

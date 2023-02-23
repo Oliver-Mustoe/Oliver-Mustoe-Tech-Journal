@@ -128,7 +128,7 @@ commit
 save
 ```
 
-**^ NOTE FOR ABOVE:** The destination port is what a user is TRYING TO CONNECT TO, when they do on the inbound-interface/protocol - it will be translated to a request going to the translation address on the tranlation port A.K.A it translates the users request to point to a certain IP on a certain port if the request is on a certain port/interface.
+**^ NOTE FOR ABOVE:** The destination port is what a user is TRYING TO CONNECT TO, when they do on the inbound-interface/protocol - it will be translated to a request going to the translation address on the translation port A.K.A it translates the users request to point to a certain IP on a certain port if the request is on a certain port/interface. Could in theory also have a destination address with or without a destination port.
 
 ### Forward authentication messages to rsyslog
 
@@ -300,6 +300,7 @@ save
 
 - https://docs.vyos.io/en/latest/configuration/service/dns.html
 - [The night of living dead protocols: RIPv2](https://blog.vyos.io/the-night-of-living-dead-protocols-ripv2)
+- [NAT &mdash; VyOS 1.3.x (equuleus) documentation](https://docs.vyos.io/en/equuleus/configuration/nat/index.html)
 
 ***
 
