@@ -29,7 +29,7 @@ show configuration commands | grep -v "syslog\|ntp\|login\|console\|config\|hw-i
 
 ### Note about basic command structure:
 
-Basic command structure in VyOS begins with enter config mode, ``configure``, then doing the commands. To commit the configuration to the system, use `commit`, then to save so that the configuration will stay on reboot, use `save`. `set` is used as the way to set a configuration rule, while `delete` is used to delete a configuration rule.
+Basic command structure in VyOS begins with enter config mode, ``configure``, then doing the commands. To commit the configuration to the system, use `commit`, then to save so that the configuration will stay on reboot, use `save`. `set` is used as the way to set a configuration rule, while `delete` is used to delete a configuration rule. Rules are accompanied by a number, where this number is kind of like the name for the rule. Rule numbers are commonly incremented in increments of 5 or 10. In the command examples below, rules are given numbers that CAN be changed to meet the enviroment.
 
 ## Commands
 
@@ -76,6 +76,17 @@ commit
 save
 ```
 
+### Setup SSH
+
+```
+configure
+set service ssh listen-address {IP}
+commit
+save
+```
+
+**^ NOTE FOR ABOVE:** The IP can be set to 0.0.0.0 to allow any IP to SSH into the router, and `delete service ssh listen-address 0.0.0.0` can be used to delete this.
+
 ### Setup NAT forwarding:
 
 ```
@@ -102,6 +113,22 @@ save
 ```
 
 **^ NOTE FOR ABOVE:** The `{GATEWAY_IP}` is "the local IPv4 or IPv6 addresses to bind the DNS forwarder to. The forwarder will listen on this address for incoming connections." - [VyOS Documentation](https://docs.vyos.io/en/latest/configuration/service/dns.html). The `{IP_ADDRESS}/{NETMASK}` is the allowed network for DNS forwarding.
+
+### Setup Port Forwarding:
+
+```
+configure
+set nat destination rule 10 destination port {DESINATION_PORT}
+set nat destination rule 10 inbound-interface eth{NUMBER}
+set nat destination rule 10 protocol {DESTINATION_PROTOCOL}
+set nat destination rule 10 translation address {IP_TO_BE_TRANSLATED_TO}
+set nat destination rule 10 translation port {PORT_TO_BE_TRANSLATED_TO}
+set nat destination rule 10 description {DESCRIPTION}
+commit
+save
+```
+
+**^ NOTE FOR ABOVE:** The destination port is what a user is TRYING TO CONNECT TO, when they do on the inbound-interface/protocol - it will be translated to a request going to the translation address on the tranlation port A.K.A it translates the users request to point to a certain IP on a certain port if the request is on a certain port/interface.
 
 ### Forward authentication messages to rsyslog
 
