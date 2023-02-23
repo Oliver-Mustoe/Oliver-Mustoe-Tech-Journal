@@ -8,6 +8,8 @@ This page journals content related to NET/SEC/SYS-480 milestone 5.
 
 3. [VSCode installation](#vscode-installation)
 
+
+
 # Pre-flight
 
 I noticed that my DHCP option for searching domain was incorrect, found this by checking awx’s /etc/resolv.conf and it was searching “dc1.oliver.local” meaning I couldnt `nslookup` anything. To correct this, I SSH’d into dc1 and used the following command:
@@ -28,6 +30,8 @@ Has I had pre-registered an account, all I had to do was navigate to [Software 
 
 ![image005](https://user-images.githubusercontent.com/71083461/218274134-e0ade5f8-0694-44ef-930e-ebbb465fdff3.png)
 
+
+
 I would continue with the milestone and come back to this once I had a key/s.
 
 I would soon receive a license key, then I would login to my vCenter > click on the MANAGE YOUR LICENSES that appears at the top:  
@@ -40,13 +44,19 @@ Then I clicked ADD > Added my key (from the sent email) > Named the license “4
 
 ![image011](https://user-images.githubusercontent.com/71083461/218274140-f73320f0-cac0-48cc-8780-9dfdef627ea8.png)
 
+
+
 Then I went over to Assets (on the top row under Licenses header) > Went to HOSTS > Selected the asset “192.168.7.25” > Then ASSIGN LICENSE:  
 
 ![image013](https://user-images.githubusercontent.com/71083461/218274142-b6e21452-8c5c-4e49-a674-77638fff5161.png)
 
+
+
 Then once I gained the vCenter license, I repeated the process to add the license with the name “480-vcenter”:  
 
 ![image015](https://user-images.githubusercontent.com/71083461/218274146-474c232e-b3c6-4881-90cc-d379a3672cba.png)
+
+
 
 Then I went over to Assets (on the top row under Licenses header) > Went to VCENTER SERVER SYSTEMS > Selected the asset “vcenter.oliver.local” > Assigned the “480-vcenter”:  
 
@@ -68,6 +78,8 @@ mkdir -p Modules/480-utils
 
 ![image019](https://user-images.githubusercontent.com/71083461/218274152-c111fde4-60f9-4ee1-a3b0-e026f9ef4c61.png)
 
+
+
 Then I created a Module manifest in my 480-utils for my 480-utils.psm1 in **powershell** and created the needed psm file with the commands below:
 
 ```powershell
@@ -79,6 +91,8 @@ touch 480-utils.psm1
 
 ![image023](https://user-images.githubusercontent.com/71083461/218274157-8119dbc6-2b9b-4d1d-9395-d5db18f658cf.png)  
 
+
+
 Then I opened up Visual studio code from the “SEC-480” directory:
 
 ```powershell
@@ -87,13 +101,19 @@ code .
 
 ![image025](https://user-images.githubusercontent.com/71083461/218274159-7a1eef46-7168-4363-8086-dab1de9c5f55.png)
 
+
+
 Which opened Visual Studio Code:  
 
 ![image027](https://user-images.githubusercontent.com/71083461/218274163-65cb0504-1fd4-4d0d-9540-329cf0533ef0.png)
 
+
+
 Inside Visual studio, I would navigate to the .psm file (Modules > 480-utils > 480-tils.psm1) and, when entering the file, would install the Powershell extension:  
 
 ![image029](https://user-images.githubusercontent.com/71083461/218274165-22227cc5-6bbd-405a-b806-30b9d25bfa5d.png)
+
+
 
 I would populate psm file with a basic function called “480Banner”:  
 
@@ -113,6 +133,8 @@ code $profile
 
 (Will prompt to open file, allow it)
 
+
+
 I then entered the following into the profile to set the module path, `$env:PSModulePath`, to be equal to itself plus the path to the modules folder:
 
 ```powershell
@@ -121,11 +143,15 @@ $env:PSModulePath = $env:PSModulePath + ":/home/olivermustoe/Oliver-Mustoe-Tech-
 
 ![image033](https://user-images.githubusercontent.com/71083461/218274170-8f76094a-6ea6-4bbe-9f95-85a280248597.png)
 
+
+
 After saving the file, CTRL+S, I would reboot my Visual studio code (opened same way as above)
 
 This can be double checked like the following:
 
 ![image035](https://user-images.githubusercontent.com/71083461/218274172-ccb4e69d-c7f8-4c90-a14b-ed72806fc25c.png)
+
+
 
 Then I imported my 480-utils module with the following command (`-Force` since I want it to always load/reload the module) and I can run the module by using the function name:
 
@@ -134,6 +160,8 @@ Import-Module '480-utils' -Force
 ```
 
 ![image037](https://user-images.githubusercontent.com/71083461/218274175-cb22666f-7495-4eb3-9288-43387892a6c2.png)
+
+
 
 I would then create a dedicated function for creating a connection with vcenter called “480Connect”, also added some additional text to my banner function (this would be used in the session before other functions were run below). Below is the new function:
 
@@ -154,9 +182,13 @@ function 480Connect([string]$server) {
 
 ![image039](https://user-images.githubusercontent.com/71083461/218274177-9a33ea4f-11b9-40e2-baa4-1ea1d4dd9bdf.png)
 
+
+
 New banner (screenshot since the formatting gets messed up with a copy paste):
 
 ![image041](https://user-images.githubusercontent.com/71083461/218274179-1a69ac6a-a9db-4d0e-a75f-5cd05c78eaad.png)
+
+
 
 Then, inside the SEC-480 directory, I created the files “480driver.ps1” and “480.json:
 
@@ -166,6 +198,8 @@ touch 480.json
 ```
 
 ![image043](https://user-images.githubusercontent.com/71083461/218274182-644ca40e-97f8-4f0d-97cd-99a684181ebd.png)
+
+
 
 I would fill 480driver.ps1 with the following code:
 
@@ -179,6 +213,8 @@ Below shows the file in action:
 
 ![image045](https://user-images.githubusercontent.com/71083461/218274186-4dff93c5-0c65-443f-9332-6de8273af4c3.png)
 
+
+
 I would file 480.json with the following:
 
 ```
@@ -188,6 +224,8 @@ I would file 480.json with the following:
 ```
 
 ![image047](https://user-images.githubusercontent.com/71083461/218274188-703e1ddb-97bc-47ff-a7e6-cea22bf95842.png)
+
+
 
 I then created a function dedicated for getting a json config with “Get-480Config”:
 
@@ -207,9 +245,13 @@ function Get-480Config([string]$config_path) {
 }
 ```
 
+
+
 Below shows a test of this function (once imported either through the import command listed above OR via 480driver.ps1, which runs that import command):
 
 ![image049](https://user-images.githubusercontent.com/71083461/218274191-44161572-c029-4b8f-8865-c15628dcd483.png)
+
+
 
 I would then update my 480driver.ps1 with the following:
 
@@ -222,6 +264,8 @@ $conf=Get-480Config -config_path "/home/olivermustoe/Oliver-Mustoe-Tech-Journal/
 ```
 
 ![image051](https://user-images.githubusercontent.com/71083461/218274193-179fa8f4-44c0-4dc0-831d-75ffe069f732.png)
+
+
 
 Then I created a function to select VMs called “Select-VM” (in later testing, found that below could be simplified and integers with 2 numbers, such as 10, would create an error. Both of these are fixed/changed in the [480-utils.psm1](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/Modules/480-utils/480-utils.psm1)):  
 
@@ -258,9 +302,13 @@ function Select-VM([string]$folder) {
 }
 ```
 
+
+
 Example run:
 
 ![image053](https://user-images.githubusercontent.com/71083461/218274195-7b83feb3-2e9b-4715-abed-d1888a4bf6f0.png)
+
+
 
 Then I updated 480.json again with the following:
 
@@ -272,6 +320,8 @@ Then I updated 480.json again with the following:
 ```
 
 ![image055](https://user-images.githubusercontent.com/71083461/218274197-4ec126ae-53e2-46e9-8301-d747e4a1a476.png)
+
+
 
 I would then update my 480driver.ps1 with the following:
 
@@ -288,6 +338,8 @@ Select-VM -folder "BASEVM"
 Test run below:
 
 ![image057](https://user-images.githubusercontent.com/71083461/218274199-4b820849-f0ca-40cd-9834-cd5727bd1cd8.png)
+
+
 
 I would commit this code to my Github (had to use the `git config –global` command to set user.email and user.name.)
 
