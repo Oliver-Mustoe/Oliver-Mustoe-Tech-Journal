@@ -1,4 +1,4 @@
-This page journals content related to NET/SEC/SYS-480 milestone 6.
+This page journals content related to NET/SEC/SYS-480 milestone 6. **NOTE:** For the Milestone video, I actually recreated fw-blue1 from scratch. The steps taken were the exact same, but the DHCP IP assigned on the 480-WAN interface before Ansible might be different. **BE SURE TO USE `Get-VMIP` TO GET THE IP/VMName/MAC.**
 
 **Table of contents**
 
@@ -32,8 +32,6 @@ With these functions I could get the networking information I needed (command ru
 
 ![image001](https://user-images.githubusercontent.com/71083461/221052622-54a91ede-fbe1-48e8-a008-7dda90698e02.png)
 
-
-
 And I could make a new Virtual network (command run and output below):
 
 ```powershell
@@ -64,8 +62,6 @@ Deploy-Clone -LinkedClone -VMName server.vyos.base -CloneVMName fw-blue1 -de
 
 ![image013](https://user-images.githubusercontent.com/71083461/221052632-f9159bcf-1370-43f1-a9e4-36455bd32071.png)
 
-
-
 Strangely, when I tried to login the password I had on file was wrong (also double checked and COULD SSH into 480-fw with the password and it works, and I checked the history of 480-fw and didn’t see any changes to the password.)
 
 Because of this I created a new full linked clone from 480-fw:
@@ -74,19 +70,13 @@ Because of this I created a new full linked clone from 480-fw:
 Deploy-Clone -FullClone -VMName 480-fw -CloneVMName test-vyos -defaultJSON ./480.json
 ```
 
-
-
 Powered on test-vyos and selected the option for the login reset:
 
 ![image015](https://user-images.githubusercontent.com/71083461/221052634-fedda245-294d-4f5f-bfa6-6260a06d08dc.png)  
 
-
-
 Selected ‘y’ to reset the login to the password on file:
 
 ![image017](https://user-images.githubusercontent.com/71083461/221052637-7859e40c-5208-40f0-8f9d-e4b263a97104.png)  
-
-
 
 I then logged in with the reset password and ran the following to prep the VM (from [Milestone 1](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/wiki/Milestone-Bare-Metal-1---ESXi-Setup#480-fw)):
 
@@ -100,8 +90,6 @@ commit
 save
 ```
 
-
-
 I would then power down the VM > Take a snapshot called Base2 > Deploy a new vyos base with the following (deleted the other base and fw-blue1):
 
 ```powershell
@@ -110,8 +98,6 @@ Deploy-Clone -FullClone -VMName test-vyos -CloneVMName server.vyos.base -de
 
 ![image019](https://user-images.githubusercontent.com/71083461/221052638-e00500f7-a4ee-4dd5-bace-9e68fc26bbd3.png)
 
-
-
 I then deployed fw-blue1 like the previous deployment:
 
 ![image021](https://user-images.githubusercontent.com/71083461/221052639-059df3a6-536f-476e-86c4-7a0e7b5b337a.png)
@@ -119,8 +105,6 @@ I then deployed fw-blue1 like the previous deployment:
 ![image023](https://user-images.githubusercontent.com/71083461/221052640-d5af40b6-e68e-4b49-a60d-4b356f46ff4f.png)
 
 ![image025](https://user-images.githubusercontent.com/71083461/221052643-d13b0d40-456c-4051-a491-d6f21707a441.png)
-
-
 
 And I was able to login successfully:
 
@@ -143,9 +127,7 @@ EOF
 
 ![image029](https://user-images.githubusercontent.com/71083461/221052648-6cb27c31-f960-4466-bfc2-da205c1912e9.png)
 
-
-
-Then I filled in a inventory file ([fw-blue1-vars.txt](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/ansible/inventories/fw-blue1-vars.txt)) like the following:
+Then I filled in a inventory file ([fw-blue1-vars.txt](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/ansible/inventories/fw-blue1-vars.txt)) like the following (taking the output of `Get-VMIP -VMName fw-blue1 -defaultJSON ./480.json` and adding it before wan_ip):
 
 ```
 [vyos]
@@ -207,51 +189,35 @@ on fw-blue1 to a file in my Github repository under [SEC-480/ansible/files/vyo
 
 ![image035](https://user-images.githubusercontent.com/71083461/221052652-7243a65d-0cc2-4790-995e-7fa9a258a339.png)
 
-
-
 I then updated [my vars file](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/ansible/inventories/fw-blue1-vars.txt) like the following:
 
 ![image037](https://user-images.githubusercontent.com/71083461/221052653-4803a994-1fae-4dc0-a2e0-2010dfd070bc.png)
-
-
 
 Then, taking from my [fw-blue1-vars.txt file](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/ansible/inventories/fw-blue1-vars.txt), for each variable set in the vars file I would replace the value in the [config.boot.j2](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/ansible/files/vyos/config.boot.j2) file with the key in jinjia format (`{{ }}`). For example in the case of the variable key pair `gateway=10.0.17.2` , I would replace all instances of `10.0.17.2` with `{{ gateway }}`. I would also make sure that none of the replaces would impact another replace, so in the case of 10.0.17.2 I added a space at the end of the find to ensure I only interacted with just that IP!
 
 ![image039](https://user-images.githubusercontent.com/71083461/221052656-766d0cbf-e4d1-4abe-8e02-ad4a7c86fc23.png)
 
-
-
 For 10.0.17.2, I would have to add back in the space:
 
 ![image041](https://user-images.githubusercontent.com/71083461/221052657-25672289-ae37-40f8-b258-bb7861cd8804.png)
-
-
 
 I would also remove the lines in the interfaces section dealing with hw-id’s:
 
 ![image043](https://user-images.githubusercontent.com/71083461/221052658-2b742a44-4630-40d1-a217-faec0ace481a.png)
 
-
-
 I also had to edit the password lines to look like the following (removing plaint-text password):
 
 ![image045](https://user-images.githubusercontent.com/71083461/221052659-f99dbfc7-fafd-4082-9cd0-8f32d475aac6.png)
 
-
-
 I then made the following [Ansible file to configure fw-blue1](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/ansible/vyos-config.yml):
 
 ![image047](https://user-images.githubusercontent.com/71083461/221052661-e66094ca-d5dd-490d-9afa-87f6c350de10.png)
-
-
 
 Below is a running of the [Ansible script](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/ansible/vyos-config.yml) (right, and the output of `Get-VMIP` (on the left):
 
 ```bash
 ansible-playbook -i ansible/inventories/fw-blue1-vars.txt --user vyos --ask-pass ansible/vyos-config.yml
 ```
-
-
 
 ![image049](https://user-images.githubusercontent.com/71083461/221052663-65377366-a1e6-4aa0-afda-4c13b75777c9.png)
 
@@ -263,19 +229,13 @@ First I set the encrypted password to line in the config to `{{ password_hash�
 
 ![image053](https://user-images.githubusercontent.com/71083461/221052666-faa423db-270d-453d-aec0-00d1cc78c704.png)
 
-
-
 With this set and saved, I then made my Ansible script like the following:
 
 ![image055](https://user-images.githubusercontent.com/71083461/221052667-652211c6-4dcf-46aa-99aa-f1ddbd246b00.png)
 
-
-
 Then I reset fw-blue1 back to the snapshot and turned it on, once it was on I ran the above script like the following (left shows the ip changing, right shows the ansible playbook run!):
 
 ![image057](https://user-images.githubusercontent.com/71083461/221052668-827e1f65-1544-410d-8317-b78d3a98e6c5.png)
-
-
 
 But this resulted in the password not changing, but everything else was implemented correctly. To troubleshoot, I took the initial configuration I made and fw-blue1’s config after using Ansible. I didn’t see anything different. I then compared the fw-blue1’s config after using Ansible to 480-fw and found that the plaintext-password line was removed. Once I removed this line from config.boot.j2, the password worked!
 
