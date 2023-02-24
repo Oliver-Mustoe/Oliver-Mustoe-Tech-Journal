@@ -53,10 +53,8 @@ This part of the milestone was a nice brush up on Powershell, after not using i
 I updated/refined my previous functions to switch network adapters/power on a VM and deployed “fw-blue1” like the following (**NOTE:** After completeing fw-blue1, "Switch-VMNetworkAdapter" function was changed to "Set-Network". The functions functionality was not changed!):
 
 ```powershell
-Deploy-Clone -LinkedClone -VMName server.vyos.base -CloneVMName fw-blue1 -defaultJSON ./480.json
+Deploy-Clone -LinkedClone -VMName server.vyos.base -CloneVMName fw-blue1 -defaultJSON ./480.json
 ```
-
-![image007](https://user-images.githubusercontent.com/71083461/221052629-6f41542b-31a7-4ed3-a952-a90f6f7fac5f.png)
 
 ![image009](https://user-images.githubusercontent.com/71083461/221052630-0c11ede4-3e3d-4a2e-9e2d-e1c5b4df6b59.png)
 
@@ -95,7 +93,7 @@ save
 I would then power down the VM > Take a snapshot called Base2 > Deploy a new vyos base with the following (deleted the other base and fw-blue1):
 
 ```powershell
-Deploy-Clone -FullClone -VMName test-vyos -CloneVMName server.vyos.base -defaultJSON ./480.json
+Deploy-Clone -FullClone -VMName test-vyos -CloneVMName server.vyos.base -defaultJSON ./480.json
 ```
 
 ![image019](https://user-images.githubusercontent.com/71083461/221052638-e00500f7-a4ee-4dd5-bace-9e68fc26bbd3.png)
