@@ -112,7 +112,7 @@ function Select-Folder() {
 # https://vdc-repo.vmware.com/vmwb-repository/dcr-public/6fb85470-f6ca-4341-858d-12ffd94d975e/4bee17f3-579b-474e-b51c-898e38cc0abb/doc/Get-VirtualNetwork.html
 # https://developer.vmware.com/docs/powercli/latest/vmware.vimautomation.core/commands/get-networkadapter/#VirtualDeviceGetter
 
-function Switch-VMNetworkAdapter([string]$vm) {
+function Set-Network([string]$vm) {
     try{
         # Go through all adapters on vm and ask user to select 1
         Write-Host "Which network adapter would you like to change?"
@@ -459,7 +459,7 @@ function Deploy-Clone([switch]$LinkedClone=$false,[switch]$FullClone=$false,[str
             if ((Read-Host -Prompt ("Do you wish to change {0}'s adapters? [y/N]?" -f $linkedvm.Name)).ToLower() -eq "y"){
                 while($true){
                     # Change adapter
-                    Switch-VMNetworkAdapter -vm $linkedvm
+                    Set-Network -vm $linkedvm
                     
                     # Prompt to exit
                     if((Read-Host -Prompt "Do you wish to change another adapter? [y/N]").ToLower() -ne "y"){
