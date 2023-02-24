@@ -14,7 +14,7 @@ This page journals content related to NET/SEC/SYS-480 milestone 6.
 
 3. [Milestone 6.3 - Ansible Ping](#milestone-63---ansible-ping)
 
-4. [Milestone 6.4 - vyos configuration](#milestone-64---vyos-configuration)
+4. [Milestone 6.4 - vyos configuration](milestone-64--vyosconfiguration)
    
    1. [Troubleshooting 6.4](#troubleshooting-64)
    
@@ -241,7 +241,7 @@ But this resulted in the password not changing, but everything else was implemen
 
 ## 6.3 and 6.4 reflection
 
-I decided to combine the last 2 sub-milestones of milestones 6 together as 6.3 didn’t have much substance to reflect on. Having had some experience with Ansible, I had never before set up the inventory with the variables set. I have previously used group_vars to set variables, but I have never done it in the inventory file before. While later ansible scripts will require the use of an ansible-vault for secrets, it was interesting to see the ability to give variables to hosts in that way. In 6.4, I have used jinja templating a bit in Python and in Ansible scripts, but I have not used it solely for templating. It is very interesting to me and I want to see other applications for it. When making my config, I did have a bit of confusion when it came to setting the password, as it seemingly refused to change. I believe this to be the doing of the plaintext-password line, and I think I could have saved myself a lot of hassle by resetting fw-blue1 when I set its config manually THEN taking its configuration as a base. Overall, a fun milestone and I can’t wait for more Ansible!
+I decided to combine the last 2 sub-milestones of milestones 6 together as 6.3 didn’t have much substance to reflect on. Having had some experience with Ansible, I had never before set up the inventory with the variables set. I have previously used group_vars to set variables, but I have never done it in the inventory file before. While later ansible scripts will require the use of an ansible-vault for secrets, it was interesting to see the ability to give variables to hosts in that way. In 6.4, I have used jinja templating a bit in Python and in Ansible scripts, but I have not used it solely for templating. It is very interesting to me and I want to see other applications for it. When making my config, I did have a bit of confusion when it came to setting the password, as it seemingly refused to change. I believe this to be the doing of the plaintext-password line, and I think I could have saved myself a lot of hassle by resetting fw-blue1 when I set its config manually THEN taking its configuration as a base. Also had a weird issue where my spaces were being replaced by a different unicode character, don't even know how that happened but I have added it to the troubleshooting steps! Overall, a fun milestone and I can’t wait for more Ansible!
 
 # Sources for all:
 
