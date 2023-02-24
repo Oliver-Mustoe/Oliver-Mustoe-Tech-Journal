@@ -56,6 +56,8 @@ I updated/refined my previous functions to switch network adapters/power on a VM
 Deploy-Clone -LinkedClone -VMName server.vyos.base -CloneVMName fw-blue1 -defaultJSON ./480.json
 ```
 
+![image007](https://user-images.githubusercontent.com/71083461/221052629-6f41542b-31a7-4ed3-a952-a90f6f7fac5f.png)
+
 ![image009](https://user-images.githubusercontent.com/71083461/221052630-0c11ede4-3e3d-4a2e-9e2d-e1c5b4df6b59.png)
 
 ![image011](https://user-images.githubusercontent.com/71083461/221052631-69740167-64b3-4cf0-8196-998b8481bb5a.png)
@@ -67,7 +69,7 @@ Strangely, when I tried to login the password I had on file was wrong (also do
 Because of this I created a new full linked clone from 480-fw:
 
 ```powershell
-Deploy-Clone -FullClone -VMName 480-fw -CloneVMName test-vyos -defaultJSON ./480.json
+Deploy-Clone -FullClone -VMName 480-fw -CloneVMName test-vyos -defaultJSON ./480.json
 ```
 
 Powered on test-vyos and selected the option for the login reset:
