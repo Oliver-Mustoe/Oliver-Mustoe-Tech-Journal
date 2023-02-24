@@ -1,4 +1,6 @@
-This page journals content related to NET/SEC/SYS-480 milestone 6. **NOTE:** For the Milestone video, I actually recreated fw-blue1 from scratch. The steps taken were the exact same, but the DHCP IP assigned on the 480-WAN interface before Ansible might be different. **BE SURE TO USE `Get-VMIP` TO GET THE IP/VMName/MAC.**
+This page journals content related to NET/SEC/SYS-480 milestone 6. 
+
+**NOTE:** For the Milestone video, I actually recreated fw-blue1 from scratch. The steps taken were the exact same, but the DHCP IP assigned on the 480-WAN interface before Ansible might be different. **BE SURE TO USE `Get-VMIP` TO GET THE IP/VMName/MAC.**
 
 **Table of contents**
 
