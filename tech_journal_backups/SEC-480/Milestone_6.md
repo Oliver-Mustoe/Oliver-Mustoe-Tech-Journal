@@ -2,23 +2,23 @@ This page journals content related to NET/SEC/SYS-480 milestone 6.
 
 **Table of contents**
 
-1. Milestone 6.1 - Network Utility Functions
+1. [Milestone 6.1 - Network Utility Functions](#milestone-6.1-network-utility-functions)
    
-   1. 6.1 reflection
+   1. [6.1 reflection](#6.1-reflection)
 
-2. Milestone 6.2 - Cloning, Networking and Starting fw-blue1
+2. [Milestone 6.2 - Cloning, Networking and Starting fw-blue1](#milestone-6.2-cloning-networking-and-starting-fw-blue1)
    
-   1. 6.2 reflection
+   1. [6.2 reflection](#6.2-reflection)
 
-3. Milestone 6.3 - Ansible Ping
+3. [Milestone 6.3 - Ansible Ping](#milestone-6.3-ansible-ping)
 
-4. Milestone 6.4 - vyos configuration
+4. [Milestone 6.4 - vyos configuration](#milestone-6.4-vyos-configuration)
    
-   1. Troubleshooting 6.4
+   1. [Troubleshooting 6.4](#troubleshooting-6.4)
    
-   2. 6.3 and 6.4 reflection
+   2. [6.3 and 6.4 reflection](#6.3-and-6.4-reflection)
 
-5. Sources for all
+5. [Sources for all](#sources-for-all)
 
 # Milestone 6.1 - Network Utility Functions
 
@@ -264,6 +264,6 @@ I decided to combine the last 2 sub-milestones of milestones 6 together as 6.3 d
 
 # Sources for all:
 
-●       [ansible.builtin.set_fact module – Set host variable(s) and fact(s). — Ansible Documentation](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/set_fact_module.html)
+- [ansible.builtin.set_fact module – Set host variable(s) and fact(s). — Ansible Documentation](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/set_fact_module.html)
 
-●       [Using filters to manipulate data — Ansible Documentation](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_filters.html)
+- [Using filters to manipulate data — Ansible Documentation](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_filters.html)
