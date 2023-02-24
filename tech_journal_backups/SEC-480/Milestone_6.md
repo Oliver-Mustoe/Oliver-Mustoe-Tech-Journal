@@ -34,6 +34,10 @@ With these functions I could get the networking information I needed (command ru
 
 And I could make a new Virtual network (command run and output below):
 
+```powershell
+New-Network -NetworkName "BLUE1-LAN" -defaultJSON ./480.json
+```
+
 ![image003](https://user-images.githubusercontent.com/71083461/221052625-50f351e1-0b24-45a5-9c5d-1c4cb6256445.png)
 
 ![image005](https://user-images.githubusercontent.com/71083461/221052627-23ddb0ac-8b59-42d3-b12e-b66d4a7c9fcf.png)
@@ -240,8 +244,6 @@ I decided to combine the last 2 sub-milestones of milestones 6 together as 6.3 d
 - [ansible.builtin.set_fact module – Set host variable(s) and fact(s). — Ansible Documentation](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/set_fact_module.html)
 
 - [Using filters to manipulate data — Ansible Documentation](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_filters.html)
-
-
 
 ---
 
