@@ -142,10 +142,8 @@ ansible_python_interpreter=/usr/bin/python3
 And could ping the host:
 
 ```bash
-ansible vyos -m ping -i ansible/inventories/fw-blue1-vars.txt --user vyos --ask-pass
+ansible vyos -m ping -i ansible/inventories/fw-blue1-vars.txt --user vyos --ask-pass
 ```
-
-![image031](https://user-images.githubusercontent.com/71083461/221052649-7eb09c94-1b38-4595-b07f-151638f481fe.png)
 
 # Milestone 6.4 - vyos configuration
 
