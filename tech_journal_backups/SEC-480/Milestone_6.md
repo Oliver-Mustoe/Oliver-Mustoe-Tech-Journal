@@ -14,7 +14,7 @@ This page journals content related to NET/SEC/SYS-480 milestone 6.
 
 3. [Milestone 6.3 - Ansible Ping](#milestone-63---ansible-ping)
 
-4. [Milestone 6.4 - vyos configuration](milestone-64--vyosconfiguration)
+4. [Milestone 6.4 - vyos configuration](#milestone-64--vyosconfiguration)
    
    1. [Troubleshooting 6.4](#troubleshooting-64)
    
