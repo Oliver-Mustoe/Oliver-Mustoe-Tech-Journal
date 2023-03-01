@@ -1,0 +1,13 @@
+# This is the network config written by 'subiquity'
+network:
+  ethernets:
+    ens160:
+      addresses:
+        - {{ IPnMask }}
+      nameservers:
+        addresses:
+        - {{ Nameserver }}
+      routes:
+        - to: default
+          via: {{ Gateway }}
+  version: 2
