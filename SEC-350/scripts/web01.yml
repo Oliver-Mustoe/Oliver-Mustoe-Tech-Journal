@@ -1,6 +1,6 @@
 # Needs https://github.com/ansible-collections/vyos.vyos
 - name: Open firewall
-  hosts: edg01
+  hosts: edge01
   vars_files:
       - ./secrets.yml
   vars:
@@ -76,7 +76,7 @@
 
 # Needs https://github.com/ansible-collections/vyos.vyos
 - name: Close firewall
-  hosts: edg01
+  hosts: edge01
   vars_files:
       - ./secrets.yml
   vars:

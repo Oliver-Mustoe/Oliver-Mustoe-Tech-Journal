@@ -155,10 +155,11 @@ While it is running, go over to WKS01 and set adaper to get a IP through DHCP.
 
 ## *Key Setup*
 
-On mgmt01, run the following the following in the SEC-350 folder > scripts folder in the home directory of 'olivermustoe':
+On mgmt01, run the following the following in the SEC-350 folder > scripts folder in the home directory of 'olivermustoe' as 'olivermustoe':
 
 ```bash
-sudo bash keys.sh
+ssh-add ~/.ssh/id_rsa
+bash keys.sh
 ```
 
 ---
@@ -398,3 +399,7 @@ sudo /var/ossec/bin/manage_agents -r {AGENT_UUID}
   - ![image](https://user-images.githubusercontent.com/71083461/222031696-83e3cd82-55ad-4f00-a37d-c2b0e88ba38d.png)
 
 - ![image](https://user-images.githubusercontent.com/71083461/222215810-2f9f05f4-0ea8-4469-ab33-473a87c99a68.png)
+
+- Double quotes "" makes interplotation happen with variables in both PS and Bash!
+
+- ![image](https://user-images.githubusercontent.com/71083461/222569487-f2dadc42-358f-4584-9916-fee2729ddc9e.png)

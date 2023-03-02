@@ -4,7 +4,7 @@
 [nginx-oliver]
 172.16.50.3 hostname=nginx01-oliver IPnMask=172.16.50.3/29 Nameserver=172.16.50.2 Gateway=172.16.50.2
 
-[edg01]
+[edge01]
 172.16.150.2
 
 [all:vars]
