@@ -15,6 +15,22 @@ This file contains the all of the information needed to complete the SEC-350 ass
 
 # Order of operations
 
+0 - Setup ansible like
+
+```bash
+sudo apt update
+sudo apt install sshpass python3-paramiko git -y
+sudo apt-add-repository ppa:ansible/ansible
+sudo apt update
+sudo apt install ansible -y
+cat >> ~/.ansible.cfg << EOF                                                              
+[defaults]
+host_key_checking = false
+EOF
+```
+
+
+
 1. For each new box, set network adapters CORRECTLY > take a snapshot
 
 2. On edg01, assign address on LAN interface > open SSH to mgmt01 > upload firewall config **(either the latest one or the one before firewall, decide this SOON)**, don't save

@@ -1,9 +1,12 @@
 - name: Setup dhcp
   hosts: dhcp-oliver
+  vars_files: 
+      - ./secrets.yml
+  # Needs the become password for sudo
   vars:
-    vars_files: ./secrets.yml
     ansible_user: "{{ dhcprootuser }}"
-    ansible_password: "{{  dhcprootpass }}"
+    ansible_password: "{{ dhcprootpass }}"
+    ansible_become_pass: "{{ dhcprootpass }}"
   become: yes
   tasks:
     - name: Setup netplan
@@ -20,12 +23,12 @@
 
     - name: Set hostname as "dhcp-oliver"
       ansible.builtin.hostname:
-        name: web01
+        name: dhcp-oliver
 
     - name: "Create {{ dhcpuser }}"
       ansible.builtin.user:
         name: "{{ dhcpuser }}"
-        password: "{{ dhcppass }}"
+        password: "{{ dhcppass | password_hash('sha512') }}"
         shell: /bin/bash
         groups: sudo
         append: yes
@@ -45,7 +48,7 @@
     
     - name: Setup interface
       ansible.builtin.shell: |
-        "echo 'INTERFACESv4=" {{ ansible_default_ipv4.interface }} "' > /etc/default/isc-dhcp-server"
+        "echo 'INTERFACESv4="{{ ansible_default_ipv4.interface }}"' > /etc/default/isc-dhcp-server"
         echo 'INTERFACESv6=""' >> /etc/default/isc-dhcp-server
     
     - name: Start dhcp
@@ -53,3 +56,4 @@
         name: isc-dhcp-server
         state: started
         enabled: yes
+    # Need to add Wazuh capabilities
