@@ -21,9 +21,10 @@
       ansible.builtin.shell: |
         netplan apply
 
-    - name: Set hostname as "dhcp-oliver"
+    - name: "Set hostname as '{{ hostname }}'"
       ansible.builtin.hostname:
-        name: dhcp-oliver
+        # name: dhcp-oliver
+        name: "{{ hostname }}"
 
     - name: "Create {{ dhcpuser }}"
       ansible.builtin.user:

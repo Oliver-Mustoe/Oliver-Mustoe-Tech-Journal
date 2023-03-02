@@ -14,14 +14,13 @@ $Password = Read-Host -prompt "What is the password for this user?" -AsSecureStr
 $hostname = Read-Host -prompt "What is the hostname of this box supposed to be?"
 New-LocalUser $Username -Password $Password -AccountNeverExpires -PasswordNeverExpires:$true
 Add-LocalGroupMember -Group "Administrators" -Member $Username
-$cred = New-Object System.Management.Automation.PSCredential $Username, $Password
+$cred = New-Object System.Management.Automation.PSCredential $username, $Password
 
 # Rename computer
 Rename-Computer -NewName $hostname
 
-# Start-Process Powershell "-Command Read-host((whoami))" -LoadUserProfile -NoNewWindow -Credential $Cred -wait
-# Start-Process Powershell "-Command ssh-keygen -t rsa -b 4096 -f C:\Users\$Username\$Username-jump-keys -C $Username" -LoadUserProfile -Credential $Cred -wait -NoNewWindow
-Start-Process Powershell "mkdir C:\Users\$Username\.ssh" -Credential $cred -wait
-Start-Process Powershell "ssh-keygen -t rsa -b 4096 -f C:\Users\$Username\.ssh\$Username-jump-keys -C $Username" -Credential $cred -wait
+#Start-Process Powershell "-Command Read-host((whoami))" -LoadUserProfile -NoNewWindow -Credential $Cred -wait
+Start-Process Powershell "-Command ssh-keygen -t rsa -b 4096 -f C:\Users\$Username\$Username-jump-keys -C $Username" -LoadUserProfile -Credential $Cred -wait -NoNewWindow
+# Start-Process Powershell "-Command ssh-keygen -t rsa -b 4096 -f C:\Users\$Username\.ssh\$Username-jump-keys -C $Username" -Credential $Cred -wait
 # log off
 Write-Host "When ready, reboot!"
