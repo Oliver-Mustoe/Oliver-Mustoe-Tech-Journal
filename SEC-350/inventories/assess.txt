@@ -1,8 +1,11 @@
 [dhcp-oliver]
-172.16.150.15 IPnMask=172.16.150.15/24 Nameserver=172.16.150.2 Gateway=172.16.150.2
+172.16.150.15 hostname=dhcp01-oliver IPnMask=172.16.150.15/24 Nameserver=172.16.150.2 Gateway=172.16.150.2
 
 [nginx-oliver]
-172.16.50.3 IPnMask=172.16.50.3/29 Nameserver=172.16.50.3 Gateway=172.16.50.3
+172.16.50.3 hostname=nginx01-oliver IPnMask=172.16.50.3/29 Nameserver=172.16.50.2 Gateway=172.16.50.2
+
+[edg01]
+172.16.150.2
 
 [all:vars]
 ansible_python_interpreter=/usr/bin/python3

@@ -27,9 +27,9 @@ cat >> ~/.ansible.cfg << EOF
 [defaults]
 host_key_checking = false
 EOF
+# Also remove known_hosts
+rm ~/.ssh/known_hosts
 ```
-
-
 
 1. For each new box, set network adapters CORRECTLY > take a snapshot
 
@@ -73,6 +73,8 @@ NOTE ABOUT CRD: Will break before firewall is up, logout of the user BEFORE the 
 
 # Automatic way
 
+**Set adapters like you see at the top of the page**
+
 ## *Firewall setup*
 
 Initial setup
@@ -80,11 +82,11 @@ Initial setup
 ```
 configure
 set interfaces ethernet eth2 address '172.16.150.2/24'
-set service ssh listen-address '172.16.150.2'
+set service ssh listen-address '172.16.150.10'
 commit
 ```
 
-Then ssh into it with `ssh vyos@172.16.150.2`, then run the commands within "fw01-edg01--config.txt(should be on mgmt01's desktop labeled "fw01-edg01--config.txt"). After checking that can ping google, run `save`.
+Then ssh into it with `ssh vyos@172.16.150.2`, then run the commands within "fw01-edg01--config.txt (should be on mgmt01's desktop labeled "fw01-edg01--config.txt"). After checking that can ping google, run `save`.
 
 ## *traveler setup*
 
@@ -101,11 +103,65 @@ Set-ExecutionPolicy -scope process unrestricted
 .\assess-setup.ps1
 ```
 
+## *nginx-oliver automatic setup instructions*
 
+assumption is interface is ens160 - change if not the case
 
-**ADD TEMP IPS**
+### Set temp IPs
 
+```bash
+# For nginx
+sudo ip a add 172.16.50.3/29 dev ens160 # Interface name may need to be changed!
+sudo ip route add default via 172.16.50.2
+sudo ip link set dev ens160 up
+ip route show
+# WONT BE ABLE TO PING GOOGLE, TRY PINGING GATEWAY AND SEE IF SSH WORKS```bash
+# Can flush IP settings with `ip addr flush eth0`
+```
 
+### nginx-oliver automatic Ansible
+
+On mgmt01, run the following in the SEC-350 folder > 'scripts' folder in the home directory of 'olivermustoe'
+
+```bash
+ansible-playbook -i ../inventories/assess.txt web01.yml --ask-vault-pass
+```
+
+## *dhcp-oliver automatic setup instructions*
+
+assumption is interface is ens160 - change if not the case
+
+### Set temp IPs
+
+```bash
+# For DHCP (FIND THIS IP ADDRESS)
+sudo ip a add 172.16.150.15/24 dev ens160 # Interface name may need to be changed!
+sudo ip route add default via 172.16.150.2
+sudo ip link set dev ens160 up
+ip route show
+# Ping google
+# Can flush IP settings with `ip addr flush eth0`
+```
+
+### dhcp-oliver automatic Ansible
+
+On mgmt01, run the following in the SEC-350 folder > scripts folder in the home directory of 'olivermustoe'
+
+```bash
+ansible-playbook -i ../inventories/assess.txt dhcp.yml --ask-vault-pass
+```
+
+While it is running, go over to WKS01 and set adaper to get a IP through DHCP.
+
+## *Key Setup*
+
+On mgmt01, run the following the following in the SEC-350 folder > scripts folder in the home directory of 'olivermustoe':
+
+```bash
+sudo bash keys.sh
+```
+
+---
 
 # Manual way
 
@@ -114,20 +170,21 @@ Set-ExecutionPolicy -scope process unrestricted
 Initial setup
 
 ```
+configure
 set interfaces ethernet eth2 address '172.16.150.2/24'
-set interfaces ethernet eth2 description 'OLIVER-LAN'
-set service ssh listen-address '0.0.0.0'
+set service ssh listen-address '172.16.150.10'
+commit
 ```
 
-Then ssh into it with `ssh vyos@172.16.150.2` from mgmt01, then run the following [here](https://raw.githubusercontent.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/main/tech_journal_backups/SEC-350/Vyos_configs/fw01-assessment.txt?token=GHSAT0AAAAAAB6QZ3PYSTLR4PCWOTHQLDAIY77S53Q) with a `configure` before and a `commit` afterwards. After checking that can ping google, run `save`.
+Then ssh into it with `ssh vyos@172.16.150.2`, then run the commands within "fw01-edg01--config.txt (should be on mgmt01's desktop labeled "fw01-edg01--config.txt"). After checking that can ping google, run `save`.
 
-## *nginx-oliver setup instructions*
+## *nginx-oliver manual setup instructions*
 
 assumption is interface is ens160-change if not the case
 
 ### Open DMZ firewall
 
-In the firewall
+In the firewall (edge01)
 
 ```
 configure
@@ -136,7 +193,7 @@ set firewall name DMZ-to-WAN rule 999 source address 172.16.50.3
 commit
 ```
 
-Close it
+Close it (do later, here to help remember :) )
 
 ```
 configure
@@ -147,11 +204,12 @@ commit
 ### Set temp IPs
 
 ```bash
-# For DHCP (FIND THIS IP ADDRESS)
+# For nginx
 sudo ip a add 172.16.50.3/29 dev ens160 # Interface name may need to be changed!
 sudo ip route add default via 172.16.50.2
 sudo ip link set dev ens160 up
 ip route show
+# WONT BE ABLE TO PING GOOGLE, TRY PINGING GATEWAY AND SEE IF SSH WORKS
 ```
 
 ### Netplan setup
@@ -218,7 +276,16 @@ commit
 
 Double check that nginx can't ping google, also check webpage is working!
 
-## *dhcp-oliver setup instructions*
+### Install and setup Wazuh
+
+```bash
+curl -so wazuh-agent-4.3.10.deb https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.3.10-1_amd64.deb && sudo WAZUH_MANAGER='172.16.200.10' WAZUH_AGENT_GROUP='linux' dpkg -i ./wazuh-agent-4.3.10.deb
+sudo systemctl daemon-reload
+sudo systemctl enable wazuh-agent
+sudo systemctl start wazuh-agent
+```
+
+## *dhcp-oliver manual setup instructions*
 
 assumption is interface is ens160-change if not the case
 
