@@ -1,0 +1,55 @@
+- name: Setup dhcp
+  hosts: dhcp-oliver
+  vars:
+    vars_files: ./secrets.yml
+    ansible_user: "{{ dhcprootuser }}"
+    ansible_password: "{{  dhcprootpass }}"
+  become: yes
+  tasks:
+    - name: Setup netplan
+      ansible.builtin.template:
+        src: ../templates/netplan.yaml.j2
+        dest: /etc/netplan/00-installer-config.yaml
+        mode: "0644"
+        owner: root
+        group: root
+
+    - name: Apply netplan
+      ansible.builtin.shell: |
+        netplan apply
+
+    - name: Set hostname as "dhcp-oliver"
+      ansible.builtin.hostname:
+        name: web01
+
+    - name: "Create {{ dhcpuser }}"
+      ansible.builtin.user:
+        name: "{{ dhcpuser }}"
+        password: "{{ dhcppass }}"
+        shell: /bin/bash
+        groups: sudo
+        append: yes
+    
+    - name: Install isc-dhcp-server
+      ansible.builtin.apt:
+        name: isc-dhcp-server
+        update_cache: yes
+    
+    - name: Copy dhcpd.conf
+      ansible.builtin.copy:
+        src: ../templates/dhcpd.conf
+        dest: /etc/dhcp/dhcpd.conf
+        owner: root
+        group: root
+        mode: '0644'
+    
+    - name: Setup interface
+      ansible.builtin.shell: |
+        "echo 'INTERFACESv4=" {{ ansible_default_ipv4.interface }} "' > /etc/default/isc-dhcp-server"
+        echo 'INTERFACESv6=""' >> /etc/default/isc-dhcp-server
+    
+    - name: Start dhcp
+      ansible.builtin.service:
+        name: isc-dhcp-server
+        state: started
+        enabled: yes

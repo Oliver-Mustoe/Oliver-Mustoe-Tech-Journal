@@ -1,7 +1,7 @@
 # This is the network config written by 'subiquity'
 network:
   ethernets:
-    ens160:
+  {{ ansible_default_ipv4.interface }}:
       addresses:
         - {{ IPnMask }}
       nameservers:

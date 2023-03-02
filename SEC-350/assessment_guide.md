@@ -5,13 +5,13 @@ This file contains the all of the information needed to complete the SEC-350 ass
 | traveler-oliver (rw01) | 10.0.17.25/24                                                                                                   | ![image](https://user-images.githubusercontent.com/71083461/222024872-ef01b2f4-a931-43c6-9e32-275238ae53fa.png) |
 | edge01-oliver (fw1)    | ![image](https://user-images.githubusercontent.com/71083461/222025222-9aacebef-09ed-4b33-8793-8f5a9afb4a9f.png) | ![image](https://user-images.githubusercontent.com/71083461/222025037-83e7a6c9-e231-4a74-82c1-31df9b8fd230.png) |
 | nginx-oliver (web01)   | 172.16.50.3/29                                                                                                  | ![image](https://user-images.githubusercontent.com/71083461/222025365-e698ac34-7b06-4825-9782-7d3327b482af.png) |
-| dhcp-oliver (new)      | **DONT KNOW, CLARIFY**                                                                                          | On LAN                                                                                                          |
+| dhcp-oliver (new)      | 172.16.150.15                                                                                                   | On LAN                                                                                                          |
 
 # Visualization
 
+![image](https://user-images.githubusercontent.com/71083461/222250518-17fed880-5fe7-49e3-b1ed-5b061352b5cd.png)
 
-
-
+**NOTE: IPs ARE DIFFERENT FOR MY WAN!**
 
 # Order of operations
 
@@ -37,27 +37,172 @@ This file contains the all of the information needed to complete the SEC-350 ass
       
       4. Copy commands to set hostname
       
-      5. On nginx-oliver-Install nginx and setup a basic webpage
+      5. On edge01-Open the firewall for nginx
       
-      6. On dhcp-oliver-Setup DHCP (copy config from Github **DO THIS**)
+      6. On nginx-oliver-Install nginx and setup a basic webpage
       
-      7. On mgmt01-Use sftp to download keys from named admin on traveler, then scp them to jump.
+      7. On nginx-Install Wazuh agent
       
-      8. On jump-Append the SSH keys to ~/.ssh/authorized_keys (since manual, do as olivermustoe-jump to make sure perms are good)
+      8. Close the firewall
       
-      9. On nginx and DHCP-Install Wazuh agents
+      9. On dhcp-oliver-Setup DHCP (copy config from Github **DO THIS**)
+      
+      10. On mgmt01-Use sftp to download keys from named admin on traveler, then scp them to jump.
+      
+      11. On jump-Append the SSH keys to ~/.ssh/authorized_keys (since manual, do as olivermustoe-jump to make sure perms are good)
+      
+      12. On DHCP-Install Wazuh agents
 
-
-
-NOTE ABOUT CRD: Will break before firewall is up, MAKE SURE TO LOGOUT OF THE BOX COMPLETELY THE DAY BEFORE AS CRD BREAKS THE USER IF IT ISNT SIGNED OUT! See prep notes for more detail.
+NOTE ABOUT CRD: Will break before firewall is up, logout of the user BEFORE the assessment, or just reboot mgmt01.
 
 # Automatic way
+
+## *Firewall setup*
+
+Initial setup
+
+```
+configure
+set interfaces ethernet eth2 address '172.16.150.2/24'
+set service ssh listen-address '172.16.150.2'
+commit
+```
+
+Then ssh into it with `ssh vyos@172.16.150.2`, then run the commands within "fw01-edg01--config.txt(should be on mgmt01's desktop labeled "fw01-edg01--config.txt"). After checking that can ping google, run `save`.
+
+## *traveler setup*
+
+Set the network settings from computer icon right click >  Open Network & Internet settings > Change adapter options > Ethernet0 right click > properties (bottom) > Internet Protocol Version 4 double click:
+
+![image](https://user-images.githubusercontent.com/71083461/222263382-7838cfab-069e-4c2b-9a0a-bbb42c275ea5.png)
+
+Run the following commands **(ADMINISTRATIVE POWERSHELL)** can find on `www.github.com/Oliver-Mustoe/publix`:
+
+```powershell
+wget https://github.com/Oliver-Mustoe/publix/blob/main/scripts-to-be-pblic/assess-setup.ps1?raw=true -Outfile assess-setup.ps1
+Unblock-File .\assess-setup.ps1
+Set-ExecutionPolicy -scope process unrestricted
+.\assess-setup.ps1
+```
+
+
+
+**ADD TEMP IPS**
 
 
 
 # Manual way
 
-## dhcp-oliver setup instructions
+### *Firewall setup*
+
+Initial setup
+
+```
+set interfaces ethernet eth2 address '172.16.150.2/24'
+set interfaces ethernet eth2 description 'OLIVER-LAN'
+set service ssh listen-address '0.0.0.0'
+```
+
+Then ssh into it with `ssh vyos@172.16.150.2` from mgmt01, then run the following [here](https://raw.githubusercontent.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/main/tech_journal_backups/SEC-350/Vyos_configs/fw01-assessment.txt?token=GHSAT0AAAAAAB6QZ3PYSTLR4PCWOTHQLDAIY77S53Q) with a `configure` before and a `commit` afterwards. After checking that can ping google, run `save`.
+
+## *nginx-oliver setup instructions*
+
+assumption is interface is ens160-change if not the case
+
+### Open DMZ firewall
+
+In the firewall
+
+```
+configure
+set firewall name DMZ-to-WAN rule 999 action accept
+set firewall name DMZ-to-WAN rule 999 source address 172.16.50.3
+commit
+```
+
+Close it
+
+```
+configure
+delete firewall name DMZ-to-WAN rule 999
+commit
+```
+
+### Set temp IPs
+
+```bash
+# For DHCP (FIND THIS IP ADDRESS)
+sudo ip a add 172.16.50.3/29 dev ens160 # Interface name may need to be changed!
+sudo ip route add default via 172.16.50.2
+sudo ip link set dev ens160 up
+ip route show
+```
+
+### Netplan setup
+
+Inside `/etc/neplan/00-installer-config.yaml`
+
+```
+# This is the network config written by 'subiquity'
+network:
+  ethernets:
+    ens160:
+      addresses:
+        - 172.16.50.3/29
+      nameservers:
+        addresses:
+        - 172.16.50.2
+      routes:
+        - to: default
+          via: 172.16.50.2
+  version: 2
+```
+
+Then issue a `sudo reboot now`
+
+### Set hostnames
+
+```bash
+# For DHCP
+sudo hostnamectl set-hostname nginx-oliver
+```
+
+### Create user
+
+```bash
+sudo adduser olivermustoe
+sudo usermod -aG olivermustoe
+sudo passwd olivermustoe
+```
+
+### Install nginx and set a banner
+
+```bash
+sudo apt update
+sudo apt install nginx
+sudo echo ‘nginx01-oliver’ > /var/www/html/index.html
+```
+
+### Install and setup Wazuh
+
+```bash
+curl -so wazuh-agent-4.3.10.deb https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.3.10-1_amd64.deb && sudo WAZUH_MANAGER='172.16.200.10' WAZUH_AGENT_GROUP='linux' dpkg -i ./wazuh-agent-4.3.10.deb
+sudo systemctl daemon-reload
+sudo systemctl enable wazuh-agent
+sudo systemctl start wazuh-agent
+```
+
+### CLOSE THE FIREWALL
+
+```
+configure
+delete firewall name DMZ-to-WAN rule 999
+commit
+```
+
+Double check that nginx can't ping google, also check webpage is working!
+
+## *dhcp-oliver setup instructions*
 
 assumption is interface is ens160-change if not the case
 
@@ -65,7 +210,7 @@ assumption is interface is ens160-change if not the case
 
 ```bash
 # For DHCP (FIND THIS IP ADDRESS)
-sudo ip a add 172.16.150.20/24 dev ens160 # Interface name may need to be changed!
+sudo ip a add 172.16.150.15/24 dev ens160 # Interface name may need to be changed!
 sudo ip route add default via 172.16.150.2
 sudo ip link set dev ens160 up
 ip route show
@@ -81,7 +226,7 @@ network:
   ethernets:
     ens160:
       addresses:
-        - 172.16.150.20/24
+        - 172.16.150.15/24
       nameservers:
         addresses:
         - 172.16.150.2
@@ -98,6 +243,14 @@ Then issue a `sudo reboot now`
 ```bash
 # For DHCP
 sudo hostnamectl set-hostname dhcp-oliver
+```
+
+### Create user
+
+```bash
+sudo adduser olivermustoe
+sudo usermod -aG olivermustoe
+sudo passwd olivermustoe
 ```
 
 ### Install DHCP on dhcp-oliver
@@ -130,6 +283,25 @@ subnet 172.16.150.0 netmask 255.255.255.0 {
 
 Then start the service with `sudo systemctl start isc-dhcp-server`
 
+### Install and setup Wazuh
+
+```bash
+curl -so wazuh-agent-4.3.10.deb https://packages.wazuh.com/4.x/apt/pool/main/w/wazuh-agent/wazuh-agent_4.3.10-1_amd64.deb && sudo WAZUH_MANAGER='172.16.200.10' WAZUH_AGENT_GROUP='linux' dpkg -i ./wazuh-agent-4.3.10.deb
+sudo systemctl daemon-reload
+sudo systemctl enable wazuh-agent
+sudo systemctl start wazuh-agent
+```
+
+## Remove Wazuh agent
+
+From the Wazuh host, run the following in the terminal (exclude the `-r` to just access the menu as the `-r` will automatically delete the agent WITHOUT confirmation!):
+
+```bash
+sudo /var/ossec/bin/manage_agents -r {AGENT_UUID}
+```
+
+![image](https://user-images.githubusercontent.com/71083461/222210740-c0814d1e-4b48-4f6c-9054-87f8dd77d155.png)
+
 # Prepping notes
 
 - Probably should uninstall SSH from wk1 in testing to see if script can install it!
@@ -142,4 +314,4 @@ Then start the service with `sudo systemctl start isc-dhcp-server`
   
   - ![image](https://user-images.githubusercontent.com/71083461/222031696-83e3cd82-55ad-4f00-a37d-c2b0e88ba38d.png)
 
-
+- ![image](https://user-images.githubusercontent.com/71083461/222215810-2f9f05f4-0ea8-4469-ab33-473a87c99a68.png)
