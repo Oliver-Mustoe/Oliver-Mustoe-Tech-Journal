@@ -162,6 +162,15 @@ ssh-add ~/.ssh/id_rsa
 bash keys.sh
 ```
 
+Then run the following on the firewall:
+
+```
+configure
+
+```
+
+
+
 ---
 
 # Manual way
