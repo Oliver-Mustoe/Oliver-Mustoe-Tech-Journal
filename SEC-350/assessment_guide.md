@@ -71,7 +71,7 @@ rm ~/.ssh/known_hosts
 
 NOTE ABOUT CRD: Will break before firewall is up, logout of the user BEFORE the assessment, or just reboot mgmt01.
 
-# Automatic way
+# Automatic way (see [troubleshooting](#troubleshooting))
 
 **Set adapters like you see at the top of the page, THEN SNAPSHOT**
 
@@ -166,7 +166,9 @@ Then run the following on the firewall:
 
 ```
 configure
-
+set system login user vyos authentication plaintext-password {SECURE_PASS}
+commit 
+save
 ```
 
 
@@ -394,6 +396,33 @@ sudo /var/ossec/bin/manage_agents -r {AGENT_UUID}
 ```
 
 ![image](https://user-images.githubusercontent.com/71083461/222210740-c0814d1e-4b48-4f6c-9054-87f8dd77d155.png)
+
+
+
+# Troubleshooting
+
+- All ansible commands, .sh file, and the vyos copy past are all done from mgmt01
+
+- Can switch to CRD after firewall setup, make sure to logout of the user on vCenter terminal!
+
+- Make sure network segments are set correctly
+
+- Run the following commands if the keys.sh file fails with a sudo error (on mgmt01)
+  
+  - ```
+    ssh olivermustoe@172.16.50.4
+    sudo cp olivermustoe-tadm-jump-keys.pub /home/olivermustoe-jump
+    sudo su olivermustoe-jump
+    cd ~
+    cat olivermustoe-tadm-jump-keys.pub >> ~/.ssh/authorized_keys
+    cat ~/.ssh/authorized_keys 
+    ```
+
+- **SNAPSHOTS**
+
+- Ansible scripts are save to run twice
+
+- Set the edge01 password afer everything is done
 
 # Prepping notes
 
