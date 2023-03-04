@@ -82,11 +82,11 @@ Initial setup
 ```
 configure
 set interfaces ethernet eth2 address '172.16.150.2/24'
-set service ssh listen-address '172.16.150.10'
+set service ssh listen-address '0.0.0.0'
 commit
 ```
 
-Then ssh into it with `ssh vyos@172.16.150.2`, then run the commands within "fw01-edg01--config.txt (should be on mgmt01's desktop labeled "fw01-edg01--config.txt"). After checking that can ping google, run `save`.
+Then ssh into it with `ssh vyos@172.16.150.2`, then run the commands within "fw01-edg01--config.txt (should be on mgmt01's desktop labeled "fw01-edg01--config.txt"). After checking that can ping google, run `save`. Then on fw01 run `delete service ssh listen-address '0.0.0.0'`.
 
 ## *traveler setup*
 
