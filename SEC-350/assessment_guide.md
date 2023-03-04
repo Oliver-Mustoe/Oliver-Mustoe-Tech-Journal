@@ -424,6 +424,8 @@ sudo /var/ossec/bin/manage_agents -r {AGENT_UUID}
 
 - Set the edge01 password afer everything is done
 
+- Can always re-copy the SEC-350 folder in the tech journal folder, will need to set the passwords folder but that is it!
+
 # Prepping notes
 
 - Probably should uninstall SSH from wk1 in testing to see if script can install it!
