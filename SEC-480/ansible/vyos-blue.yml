@@ -1,4 +1,4 @@
-# Run this
+# Usage: ansible-playbook -i inventories/fw-blue1.yaml/ --ask-pass vyos-blue.yml
 - name: vyos network config
   hosts: vyos
   tasks:
