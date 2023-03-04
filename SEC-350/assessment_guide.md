@@ -171,8 +171,6 @@ commit
 save
 ```
 
-
-
 ---
 
 # Manual way
@@ -396,8 +394,6 @@ sudo /var/ossec/bin/manage_agents -r {AGENT_UUID}
 ```
 
 ![image](https://user-images.githubusercontent.com/71083461/222210740-c0814d1e-4b48-4f6c-9054-87f8dd77d155.png)
-
-
 
 # Troubleshooting
 
