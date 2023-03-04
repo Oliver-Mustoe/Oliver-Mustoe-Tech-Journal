@@ -82,7 +82,7 @@ Initial setup
 ```
 configure
 set interfaces ethernet eth2 address '172.16.150.2/24'
-set service ssh listen-address '0.0.0.0'
+set service ssh listen-address '172.16.150.2'
 commit
 ```
 
