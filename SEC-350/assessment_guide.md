@@ -73,7 +73,7 @@ NOTE ABOUT CRD: Will break before firewall is up, logout of the user BEFORE the 
 
 # Automatic way
 
-**Set adapters like you see at the top of the page**
+**Set adapters like you see at the top of the page, THEN SNAPSHOT**
 
 ## *Firewall setup*
 
