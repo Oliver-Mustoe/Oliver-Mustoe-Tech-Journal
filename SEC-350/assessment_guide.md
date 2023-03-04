@@ -105,7 +105,7 @@ Set-ExecutionPolicy -scope process unrestricted
 
 ## *nginx-oliver automatic setup instructions*
 
-assumption is interface is ens160 - change if not the case
+assumption is interface is ens160 - change in commands if not the case
 
 ### Set temp IPs
 
@@ -129,7 +129,7 @@ ansible-playbook -i ../inventories/assess.txt web01.yml --ask-vault-pass
 
 ## *dhcp-oliver automatic setup instructions*
 
-assumption is interface is ens160 - change if not the case
+assumption is interface is ens160 - change in commands if not the case
 
 ### Set temp IPs
 
