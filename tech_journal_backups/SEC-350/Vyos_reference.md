@@ -13,8 +13,6 @@ This page contains configurations/tips on working with the VyOS.
 
 Current SEC-350 VyOS config (All VyOS hosts): W6 -- [2-23-23](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-350/Vyos_configs/2-8-23.md)
 
-
-
 Old VyOS configs:
 
 - W4 -- [2-8-23](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-350/Vyos_configs/2-8-23.md)
@@ -147,7 +145,7 @@ save
 ### Configure RIP:
 
 ```
-Configure  
+configure  
 set protocols rip interface eth{NUM}
 set protocols rip network {IP_ADDRESS}/{NETMASK} 
 commit  
