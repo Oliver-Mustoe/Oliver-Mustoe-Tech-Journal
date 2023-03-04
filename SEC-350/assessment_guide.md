@@ -139,7 +139,7 @@ sudo ip a add 172.16.150.15/24 dev ens160 # Interface name may need to be change
 sudo ip route add default via 172.16.150.2
 sudo ip link set dev ens160 up
 ip route show
-# Ping google
+# Ping 8.8.8.8
 # Can flush IP settings with `ip addr flush eth0`
 ```
 
