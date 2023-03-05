@@ -121,17 +121,17 @@ And this Ansible [vyos-blue.yml](https://github.com/Oliver-Mustoe/Oliver-Mustoe
 Run shown below with command:
 
 ```
-ansible-playbook -i inventories/fw-blue1-vars.yaml --ask-pass vyos-blue.yml
+ansible-playbook -i inventories/fw-blue1-vars.yaml --ask-pass vyos-blue.yml
 ```
 
-![image039](https://user-images.githubusercontent.com/71083461/222982259-c4ea49a4-6f7c-4f95-a445-ff45c54d8ab0.png)  
+![image039](https://user-images.githubusercontent.com/71083461/222986061-20701599-37af-42c2-bf2e-6f00e04be5fa.png)  
 
 I then created rocky1-3 with the commands below (using the deploy-clone function to switch adapters and power on VMs):
 
 ```powershell
-Deploy-Clone -LinkedClone -VMName server.rocky.9-1.base -CloneVMName rocky-1 -defaultJSON ./480.json
-Deploy-Clone -LinkedClone -VMName server.rocky.9-1.base -CloneVMName rocky-2 -defaultJSON ./480.json
-Deploy-Clone -LinkedClone -VMName server.rocky.9-1.base -CloneVMName rocky-3 -defaultJSON ./480.json
+Deploy-Clone -LinkedClone -VMName server.rocky.9-1.base -CloneVMName rocky-1 -defaultJSON ./480.json
+Deploy-Clone -LinkedClone -VMName server.rocky.9-1.base -CloneVMName rocky-2 -defaultJSON ./480.json
+Deploy-Clone -LinkedClone -VMName server.rocky.9-1.base -CloneVMName rocky-3 -defaultJSON ./480.json
 ```
 
 Created VMs after being moved into a created folder “BLUE1” shown below (Right clicked 480-Devops > New Folder > New VM and Template Folder > named “BLUE1”):
@@ -183,7 +183,7 @@ And I made the following playbook "[rocky-playbook.yml](https://github.com/Olive
 Below is a run of the [rocky-playbook.yml](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/ansible/rocky-playbook.yml) (-K needed for sudo password):
 
 ```bash
-ansible-playbook -i inventories/linux.yaml --ask-pass rocky-playbook.yml -K
+ansible-playbook -i inventories/linux.yaml --ask-pass rocky-playbook.yml -K
 ```
 
 ![image059](https://user-images.githubusercontent.com/71083461/222982271-f4503d96-2c90-4fb4-b859-ca6df8629b97.png)
@@ -207,8 +207,8 @@ Showing that I can SSH into one of the new rocky boxes:
 First I created 2 new ubuntu VMs from my base image (also switched the network adapter and turned them on):
 
 ```powershell
-Deploy-Clone -LinkedClone -VMName ubuntu.22.04.1.base -CloneVMName ubuntu-1 -defaultJSON ./480.json
-Deploy-Clone -LinkedClone -VMName ubuntu.22.04.1.base -CloneVMName ubuntu-2 -defaultJSON ./480.json
+Deploy-Clone -LinkedClone -VMName ubuntu.22.04.1.base -CloneVMName ubuntu-1 -defaultJSON ./480.json
+Deploy-Clone -LinkedClone -VMName ubuntu.22.04.1.base -CloneVMName ubuntu-2 -defaultJSON ./480.json
 ```
 
 Result after being setup and moved into the right folder:
@@ -240,8 +240,10 @@ Then created [ubuntu-playbook.yml](https://github.com/Oliver-Mustoe/Oliver-Musto
 Below is a run of the playbook with command:
 
 ```bash
-ansible-playbook -i inventories/linux.yaml --ask-pass ubuntu-playbook.yml -K
+ansible-playbook -i inventories/linux.yaml --ask-pass ubuntu-playbook.yml -K
 ```
+
+
 
 ![image077](https://user-images.githubusercontent.com/71083461/222982280-85718e84-700c-4360-83ff-bb0272dc1769.png)
 
