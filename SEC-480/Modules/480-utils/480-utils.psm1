@@ -206,17 +206,20 @@ function Get-VMIP ([string]$VMName = "",[string]$defaultJSON=""){
 
         # Connect to vcenter server
         480Connect -server $conf.vcenter_server
+        
+        # Write-Host "[Gathering information on $VMName]"
+        $VMs = Get-VM -Name $VMName
+        foreach($VMName in $VMs){
+            # Get general information about the VM
+            $GenVmInfo = (get-vm -Name $VMName).Guest
+            # Get the VMs MAC addresses (force array since VMs with 1 mac arent arrays be default)
+            # https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_type_operators?view=powershell-7.3
+            [array]$MacVmInfo = (Get-NetworkAdapter -VM $VMName).MacAddress
 
-        Write-Host "[Gathering information on $VMName]"
-        # Get general information about the VM
-        $GenVmInfo = (get-vm -Name $VMName).Guest
-        # Get the VMs MAC addresses (force array since VMs with 1 mac arent arrays be default)
-        # https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_type_operators?view=powershell-7.3
-        [array]$MacVmInfo = (Get-NetworkAdapter -VM $VMName).MacAddress
-
-        # Desginated output gather certain information from general (hostname, NIC 1, IPv4 address) and the corressponding MAC information of the first network adapter (through $MacVMInfo)
-        $output = "{0} hostname={1} mac={2}" -f $GenVmInfo.nics.IPAddress[0].ToString(), $VMName, $MacVmInfo[0].ToString()
-        Write-Host $output -ForegroundColor White
+            # Desginated output gather certain information from general (hostname, NIC 1, IPv4 address) and the corressponding MAC information of the first network adapter (through $MacVMInfo)
+            $output = "{0} hostname={1} mac={2}" -f $GenVmInfo.nics.IPAddress[0].ToString(), $VMName, $MacVmInfo[0].ToString()
+            Write-Host $output -ForegroundColor White
+        }
     }
     catch {
         # https://stackoverflow.com/questions/17226718/how-to-get-the-line-number-of-error-in-powershell
