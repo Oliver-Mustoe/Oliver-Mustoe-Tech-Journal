@@ -10,10 +10,10 @@ OS: Ubuntu 22.04
 
 **General information (different per machine)**
 
-- **ubuntu-1**  
-  
-  ![image](https://user-images.githubusercontent.com/71083461/222983132-fcdba4f2-4d5e-494c-86f9-9793e14023cd.png)
+#### **ubuntu-1**
 
-- **ubuntu-2**  
-  
-  ![](C:\Users\oliver.mustoe\AppData\Roaming\marktext\images\2023-03-05-15-05-26-image.png)
+![image](https://user-images.githubusercontent.com/71083461/222983132-fcdba4f2-4d5e-494c-86f9-9793e14023cd.png)
+
+#### **ubuntu-2**
+
+![](C:\Users\oliver.mustoe\AppData\Roaming\marktext\images\2023-03-05-15-05-26-image.png)

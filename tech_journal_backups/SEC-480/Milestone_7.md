@@ -22,11 +22,11 @@ This page journals content related to NET/SEC/SYS-480 milestone 7.
 
 - ubuntu-2
 
-- [rocky-1]()
+- [rocky-1](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/VM-Inventory/rocky-1-3.md#rocky-1)
 
-- rocky-2
+- [rocky-2](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/VM-Inventory/rocky-1-3.md#rocky-2)
 
-- rocky-3
+- [rocky-3](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/VM-Inventory/rocky-1-3.md#rocky-3)
 
 # 7.1 Create a Rocky 9.1 Base VM
 
