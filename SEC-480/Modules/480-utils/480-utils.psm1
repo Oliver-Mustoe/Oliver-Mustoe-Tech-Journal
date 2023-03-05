@@ -175,15 +175,20 @@ function PowerCycle([switch]$on,[switch]$off,[string]$vm) {
         Write-Error "VM NAME '$vm' IS NOT VALID"
     }
     else {
-        # See whether to turn the VM on or off, do so accordingly
-        if ($on) {
-            Start-VM -VM $vm -Confirm:$true
-        }
-        elseif ($off) {
-            Stop-VM -VM $vm -Confirm:$true
-        }
-        else {
-            Write-Error "Please select a power state, either '-on' or '-off'"
+        # Get all vms
+        $vms = Get-vm -Name $vm
+
+        foreach($vm in $vms){
+            # See whether to turn the VM on or off, do so accordingly
+            if ($on) {
+                Start-VM -VM $vm -Confirm:$true
+            }
+            elseif ($off) {
+                Stop-VM -VM $vm -Confirm:$true
+            }
+            else {
+                Write-Error "Please select a power state, either '-on' or '-off'"
+            }
         }
     }
     
