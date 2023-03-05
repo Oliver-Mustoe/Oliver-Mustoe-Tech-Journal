@@ -6,7 +6,9 @@ OS: Ubuntu 22.04
 
 **VM Setup (same for all ubuntus)**
 
-![image](https://user-images.githubusercontent.com/71083461/222982990-e4b93a3f-edce-446d-9558-2839ab743af6.png)**General information (different per machine)**
+![image](https://user-images.githubusercontent.com/71083461/222982990-e4b93a3f-edce-446d-9558-2839ab743af6.png)
+
+**General information (different per machine)**
 
 - **ubuntu-1**  
   

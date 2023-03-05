@@ -6,7 +6,9 @@ OS: Rocky Linux 9.1
 
 **VM Setup (same for all rockys)**
 
-![image](https://user-images.githubusercontent.com/71083461/222982871-b723d336-bf7a-4e75-9e67-f6bc64138546.png)**General information (different per machine)**
+![image](https://user-images.githubusercontent.com/71083461/222982871-b723d336-bf7a-4e75-9e67-f6bc64138546.png)  
+
+**General information (different per machine)**
 
 - **rocky-1**  
   
