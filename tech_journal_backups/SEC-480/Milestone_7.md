@@ -110,11 +110,11 @@ Result of above commands:
 
 ![image033](https://user-images.githubusercontent.com/71083461/222982255-b4a37b7d-9365-4f1a-9a2c-d721a9b1555c.png)  
 
-Then I created fw-blue1-vars.yaml ansible inventory:
+Then I created [fw-blue1-vars.yaml](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/ansible/inventories/fw-blue1-vars.yaml) Ansible inventory:
 
 ![image035](https://user-images.githubusercontent.com/71083461/222982257-f5e24bb1-faea-40a9-b58e-d8f97c5beb90.png)
 
-And this Ansible vyos-blue.yml playbook:
+And this Ansible [vyos-blue.yml](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/ansible/vyos-blue.yml) playbook:
 
 ![image037](https://user-images.githubusercontent.com/71083461/222982258-0a8b51ca-301a-41be-8c77-983e1095569a.png)
 
@@ -124,7 +124,7 @@ Run shown below with command:
 ansible-playbook -i inventories/fw-blue1-vars.yaml --ask-pass vyos-blue.yml
 ```
 
-![image039](https://user-images.githubusercontent.com/71083461/222982259-c4ea49a4-6f7c-4f95-a445-ff45c54d8ab0.png)
+![image039](https://user-images.githubusercontent.com/71083461/222982259-c4ea49a4-6f7c-4f95-a445-ff45c54d8ab0.png)  
 
 I then created rocky1-3 with the commands below (using the deploy-clone function to switch adapters and power on VMs):
 
@@ -138,7 +138,7 @@ Created VMs after being moved into a created folder “BLUE1” shown below (Rig
 
 ![image041](https://user-images.githubusercontent.com/71083461/222982260-780b166c-4697-4df9-8dd5-e588c4bf3131.png)
 
-I also updated my Get-VMIP function to accommodate multiple VMs (such as ‘rocky-*’)
+I also updated my [Get-VMIP function](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/Modules/480-utils/480-utils.psm1) to accommodate multiple VMs (such as ‘rocky-*’)
 
 ![image043](https://user-images.githubusercontent.com/71083461/222982261-a910437f-db85-4314-b8f2-7dd010badbc4.png)
 
@@ -156,7 +156,7 @@ Since 7.1 didn’t have much new information to reflect on, I decided to combine
 
 # 7.3 - Rocky 1-3 Post Provisioning
 
-First I updated my Powercycle function to support using a *. Then I used that new functionality to turn off all of the rocky boxes:
+First I updated my [Powercycle function](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/Modules/480-utils/480-utils.psm1) to support using a *. Then I used that new functionality to turn off all of the rocky boxes:
 
 ![image047](https://user-images.githubusercontent.com/71083461/222982264-98b90914-c2a5-4192-98a6-c3601722df69.png)
 
@@ -170,17 +170,17 @@ I then generated a passphraseless RSA key:
 
 ![image051](https://user-images.githubusercontent.com/71083461/222982266-49ab3dc5-7b8f-4326-a09a-8a36131a1189.png)
 
-I then made the following linux.yaml playbook (using the RSA public key made above, small change made to instructors as “{{ ansible_default_ipv4.interface }}” will grab the interface dynamically so if the interface isn’t “ens192” the script won’t error out!):
+I then made the following [linux.yaml](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/ansible/inventories/linux.yaml) playbook (using the RSA public key made above, small change made to instructors as “{{ ansible_default_ipv4.interface }}” will grab the interface dynamically so if the interface isn’t “ens192” the script won’t error out!):
 
 ![image053](https://user-images.githubusercontent.com/71083461/222982267-b97ede44-3e76-4a96-931e-4ab6e2cabcab.png)
 
-And I made the following playbook for rocky post provisioning:
+And I made the following playbook "[rocky-playbook.yml](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/ansible/rocky-playbook.yml)" for rocky post provisioning:
 
 ![image055](https://user-images.githubusercontent.com/71083461/222982269-b11025eb-47f2-48ae-9d72-ecfbf60cd611.png)  
 
 ![image057](https://user-images.githubusercontent.com/71083461/222982270-d36c1e05-c01b-4241-bdfb-3ad5e7b543c3.png)  
 
-Below is a run of the rocky-playbook.yml (-K needed for sudo password):
+Below is a run of the [rocky-playbook.yml](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/ansible/rocky-playbook.yml) (-K needed for sudo password):
 
 ```bash
 ansible-playbook -i inventories/linux.yaml --ask-pass rocky-playbook.yml -K
@@ -225,15 +225,15 @@ Get-VMIP -VMName ubuntu-* -defaultJSON ./480.json
 
 With this set, I would repeat the same process of creating snapshots for the ubuntu boxes while they are powered off, afterwards turning them on with `PowerCycle -vm ubuntu-* -on`.
 
-Then I updated my linux.yaml for ubuntu:
+Then I updated my [linux.yaml](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/ansible/inventories/linux.yaml) for ubuntu:
 
 ![image071](https://user-images.githubusercontent.com/71083461/222982277-b0d38fa0-ea12-4be6-9415-591f0e72d034.png)
 
-Templated a netplan.yaml:
+Templated a [netplan.yaml](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/ansible/files/ubuntu/netplan.yaml.j2):
 
 ![image073](https://user-images.githubusercontent.com/71083461/222982278-7612326e-2920-4273-9727-5ba8d9dc73c3.png)
 
-Then created ubuntu-playbook.yml (on right side is last 4 lines of the file):
+Then created [ubuntu-playbook.yml](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/ansible/ubuntu-playbook.yml) (on right side is last 4 lines of the file):
 
 ![image075](https://user-images.githubusercontent.com/71083461/222982279-d902c240-b978-4243-bd2a-6ec90d20b3dd.png)
 
@@ -264,8 +264,6 @@ Since these two milestones were so closely aligned, I decided to combine their r
 # Sources for all:
 
 [How to Install Rocky Linux on VMware | phoenixNAP KB](https://phoenixnap.com/kb/rocky-linux-vmware)
-
-
 
 ---
 
