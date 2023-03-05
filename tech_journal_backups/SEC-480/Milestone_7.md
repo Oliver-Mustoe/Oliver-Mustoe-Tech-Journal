@@ -18,9 +18,9 @@ This page journals content related to NET/SEC/SYS-480 milestone 7.
 
 ## VM Inventory
 
-- ubuntu-1
+- [ubuntu-1](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/VM-Inventory/ubuntu-1-2.md#ubuntu-1)
 
-- ubuntu-2
+- [ubuntu-2](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/VM-Inventory/ubuntu-1-2.md#ubuntu-2)
 
 - [rocky-1](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/VM-Inventory/rocky-1-3.md#rocky-1)
 
