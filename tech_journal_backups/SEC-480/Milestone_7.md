@@ -10,7 +10,7 @@ This page journals content related to NET/SEC/SYS-480 milestone 7.
 
 * [7.3 - Rocky 1-3 Post Provisioning](#73---rocky-1-3-post-provisioning)
 
-* [7.4  Post Provisioning Ubuntu 1-2 with Ansible](#74--post-provisioning-ubuntu-1-2-with-ansible)
+* [7.4  Post Provisioning Ubuntu 1-2 with Ansible](#74postprovisioning-ubuntu-1-2-with-ansible)
   
   * [Reflection for Milestone 7.3 and 7.4](#reflection-for-milestone-73-and-74)
 
@@ -264,3 +264,9 @@ Since these two milestones were so closely aligned, I decided to combine their r
 # Sources for all:
 
 [How to Install Rocky Linux on VMware | phoenixNAP KB](https://phoenixnap.com/kb/rocky-linux-vmware)
+
+
+
+---
+
+Can't find something? Check in the [Backup Milestone 7 journal](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/Milestone_7.md)
