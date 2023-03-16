@@ -277,6 +277,103 @@ function New-Network ([string]$NetworkName="", [string]$defaultJSON=""){
         Write-Host "[DONE]" -ForegroundColor Green
 }
 
+# Function to edit VM settings
+function Edit-VMs ([string]$defaultJSON="",[string]$VM="",[int]$CPU=0,[int]$Memory=0) {
+    try{
+        # Find the path of the json file
+        if ($defaultJSON -eq "") {
+            $defaultJSON = Read-Host -Prompt "Please enter the path for the default JSON config"
+            $conf = Get-480Config -config_path $defaultJSON
+        }
+        else {
+            $conf = Get-480Config -config_path $defaultJSON
+        }
+
+        # Connect to vcenter server
+        480Connect -server $conf.vcenter_server
+
+        if ($VM -eq ""){
+            # Get all VMs and 
+            $vms = Get-VM
+            $index=1
+            foreach($vm in $vms){
+                Write-Host [$index] $vm
+                $index+=1
+            }
+            while($true){
+                [int]$pick_index = Read-Host "Which index number [x] do you wish to pick?"
+                if($pick_index -lt $index -and $pick_index -gt 0) {
+                    $selected_vm=$vms[$pick_index - 1]
+                    break
+                }
+                else {
+                    Write-Host "[ERROR: Please select an inbound index]" -ForegroundColor Red
+                }
+            }
+        }
+        else {
+            $selected_vm=Get-VM -Name $VM
+        }
+        Write-Host "You selected",$selected_vm.Name
+
+        $VmName=$selected_vm.Name
+        $NumCpu=$selected_vm.NumCpu
+        $RamCount=$selected_vm.MemoryGB
+
+        Write-Host "Information for $VmName :
+[CPU] $NumCpu
+[RAM] $RamCount (GB)
+        "
+
+        if ($Cpu -eq 0 -and $Memory -eq 0) {
+            $UserChange = (Read-Host -Prompt "Would you like to change $VmName's [C]PU or [R]AM or [E]xit (C/R/E)").ToLower()
+
+            switch ($UserChange) {
+                "c" {
+                    $NewCpu = Read-Host -Prompt "Please enter in the new CPU amount"
+
+                    $selected_vm | set-VM -NumCpu $NewCpu
+                }
+                "r"{
+                    $NewRam = Read-Host -Prompt "Please enter in the new RAM amount in GB"
+
+                    $selected_vm | set-VM -MemoryGB $NewRam
+                }
+                "e"{
+                    exit
+                }
+                Default {
+                    Write-Host "NOTHING HAS OCCURED"
+                }
+            }
+        }
+       else {
+            switch -Regex ($Cpu) {
+                '\d.*' {
+                    $selected_vm | set-VM -NumCpu $Cpu
+                }
+                Default {
+                    Write-Output "No value selected for CPU"
+                }
+            }
+
+            switch -Regex ($Memory) {
+                '\d.*' {
+                    $selected_vm | set-VM -MemoryGB $Memory
+                }
+                Default {
+                    Write-Output "No value selected RAM"
+                }
+            }
+        }
+    }
+    catch{
+        StandardError -err $_
+        break
+    }
+}
+
+
 # Function that contains the standard error format I wish to output
 function StandardError ([array]$err){
     # https://stackoverflow.com/questions/17226718/how-to-get-the-line-number-of-error-in-powershell
