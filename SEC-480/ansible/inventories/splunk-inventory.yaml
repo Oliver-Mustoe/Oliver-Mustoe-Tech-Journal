@@ -1,0 +1,22 @@
+splunk:
+  hosts:
+  children:
+    enterprise_server:
+      hosts:
+        10.0.5.83:
+          hostname: splunk
+          lan_ip: 10.0.5.200
+
+    forwarders:
+      hosts:
+        10.0.5.30
+
+  vars:
+    public_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC6LChLA0z3N49C0tG9HB1ELs+PR6dRaSz2zmQ/szyI0rnJWadKtWYBK4ixQR8MvscfdJikCfy9fxJAgGAw6HTOOWp3/rXjxtNupKp400OxZC/d6noFJvt9PJyZA6DE/ouDA8xsnIkabJenqmAYMLfYv5D+4JJGv00JnBtMLUqImF/EoCq0Ux44BYRAXMO3oYVd2RC5kevwO9AhtU8tVVnHJhM212XVxjl2Eocwht1Pt1/gaipMDPhbz+eOeGWrTiSznWuGuUxIBnlBtbNIXAbl1RHmPLR+b+oUdpn4d5kv5bfB8cYVvAiBCRSQdl62RjpGdGWR/oJp4WWrg4XKU2/yaCBFJGEwre4/ebRmjPftco/ePVJgY/4N0DCyWk5oHlrS5ncJF8kAYY7/zx3AjT7Yf0uaKRUSI6ZKpqKp5BvxMR4RSiME8rHPqCKxcstU+WycrqkWW4w4s5bX5rMYuh0D5ukRWfPl/j4sET236Uf6U6P8B332UcvWOeAym+kLQ4Dtm0LTmoxZNeqJUtkn0qnY/J9n2MHnM1qjwEVLijuA4f/PXyzpFDA9uQw7ozMDI7AFdutlDiahLov2K4QuhTZVG95yB7oFKcQ3Hx4exPpGOt0m3ep2PyjYb/XS11zyOn5UrK1msg8Nu/gqpgxbhhdaBqMDTQs3s46QhcZ0HenrzQ== olivermustoe@xubuntu-wan"
+    ansible_user: rangeuser
+    prefix: 24
+    gateway: 10.0.5.2
+    name_server: 10.0.5.5
+    domain: blue1.local
+    splunk_enterprise_deb: splunk-9.0.4-de405f4a7979-linux-2.6-amd64.deb
+    splunk_forwarder_deb: splunkforwarder-9.0.4-de405f4a7979-linux-2.6-amd64.deb

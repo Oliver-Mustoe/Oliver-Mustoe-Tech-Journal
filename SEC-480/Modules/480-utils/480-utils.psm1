@@ -278,6 +278,8 @@ function New-Network ([string]$NetworkName="", [string]$defaultJSON=""){
 }
 
 # Function to edit VM settings
+#https://vmguru.com/2015/12/powershell-friday-adding-cpus-powercli/
+#https://vmguru.com/2015/12/powershell-friday-adding-memory/
 function Edit-VMs ([string]$defaultJSON="",[string]$VM="",[int]$CPU=0,[int]$Memory=0) {
     try{
         # Find the path of the json file
@@ -292,8 +294,9 @@ function Edit-VMs ([string]$defaultJSON="",[string]$VM="",[int]$CPU=0,[int]$Memo
         # Connect to vcenter server
         480Connect -server $conf.vcenter_server
 
+        # See if user has selected a VM, if not...
         if ($VM -eq ""){
-            # Get all VMs and 
+            # Get all VMs and display them
             $vms = Get-VM
             $index=1
             foreach($vm in $vms){
@@ -301,6 +304,7 @@ function Edit-VMs ([string]$defaultJSON="",[string]$VM="",[int]$CPU=0,[int]$Memo
                 $index+=1
             }
             while($true){
+                # Choose a VM
                 [int]$pick_index = Read-Host "Which index number [x] do you wish to pick?"
                 if($pick_index -lt $index -and $pick_index -gt 0) {
                     $selected_vm=$vms[$pick_index - 1]
@@ -316,6 +320,7 @@ function Edit-VMs ([string]$defaultJSON="",[string]$VM="",[int]$CPU=0,[int]$Memo
         }
         Write-Host "You selected",$selected_vm.Name
 
+        # Gather the relevant information and display to screen
         $VmName=$selected_vm.Name
         $NumCpu=$selected_vm.NumCpu
         $RamCount=$selected_vm.MemoryGB
@@ -325,10 +330,14 @@ function Edit-VMs ([string]$defaultJSON="",[string]$VM="",[int]$CPU=0,[int]$Memo
 [RAM] $RamCount (GB)
         "
 
+        # See if user has selected a cpu or memory amount, if not
         if ($Cpu -eq 0 -and $Memory -eq 0) {
+
+            # Prompt user for what they want to change, switch on it
             $UserChange = (Read-Host -Prompt "Would you like to change $VmName's [C]PU or [R]AM or [E]xit (C/R/E)").ToLower()
 
             switch ($UserChange) {
+                # For CPU/Memory, prompt the user for the new settings and set it
                 "c" {
                     $NewCpu = Read-Host -Prompt "Please enter in the new CPU amount"
 
@@ -339,6 +348,7 @@ function Edit-VMs ([string]$defaultJSON="",[string]$VM="",[int]$CPU=0,[int]$Memo
 
                     $selected_vm | set-VM -MemoryGB $NewRam
                 }
+                # ELSE give the exit
                 "e"{
                     exit
                 }
@@ -348,23 +358,14 @@ function Edit-VMs ([string]$defaultJSON="",[string]$VM="",[int]$CPU=0,[int]$Memo
             }
         }
        else {
-            switch -Regex ($Cpu) {
-                '\d.*' {
-                    $selected_vm | set-VM -NumCpu $Cpu
-                }
-                Default {
-                    Write-Output "No value selected for CPU"
-                }
+            # If CPU and Memory are explicit, set them to what the user asks
+            if($Cpu){
+                $selected_vm | set-VM -NumCpu $Cpu
+            }
+            if($Memory){
+                $selected_vm | set-VM -MemoryGB $Memory
             }
 
-            switch -Regex ($Memory) {
-                '\d.*' {
-                    $selected_vm | set-VM -MemoryGB $Memory
-                }
-                Default {
-                    Write-Output "No value selected RAM"
-                }
-            }
         }
     }
     catch{
