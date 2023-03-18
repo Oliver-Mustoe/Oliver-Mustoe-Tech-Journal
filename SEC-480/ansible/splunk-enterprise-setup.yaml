@@ -3,9 +3,9 @@
   hosts: enterprise_server
   vars_prompt:
 
-    #- name: splunk_user_password
-      #prompt: Please enter your new splunk user password
-      #private: true
+    - name: splunk_user_password
+      prompt: Please enter your new splunk user password
+      private: true
 
     - name: splunk_admin_password
       prompt: Please enter your new splunk web admin password
@@ -66,7 +66,7 @@
     ansible.builtin.user:
       #name: splunk
       name: splunkuser
-      #password: "{{ splunk_user_password | password_hash('sha512') }}"
+      password: "{{ splunk_user_password | password_hash('sha512') }}"
       shell: /bin/bash
       groups: sudo
       append: yes
@@ -119,6 +119,32 @@
     ansible.builtin.unarchive:
       src: files/splunk/splunk-add-on-for-unix-and-linux_880.tgz
       dest: /opt/splunk/etc/apps
+    become: true
+  
+  - name: create necessary local folder for addon if not there
+    file:
+      path: /opt/splunk/etc/apps/Splunk_TA_nix/local
+      state: directory
+      mode: 0700
+    become: true
+
+  #- name: install unix/linux addon
+    #ansible.builtin.copy:
+      #src: files/splunk/Splunk_TA_nix
+      #dest: "/home/splunk/{{ splunk_enterprise_deb }}"
+      #dest: /opt/splunk/etc/apps
+      #owner: root
+      #group: root
+      #mode: '0644'
+    #become: true
+
+  - name: Setup to receive information from *nix (copy inputs.conf)
+    ansible.builtin.template:
+      src: files/splunk/unix_inputs.conf.j2
+      dest: /opt/splunk/etc/apps/Splunk_TA_nix/local/inputs.conf
+      owner: root
+      group: root
+      mode: '0644'
     become: true
 
   - name: add an index named 480
@@ -179,3 +205,5 @@
     poll: 0
 
 # Trying to see how I can get splunk to run as the user, see here https://docs.splunk.com/Documentation/Splunk/9.0.4/Admin/ConfigureSplunktostartatboottime (maybe make /etc/init.d/splunk???)
+# Cleanup comments and add a password prompt for the splunkuser
+# Maybe template out the 480 index to the group

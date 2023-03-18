@@ -2,6 +2,9 @@
 - name: splunk forwarder config
   hosts: forwarders
   vars_prompt:
+    - name: splunk_user_password
+      prompt: Please enter your new splunk user password
+      private: true
 
     - name: splunk_admin_password
       prompt: Please enter your new splunk admin password
@@ -11,7 +14,7 @@
   - name: create splunkuser
     ansible.builtin.user:
       name: splunkuser
-      #password: "{{ splunk_user_password | password_hash('sha512') }}"
+      password: "{{ splunk_user_password | password_hash('sha512') }}"
       shell: /bin/bash
       groups: sudo # Sudo because /var/log is a protect directory
       append: yes
@@ -44,16 +47,38 @@
     #ansible.builtin.shell: /opt/splunkforwarder/bin/splunk start --accept-license --answer-yes --no-prompt
     #become: true
 
+  #- name: install unix/linux addon
+    #ansible.builtin.unarchive:
+      #src: files/splunk/splunk-add-on-for-unix-and-linux_880.tgz
+      #dest: /opt/splunkforwarder/etc/apps
+    #become: true
+
+  #- name: Setup to receive information from /var/log (copy inputs.conf)
+    #ansible.builtin.copy:
+      #src: files/splunk/forwarder_configs/forwarder_inputs.conf
+      #dest: /opt/splunkforwarder/etc/system/local/inputs.conf
+      #owner: root
+      #group: root
+      #mode: '0644'
+    #become: true
+
   - name: install unix/linux addon
     ansible.builtin.unarchive:
       src: files/splunk/splunk-add-on-for-unix-and-linux_880.tgz
       dest: /opt/splunkforwarder/etc/apps
     become: true
+  
+  - name: create necessary local folder for addon if not there
+    file:
+      path: /opt/splunkforwarder/etc/apps/Splunk_TA_nix/local
+      state: directory
+      mode: 0700
+    become: true
 
-  - name: Setup to receive information from /var/log (copy inputs.conf)
-    ansible.builtin.copy:
-      src: files/splunk/forwarder_configs/forwarder_inputs.conf
-      dest: /opt/splunkforwarder/etc/system/local/inputs.conf
+  - name: Setup to receive information from *nix (copy inputs.conf)
+    ansible.builtin.template:
+      src: files/splunk/unix_inputs.conf.j2
+      dest: /opt/splunkforwarder/etc/apps/Splunk_TA_nix/local/inputs.conf
       owner: root
       group: root
       mode: '0644'
@@ -92,9 +117,11 @@
     become: true
 
   - name: enable splunk
-    ansible.builtin.shell: /opt/splunkforwarder/bin/splunk enable boot-start -user splunkuser --accept-license --answer-yes --no-prompt
+    ansible.builtin.shell: /opt/splunkforwarder/bin/splunk enable boot-start -user splunkuser -systemd-managed 0 --accept-license --answer-yes --no-prompt
     become: true
 
-  - name: restart splunk
-    ansible.builtin.shell: systemctl restart SplunkForwarder
+  - name: start splunk
+    ansible.builtin.shell: su - splunkuser -c "/opt/splunkforwarder/bin/splunk start --accept-license --answer-yes --no-prompt"
     become: true
+
+# Cleanup comments and add a password prompt for the splunkuser, GET THE ADDON WORKING PLS
