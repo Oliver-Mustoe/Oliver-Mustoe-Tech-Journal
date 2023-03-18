@@ -1,0 +1,100 @@
+# Script to install a splunk forwarder on a ubuntu system
+- name: splunk forwarder config
+  hosts: forwarders
+  vars_prompt:
+
+    - name: splunk_admin_password
+      prompt: Please enter your new splunk admin password
+      private: true
+  tasks:
+
+  - name: create splunkuser
+    ansible.builtin.user:
+      name: splunkuser
+      #password: "{{ splunk_user_password | password_hash('sha512') }}"
+      shell: /bin/bash
+      groups: sudo # Sudo because /var/log is a protect directory
+      append: yes
+    become: yes
+
+  - name: copy over forwarder deb
+    ansible.builtin.copy:
+      src: "files/splunk/{{ splunk_forwarder_deb }}"
+      dest: "/tmp/{{ splunk_forwarder_deb }}"
+      owner: root
+      group: root
+      mode: '0774'
+    become: true
+
+  - name: install splunk with forwarder deb
+    ansible.builtin.apt:
+      deb: "/tmp/{{ splunk_forwarder_deb }}"
+    become: true
+
+  - name: copy over user seed
+    ansible.builtin.template:
+      src: "files/splunk/user-seed.j2"
+      dest: /opt/splunkforwarder/etc/system/local/user-seed.conf # splunk home on fowarders is /opt/splunkforwarder
+      owner: root
+      group: root
+      mode: '0644'
+    become: true
+
+  #- name: start splunk
+    #ansible.builtin.shell: /opt/splunkforwarder/bin/splunk start --accept-license --answer-yes --no-prompt
+    #become: true
+
+  - name: install unix/linux addon
+    ansible.builtin.unarchive:
+      src: files/splunk/splunk-add-on-for-unix-and-linux_880.tgz
+      dest: /opt/splunkforwarder/etc/apps
+    become: true
+
+  - name: Setup to receive information from /var/log (copy inputs.conf)
+    ansible.builtin.copy:
+      src: files/splunk/forwarder_configs/forwarder_inputs.conf
+      dest: /opt/splunkforwarder/etc/system/local/inputs.conf
+      owner: root
+      group: root
+      mode: '0644'
+    become: true
+
+  - name: Setup output (copy templated outputs.conf)
+    ansible.builtin.template:
+      src: files/splunk/forwarder_configs/forwarder_outputs.conf
+      dest: /opt/splunkforwarder/etc/system/local/outputs.conf
+      owner: root
+      group: root
+      mode: '0644'
+    become: true
+
+  - name: set the minimum free space
+    ansible.builtin.lineinfile:
+      path: /opt/splunkforwarder/etc/system/default/server.conf
+      search_string: 'minFreeSpace = 5000'
+      line: minFreeSpace = 50
+      owner: root
+      group: root
+      mode: '0644'
+    become: true
+
+  #- name: stop splunk
+    #ansible.builtin.shell: /opt/splunkforwarder/bin/splunk stop --accept-license --answer-yes --no-prompt
+    #become: true
+
+  - name: change ownership to splunk user
+    ansible.builtin.file:
+      path: /opt/splunkforwarder
+      state: directory
+      recurse: yes
+      owner: splunkuser
+      group: splunkuser
+    become: true
+
+  - name: enable splunk
+    ansible.builtin.shell: /opt/splunkforwarder/bin/splunk enable boot-start -user splunkuser --accept-license --answer-yes --no-prompt
+    become: true
+
+  - name: restart splunk
+    ansible.builtin.shell: systemctl restart SplunkForwarder
+    become: true
