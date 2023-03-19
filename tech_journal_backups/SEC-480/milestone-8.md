@@ -23,7 +23,7 @@ First I deployed a new Ubuntu VM named "splunk" (VM in vCenter shown below):
 Deploy-Clone -LinkedClone -VMName ubuntu.22.04.1.base -CloneVMName splunk -defaultJSON ./480.json
 ```
 
-<figure><img src="../.gitbook/assets/image (3) (2).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/.gitbook/assets/image (3) (2).png" alt=""><figcaption></figcaption></figure>
 
 Then in my 480-utils function, I added the following function to allow the editing of deployed VMs:
 
@@ -129,9 +129,9 @@ And increased my splunk VMs CPU and Memory like the following (deployment and ap
 Edit-VMs -defaultJSON 480.json -VM splunk -CPU 4 -Memory 4
 ```
 
-<figure><img src="../.gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/.gitbook/assets/image (1) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src="../.gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/.gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
 
 I then powered splunk on and moved it into the BLUE1 folder. I waited until splunk was full powered on and grabbed the IP with the command below:
 
@@ -139,11 +139,11 @@ I then powered splunk on and moved it into the BLUE1 folder. I waited until splu
 get-VMIP -VMName splunk -defaultJSON ./480.json
 ```
 
-<figure><img src="../.gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/.gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
 
 Afterwards I shutdown the VM and made a snapshot in the splunk Actions dropdown > Snapshots > Take Snapshot > named "BEFORE ANSIBLE":
 
-<figure><img src="../.gitbook/assets/image (4) (2).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/.gitbook/assets/image (4) (2).png" alt=""><figcaption></figcaption></figure>
 
 ## 8.1 Splunk Enterprise Installation
 
@@ -153,7 +153,7 @@ With this setup, I made a Splunk account, created a directory in ansible/files n
 wget -O files/splunk/splunk-9.0.4-de405f4a7979-linux-2.6-amd64.deb "https://download.splunk.com/products/splunk/releases/9.0.4/linux/splunk-9.0.4-de405f4a7979-linux-2.6-amd64.deb"
 ```
 
-<figure><img src="../.gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/.gitbook/assets/image (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 I also downloaded the universal forwarder as well to be copied to one of the BLUE1 machines:
 
@@ -161,11 +161,11 @@ I also downloaded the universal forwarder as well to be copied to one of the BLU
 wget -O files/splunk/splunkforwarder-9.0.4-de405f4a7979-linux-2.6-amd64.deb "https://download.splunk.com/products/universalforwarder/releases/9.0.4/linux/splunkforwarder-9.0.4-de405f4a7979-linux-2.6-amd64.deb"
 ```
 
-<figure><img src="../.gitbook/assets/image (2) (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/.gitbook/assets/image (2) (3).png" alt=""><figcaption></figcaption></figure>
 
 As well I downloaded the needed Add-on from [https://splunkbase.splunk.com/app/833](https://splunkbase.splunk.com/app/833):
 
-<figure><img src="../.gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/.gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
 
 and moved it to my ansible/files/splunk directory:
 
@@ -173,7 +173,7 @@ and moved it to my ansible/files/splunk directory:
 cp -r ~/Downloads/splunk-add-on-for-unix-and-linux_880.tgz files/splunk/
 ```
 
-<figure><img src="../.gitbook/assets/image (4) (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/.gitbook/assets/image (4) (3).png" alt=""><figcaption></figcaption></figure>
 
 Then I created a Ansible script/Inventory ([splunk-enterprise-setup.yaml](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/ansible/splunk-enterprise-setup.yaml)) to do the following:
 
@@ -185,7 +185,7 @@ Then I created a Ansible script/Inventory ([splunk-enterprise-setup.yaml](https:
    5. Added indexes: 1x called 480
    6. Receiver on the default port (9997)
 
-<figure><img src="../.gitbook/assets/image (2) (5).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/.gitbook/assets/image (2) (5).png" alt=""><figcaption></figcaption></figure>
 
 Below is a run of the script (command/result):
 
@@ -193,19 +193,19 @@ Below is a run of the script (command/result):
 ansible-playbook -i inventories/splunk-inventory.yaml splunk-enterprise-setup.yaml --ask-pass -K
 ```
 
-<figure><img src="../.gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/.gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
 
-<figure><img src="../.gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/.gitbook/assets/image (9).png" alt=""><figcaption></figcaption></figure>
 
 Result:
 
-<figure><img src="../.gitbook/assets/image (9) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/.gitbook/assets/image (9) (1).png" alt=""><figcaption></figcaption></figure>
 
 ## 8.2 Splunk Forwarder installation
 
 I chose to use ubuntu-1 (10.0.5.30/24) as my Splunk forwarder, where in its logs would be forwarded to my splunk VM in the "480" index. First, using the same process as splunk, I created a new snapshot for the ubuntu-1-1 VM labeled "BEFORE FORWARDER":
 
-<figure><img src="../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
 
 I then created an Ansible script ([splunk-forwarder-setup.yaml](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/ansible/splunk-forwarder-setup.yaml))/Updated my splunk-inventory for the following requirements (see [here](milestone-8.md#created-files) for the created files list):
 
@@ -218,11 +218,11 @@ Below is a run of the script (command/result):
 ansible-playbook -i inventories/splunk-inventory.yaml splunk-forwarder-setup.yaml
 ```
 
-<figure><img src="../.gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/.gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
 
 Result seen in a Splunk search:
 
-<figure><img src="../.gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/.gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
 
 ## Milestone 8 reflection
 
@@ -234,39 +234,39 @@ The steps for creating the Splunk enterprise and forwarder was a very mixed proc
 
     1. A ansible playbook to fully provision a ubuntu VM from linked state to being a splunk enterprise server (first part of script shown):
 
-    <figure><img src="../.gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/.gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
 2.  [splunk-forwarder-setup.yaml](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/ansible/splunk-forwarder-setup.yaml)
 
     1. A ansible playbook to provision a configured ubuntu VM with a splunk forwarder (first part of script shown):
 
-    <figure><img src="../.gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/.gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
 3.  [splunk-inventory.yaml](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/ansible/inventories/splunk-inventory.yaml)
 
     1. A ansible inventory of both the enterprise and forwarder machines as well as needed variables:
 
-    <figure><img src="../.gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/.gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
 4.  [user-seed.j2](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/ansible/files/splunk/user-seed.j2)
 
     1. A templated Jinja file that provides the user info needed by splunk on initial user setup:
 
 
 
-    <figure><img src="../.gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/.gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
 5.  [unix\_inputs.conf.j2](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/ansible/files/splunk/unix\_inputs.conf.j2)
 
     1. A templated Jinja file to enable the \*nix addon for splunks inputs (first part of script shown):
 
-    <figure><img src="../.gitbook/assets/image (12).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/.gitbook/assets/image (12).png" alt=""><figcaption></figcaption></figure>
 6.  [inputs.conf](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/ansible/files/splunk/inputs.conf)
 
     1. A config file to setup a reciever on a enterprise splunk instance for the TCP port 9997 (first part of script shown):&#x20;
 
-    <figure><img src="../.gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/.gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
 7.  [forwarder\_outputs.conf.j2](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/SEC-480/ansible/files/splunk/forwarder\_configs/forwarder\_outputs.conf.j2)
 
     1. A templated Jinja file that sets up a forwarders output group/the enterprise address and port it should be forwarding to:
 
-    <figure><img src="../.gitbook/assets/image (13).png" alt=""><figcaption></figcaption></figure>
+    <figure><img src="https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-480/.gitbook/assets/image (13).png" alt=""><figcaption></figcaption></figure>
 
 ## Sources for Milestone 8
 
