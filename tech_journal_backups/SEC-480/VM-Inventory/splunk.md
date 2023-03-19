@@ -10,4 +10,4 @@ OS: Ubuntu 22.04
 
 **General information**
 
-![](C:\Users\oliver.mustoe\AppData\Roaming\marktext\images\2023-03-19-18-11-12-image.png)
+![2023-03-19-18-11-12-image](https://user-images.githubusercontent.com/71083461/226216701-bb49f593-a4ef-482c-91fc-fbde84b21e9a.png)
