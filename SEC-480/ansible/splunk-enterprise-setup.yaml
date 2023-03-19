@@ -1,14 +1,10 @@
-#this playbook performs post provisioning configuration of ubuntu
+#this playbook performs provisioning of ubuntu for splunk enterprise from scratch
+# Run: ansible-playbook -i inventories/splunk-inventory.yaml splunk-enterprise-setup.yaml --ask-pass -K
 - name: splunk config
   hosts: enterprise_server
   vars_prompt:
-
-    - name: splunk_user_password
-      prompt: Please enter your new splunk user password
-      private: true
-
     - name: splunk_admin_password
-      prompt: Please enter your new splunk web admin password
+      prompt: Please enter your new splunk admin password
       private: true
 
   tasks:
@@ -61,12 +57,13 @@
       owner: root
       group: root
     become: yes
-  
-  - name: create splunkuser
+
+### Splunk installation starts here
+
+  - name: create splunkadmin
     ansible.builtin.user:
-      #name: splunk
-      name: splunkuser
-      password: "{{ splunk_user_password | password_hash('sha512') }}"
+      name: splunkadmin
+      password: "{{ splunk_admin_password | password_hash('sha512') }}"
       shell: /bin/bash
       groups: sudo
       append: yes
@@ -75,7 +72,6 @@
   - name: copy over enterprise deb
     ansible.builtin.copy:
       src: "files/splunk/{{ splunk_enterprise_deb }}"
-      #dest: "/home/splunk/{{ splunk_enterprise_deb }}"
       dest: "/tmp/{{ splunk_enterprise_deb }}"
       owner: root
       group: root
@@ -84,7 +80,6 @@
 
   - name: install splunk with enterprise deb
     ansible.builtin.apt:
-      #deb: "/home/splunk/{{ splunk_enterprise_deb }}"
       deb: "/tmp/{{ splunk_enterprise_deb }}"
     become: true
 
@@ -96,24 +91,6 @@
       group: root
       mode: '0644'
     become: true
-    
-  #- name: change ownership to splunk user
-    #ansible.builtin.file:
-      #path: /opt/splunk
-      #state: directory
-      #recurse: yes
-      #owner: splunk
-      #group: splunk
-    #become: true
-    
-  #- name: enable splunk
-    #ansible.builtin.shell: /opt/splunk/bin/splunk enable boot-start -user splunk --accept-license --answer-yes --no-prompt
-    #become: true
-
-  #- name: start splunk
-    #ansible.builtin.shell: su - splunk -c "/opt/splunk/bin/splunk start --accept-license --answer-yes --no-prompt"
-    #ansible.builtin.shell: /opt/splunk/bin/splunk start --accept-license --answer-yes --no-prompt
-    #become: true
 
   - name: install unix/linux addon
     ansible.builtin.unarchive:
@@ -128,17 +105,7 @@
       mode: 0700
     become: true
 
-  #- name: install unix/linux addon
-    #ansible.builtin.copy:
-      #src: files/splunk/Splunk_TA_nix
-      #dest: "/home/splunk/{{ splunk_enterprise_deb }}"
-      #dest: /opt/splunk/etc/apps
-      #owner: root
-      #group: root
-      #mode: '0644'
-    #become: true
-
-  - name: Setup to receive information from *nix (copy inputs.conf)
+  - name: setup to receive information from *nix (copy inputs.conf)
     ansible.builtin.template:
       src: files/splunk/unix_inputs.conf.j2
       dest: /opt/splunk/etc/apps/Splunk_TA_nix/local/inputs.conf
@@ -147,21 +114,21 @@
       mode: '0644'
     become: true
 
-  - name: add an index named 480
+  - name: add an index named {{ splunk_group }}
     ansible.builtin.blockinfile:
       path: /opt/splunk/etc/system/local/indexes.conf
       block: |
-        [480]
-        homePath = $SPLUNK_DB/480/db 
-        coldPath = $SPLUNK_DB/480/colddb 
-        thawedPath = $SPLUNK_DB/480/thaweddb 
+        [{{ splunk_group }}]
+        homePath = $SPLUNK_DB/{{ splunk_group }}/db
+        coldPath = $SPLUNK_DB/{{ splunk_group }}/colddb
+        thawedPath = $SPLUNK_DB/{{ splunk_group }}/thaweddb
       create: true
       owner: root
       group: root
       mode: '0644'
     become: true
   
-  - name: Add reciever on TCP 9997 (copy inputs.conf)
+  - name: add reciever on TCP 9997 (copy inputs.conf)
     ansible.builtin.copy:
       src: files/splunk/inputs.conf
       dest: /opt/splunk/etc/system/local/inputs.conf
@@ -169,10 +136,6 @@
       group: root
       mode: '0644'
     become: true
-  
-  #- name: stop splunk
-    #ansible.builtin.shell: /opt/splunk/bin/splunk stop --accept-license --answer-yes --no-prompt
-    #become: true
   
   # Needed since default free space turns an error and messes stuff up
   - name: set the minimum free space
@@ -185,17 +148,17 @@
       mode: '0644'
     become: true
 
-  - name: change ownership to splunkuser
+  - name: change ownership to splunkadmin
     ansible.builtin.file:
       path: /opt/splunk
       state: directory
       recurse: yes
-      owner: splunkuser
-      group: splunkuser
+      owner: splunkadmin
+      group: splunkadmin
     become: true
 
   - name: enable splunk
-    ansible.builtin.shell: /opt/splunk/bin/splunk enable boot-start -user splunkuser --accept-license --answer-yes --no-prompt
+    ansible.builtin.shell: /opt/splunk/bin/splunk enable boot-start -user splunkadmin --accept-license --answer-yes --no-prompt
     become: true
 
   - name: bounce the box
@@ -203,7 +166,3 @@
     become: yes
     async: 1
     poll: 0
-
-# Trying to see how I can get splunk to run as the user, see here https://docs.splunk.com/Documentation/Splunk/9.0.4/Admin/ConfigureSplunktostartatboottime (maybe make /etc/init.d/splunk???)
-# Cleanup comments and add a password prompt for the splunkuser
-# Maybe template out the 480 index to the group
