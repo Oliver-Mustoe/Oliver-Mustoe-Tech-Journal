@@ -89,7 +89,7 @@
       dest: /opt/splunk/etc/system/local/user-seed.conf
       owner: root
       group: root
-      mode: '0644'
+      mode: '0600'
     become: true
 
   - name: install unix/linux addon
@@ -111,7 +111,7 @@
       dest: /opt/splunk/etc/apps/Splunk_TA_nix/local/inputs.conf
       owner: root
       group: root
-      mode: '0644'
+      mode: '0660'
     become: true
 
   - name: add an index named {{ splunk_group }}
@@ -125,7 +125,7 @@
       create: true
       owner: root
       group: root
-      mode: '0644'
+      mode: '0660'
     become: true
   
   - name: add reciever on TCP 9997 (copy inputs.conf)
@@ -134,7 +134,7 @@
       dest: /opt/splunk/etc/system/local/inputs.conf
       owner: root
       group: root
-      mode: '0644'
+      mode: '0660'
     become: true
   
   # Needed since default free space turns an error and messes stuff up
@@ -145,7 +145,7 @@
       line: minFreeSpace = 50
       owner: root
       group: root
-      mode: '0644'
+      mode: '0660'
     become: true
 
   - name: change ownership to splunkadmin

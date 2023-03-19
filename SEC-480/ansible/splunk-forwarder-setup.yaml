@@ -39,7 +39,7 @@
       dest: /opt/splunkforwarder/etc/system/local/user-seed.conf # splunk home on fowarders is /opt/splunkforwarder
       owner: root
       group: root
-      mode: '0644'
+      mode: '0600'
     become: true
 
   - name: install unix/linux addon
@@ -61,7 +61,7 @@
       dest: /opt/splunkforwarder/etc/apps/Splunk_TA_nix/local/inputs.conf
       owner: root
       group: root
-      mode: '0644'
+      mode: '0660'
     become: true
 
   - name: setup output (copy templated outputs.conf)
@@ -70,7 +70,7 @@
       dest: /opt/splunkforwarder/etc/system/local/outputs.conf
       owner: root
       group: root
-      mode: '0644'
+      mode: '0660'
     become: true
 
   - name: set the minimum free space
@@ -80,7 +80,7 @@
       line: minFreeSpace = 50
       owner: root
       group: root
-      mode: '0644'
+      mode: '0660'
     become: true
 
   - name: change ownership to splunk user
