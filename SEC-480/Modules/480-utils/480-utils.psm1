@@ -387,7 +387,7 @@ function StandardError ([array]$err){
 # Function to create clone
 # https://developer.vmware.com/docs/powercli/latest/vmware.vimautomation.core/commands/connect-viserver/#Default
 # https://www.gngrninja.com/script-ninja/2016/6/5/powershell-getting-started-part-11-error-handling
-function Deploy-Clone([switch]$LinkedClone=$false,[switch]$FullClone=$false,[string]$VMName = "",[string]$CloneVMName = "",[string]$defaultJSON = "") {
+function Deploy-Clone([switch]$LinkedClone=$false,[switch]$FullClone=$false,[string]$VMName = "",[string]$CloneVMName = "",[string]$defaultJSON = "", [string]$Location="") {
     # Determine if clone type is set
     while($true){
         if($LinkedClone){
@@ -517,7 +517,7 @@ function Deploy-Clone([switch]$LinkedClone=$false,[switch]$FullClone=$false,[str
             if($LinkedClone){
                 Write-Host "[Creating $CloneVMName]" -ForegroundColor Green
                 # Create a new linked clone
-                $linkedvm = New-VM -LinkedClone -Name $CloneVMName -VM $vm -ReferenceSnapshot $snapshot -VMHost $vmhost -Datastore $ds
+                $linkedvm = New-VM -LinkedClone -Name $CloneVMName -VM $vm -ReferenceSnapshot $snapshot -VMHost $vmhost -Datastore $ds -Location $Location
             }
             elseif ($FullClone) {
                 $lclone = “{0}.linked” -f $vm.name
@@ -528,7 +528,7 @@ function Deploy-Clone([switch]$LinkedClone=$false,[switch]$FullClone=$false,[str
 
                 Write-Host "[Creating $CloneVMName from $lclone]" -ForegroundColor Green
                 # Create a new VM
-                $newvm = New-VM -Name $CloneVMName -VM $templinkedvm -VMHost $vmhost -Datastore $ds
+                $newvm = New-VM -Name $CloneVMName -VM $templinkedvm -VMHost $vmhost -Datastore $ds -Location $Location
 
                 Write-Host "[Creating Base snapshot of $CloneVMName]" -ForegroundColor Green
                 # Make a new Base snapshot
@@ -544,12 +544,7 @@ function Deploy-Clone([switch]$LinkedClone=$false,[switch]$FullClone=$false,[str
 
         }
         catch{
-            # https://stackoverflow.com/questions/17226718/how-to-get-the-line-number-of-error-in-powershell
-            # https://hostingultraso.com/help/windows/find-your-script%E2%80%99s-name-powershell#:~:text=You%20want%20to%20know%20the%20name%20of%20the%20currently%20running%20script.&text=To%20determine%20the%20name%20that,InvocationName%20variable.
-            # $e=$_.Exception.Message
-            # $line=$_.InvocationInfo.ScriptLineNumber
-            # $name=$myInvocation.InvocationName
-            # Write-Host "$name Error Message -- $e at line $line" -ForegroundColor Red
+            # Write to standard error function
             StandardError -err $_
             break
         }
