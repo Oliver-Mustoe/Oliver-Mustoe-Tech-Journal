@@ -47,3 +47,10 @@ EOF
 # Set the interface to be up
 wg-quick up wg0
 "
+
+function dcheck{
+  checkstatus=$(ip link show | grep wg0)
+  [[ -n "$checkstatus" ]] && printf "\nSUCCESS: Wireguard interface is up! \n" || printf "\nERROR: Wireguard interface does not exist! \n"
+}
+
+dcheck
