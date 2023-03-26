@@ -11,7 +11,7 @@ This page contains configurations/tips on working with the VyOS.
 
 ## Vyos configs:
 
-Current SEC-350 VyOS config (All VyOS hosts): W10 -- [3/26/23]([Oliver-Mustoe-Tech-Journal/3-26-23.md at main · Oliver-Mustoe/Oliver-Mustoe-Tech-Journal · GitHub](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-350/Vyos_configs/3-26-23.md))
+Current SEC-350 VyOS config (All VyOS hosts): W10 -- [3/26/23](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/blob/main/tech_journal_backups/SEC-350/Vyos_configs/3-26-23.md)
 
 Old VyOS configs:
 
