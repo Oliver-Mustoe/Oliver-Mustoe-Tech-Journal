@@ -49,8 +49,12 @@ wg-quick up wg0
 "
 
 function dcheck{
+  # https://stackoverflow.com/questions/4332478/read-the-current-text-color-in-a-xterm/4332530#4332530
+  NORMAL=$(tput sgr0)
+  RED=$(tput setaf 1)
+  GREEN=$(tput setaf 2)
   checkstatus=$(ip link show | grep wg0)
-  [[ -n "$checkstatus" ]] && printf "\nSUCCESS: Wireguard interface is up! \n" || printf "\nERROR: Wireguard interface does not exist! \n"
+  [[ -n "$checkstatus" ]] && printf "\n ${GREEN}SUCCESS: Wireguard interface is up!${NORMAL} \n" || printf "\n ${RED}ERROR: Wireguard interface does not exist!${NORMAL} \n"
 }
 
 dcheck
