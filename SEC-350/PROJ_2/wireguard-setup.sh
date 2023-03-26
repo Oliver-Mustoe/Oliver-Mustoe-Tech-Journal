@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Update and install wireguard
 sudo apt update
 sudo apt install wireguard -y
@@ -48,12 +48,12 @@ EOF
 wg-quick up wg0
 "
 
-function dcheck{
-  # https://stackoverflow.com/questions/4332478/read-the-current-text-color-in-a-xterm/4332530#4332530
-  RED=$(tput setaf 1)
-  GREEN=$(tput setaf 2)
-  checkstatus=$(ip link show | grep wg0)
-  [[ -n "$checkstatus" ]] && printf "\n ${GREEN}SUCCESS: Wireguard interface is up! \n" || printf "\n ${RED}ERROR: Wireguard interface does not exist! \n"
+dcheck (){
+	# https://dev.to/ifenna__/adding-colors-to-bash-scripts-48g4
+	RED="\e[31m"
+	GREEN="\e[32m"
+	checkstatus=$(ip link show | grep wg0)
+	[ -n "$checkstatus" ] && printf "\n${GREEN}SUCCESS: Wireguard interface is up! \n" || printf "\n${RED}ERROR: Wireguard interface does not exist! \n"
 }
 
 dcheck
