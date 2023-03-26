@@ -6,8 +6,8 @@ sudo apt install wireguard -y
 # Setup keys
 sudo bash -c "
 # Generate the needed keypairs
-sudo wg genkey | sudo tee /etc/wireguard/server_private_key | sudo wg pubkey > /etc/wireguard/server_public_key
-sudo wg genkey | sudo tee /etc/wireguard/client_private_key | sudo wg pubkey > /etc/wireguard/client_public_key
+wg genkey | tee /etc/wireguard/server_private_key | wg pubkey > /etc/wireguard/server_public_key
+wg genkey | tee /etc/wireguard/client_private_key | wg pubkey > /etc/wireguard/client_public_key
 "
 
 # Sudo into root shell and execute the following
