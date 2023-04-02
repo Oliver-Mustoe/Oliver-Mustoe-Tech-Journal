@@ -374,6 +374,35 @@ function Edit-VMs ([string]$defaultJSON="",[string]$VM="",[int]$CPU=0,[int]$Memo
     }
 }
 
+function Edit-WVMIP ([string]$vm="",[string]$ethernetname="",[string]$ip="",[string]$mask="",[string]$gateway="",[string]$nameserver="",[string]$defaultJSON="") {
+    try {
+        # Find the path of the json file
+        if ($defaultJSON -eq "") {
+            $defaultJSON = Read-Host -Prompt "Please enter the path for the default JSON config"
+            $conf = Get-480Config -config_path $defaultJSON
+        }
+        else {
+            $conf = Get-480Config -config_path $defaultJSON
+        }
+
+        # Connect to vcenter server
+        480Connect -server $conf.vcenter_server
+
+        $vm = Get-VM -Name $vm
+        $cred = Get-Credential -Message "Please input the username and password for '$vm'"
+
+        $c1 = Invoke-VMScript -VM $vm -GuestCredential $cred -ScriptText "netsh interface ipv4 set address name='$ethernetname' static $ip $mask $gateway "
+        # Needed for below commands to work consistently
+        #Start-Sleep -Seconds 5
+        $c2 = Invoke-VMScript -VM $vm -GuestCredential $cred -ScriptText "netsh interface ipv4 add dns name='$ethernetname' $nameserver index=1"
+        Invoke-VMScript -VM $vm -GuestCredential $cred -ScriptText "ipconfig /all"
+    }
+    catch {
+        StandardError -err $_
+        break
+    }
+    
+}
 
 # Function that contains the standard error format I wish to output
 function StandardError ([array]$err){
@@ -510,7 +539,8 @@ function Deploy-Clone([switch]$LinkedClone=$false,[switch]$FullClone=$false,[str
             Write-host "[Found $vmhost]" -foreground Green
             ###
 
-            
+            # Find the location
+            #$Location = (get-folder -name BLUE1 -type vm).Name
 
             # Determine if linked clone or full clone, execute accordingly
 
