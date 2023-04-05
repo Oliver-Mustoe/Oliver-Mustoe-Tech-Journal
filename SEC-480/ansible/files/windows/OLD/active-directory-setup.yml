@@ -6,6 +6,10 @@
     - name: safemodepassword
       prompt: Please enter your new safemode password
       private: true
+    
+    # - name: domainadminpassword
+    #   prompt: Please enter your new domain admin password
+    #   private: true
 
     - name: adminpassword
       prompt: Please enter your admin password
@@ -41,7 +45,7 @@
 # can check below with 'wmic.exe ComputerSystem get DomainRole' https://dirteam.com/sander/2009/09/23/how-to-tell-whether-it-s-a-server-core-domain-controller/
   - name: create domain 
     ansible.windows.win_domain:
-      dns_domain_name: blue1.local
+      dns_domain_name: blue1.local # Hardcoded for later
       safe_mode_password: "{{ safemodepassword }}"
       install_dns: true
     register: domain_install
@@ -52,6 +56,15 @@
     ansible.windows.win_reboot:
     when: domain_install.reboot_required
 
+  # - name: create domain admin user '"{{ domain_admin_user }}"'
+  #   community.windows.win_domain_user:
+  #     name: "{{ domain_admin_user }}"
+  #     password: "{{ domainadminpassword }}"
+  #     state: present
+  #     groups:
+  #       - Domain Admins
+  #       - Enterprise Admins
+
   - name: elevate deployer user
     community.windows.win_domain_user:
       name: deployer
@@ -61,7 +74,43 @@
         - Domain Admins
         - Enterprise Admins
     
-  # OU structure
+  # OU structure (try the script, but like max 1hr)
+  # - name: Ensure blue1 OU is present 
+  #   community.windows.win_domain_ou:
+  #     name: blue1
+  #     path: "dc=blue1,dc=local"
+  #     state: present
+
+  # - name: Ensure Accounts OU is present 
+  #   community.windows.win_domain_ou:
+  #     name: Accounts
+  #     path: "ou=blue1,dc=blue1,dc=local"
+  #     state: present
+    
+  # - name: Ensure Groups OU is present 
+  #   community.windows.win_domain_ou:
+  #     name: Groups
+  #     path: "ou=Accounts,ou=blue1,dc=blue1,dc=local"
+  #     state: present
+
+  # - name: Ensure Computers OU is present 
+  #   community.windows.win_domain_ou:
+  #     name: Computers
+  #     path: "ou=blue1,dc=blue1,dc=local"
+  #     state: present
+
+  # - name: Ensure Servers OU is present 
+  #   community.windows.win_domain_ou:
+  #     name: Servers
+  #     path: "ou=Computers,ou=blue1,dc=blue1,dc=local"
+  #     state: present
+    
+  # - name: Ensure Workstations OU is present 
+  #   community.windows.win_domain_ou:
+  #     name: Workstations
+  #     path: "ou=Computers,ou=blue1,dc=blue1,dc=local"
+  #     state: present
+
   - name: copy ps1 file
     ansible.windows.win_copy:
       src: files/windows/ou-creation.ps1

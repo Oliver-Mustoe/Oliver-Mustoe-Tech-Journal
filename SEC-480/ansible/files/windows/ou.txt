@@ -1,0 +1,3 @@
+OU=Groups,OU=Accounts,OU=blue1,DC=blue1,DC=local
+OU=Workstations,OU=Computers,OU=blue1,DC=blue1,DC=local
+OU=Servers,OU=Computers,OU=blue1,DC=blue1,DC=local

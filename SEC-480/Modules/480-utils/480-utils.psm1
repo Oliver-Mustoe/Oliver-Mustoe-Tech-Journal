@@ -388,13 +388,15 @@ function Edit-WVMIP ([string]$vm="",[string]$ethernetname="",[string]$ip="",[str
         # Connect to vcenter server
         480Connect -server $conf.vcenter_server
 
+        # Get the VM and a credential for it
         $vm = Get-VM -Name $vm
         $cred = Get-Credential -Message "Please input the username and password for '$vm'"
 
+        # Set the VMs IP
         $c1 = Invoke-VMScript -VM $vm -GuestCredential $cred -ScriptText "netsh interface ipv4 set address name='$ethernetname' static $ip $mask $gateway "
-        # Needed for below commands to work consistently
-        #Start-Sleep -Seconds 5
+        # Set the VMs DNS
         $c2 = Invoke-VMScript -VM $vm -GuestCredential $cred -ScriptText "netsh interface ipv4 add dns name='$ethernetname' $nameserver index=1"
+        # Do an ipconfig /all to d-check that above was correct
         Invoke-VMScript -VM $vm -GuestCredential $cred -ScriptText "ipconfig /all"
     }
     catch {
