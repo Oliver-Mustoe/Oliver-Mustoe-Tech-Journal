@@ -1,0 +1,113 @@
+# run with: ansible-playbook -i inventories/windows.yaml active-directory-setup.yaml --ask-pass -K
+# need to run "install-windows-setup.sh" before above
+- name: create ad
+  hosts: windows
+  vars_prompt:
+    - name: safemodepassword
+      prompt: Please enter your new safemode password
+      private: true
+    
+    # - name: domainadminpassword
+    #   prompt: Please enter your new domain admin password
+    #   private: true
+
+    - name: adminpassword
+      prompt: Please enter your admin password
+      private: true
+
+  tasks:
+  
+  - name: reset administrator password
+    ansible.windows.win_user:
+      name: Administrator
+      password: "{{ adminpassword }}"
+      state: present
+
+  
+  - name: set hostname to "{{ hostname }}"
+    ansible.windows.win_hostname:
+      name: "{{ hostname }}"
+    register: hostnamereboot
+
+# reboot needed here since trying to install the domain before rebooting with the new hostname will encounter errors!
+  - name: reboot to set hostname
+    ansible.windows.win_reboot:
+    when: hostnamereboot.reboot_required
+  
+  - name: install ad feature
+    ansible.windows.win_feature:
+      name: AD-Domain-Services
+      state: present
+      include_management_tools: yes
+    register: adinstall
+  - debug:
+      var: adinstall.exitcode
+
+# can check below with 'wmic.exe ComputerSystem get DomainRole' https://dirteam.com/sander/2009/09/23/how-to-tell-whether-it-s-a-server-core-domain-controller/
+  - name: create domain 
+    ansible.windows.win_domain:
+      dns_domain_name: blue1.local # Hardcoded for later
+      safe_mode_password: "{{ safemodepassword }}"
+      install_dns: true
+    register: domain_install
+  - debug:
+      var: domain_install.reboot_required
+
+  - name: reboot to set domain
+    ansible.windows.win_reboot:
+    when: domain_install.reboot_required
+
+  # - name: create domain admin user '"{{ domain_admin_user }}"'
+  #   community.windows.win_domain_user:
+  #     name: "{{ domain_admin_user }}"
+  #     password: "{{ domainadminpassword }}"
+  #     state: present
+  #     groups:
+  #       - Domain Admins
+  #       - Enterprise Admins
+
+  - name: elevate deployer user
+    community.windows.win_domain_user:
+      name: deployer
+      state: present
+      groups_action: add
+      groups:
+        - Domain Admins
+        - Enterprise Admins
+    
+  # OU structure
+  - name: Ensure blue1 OU is present 
+    community.windows.win_domain_ou:
+      name: blue1
+      path: "dc=blue1,dc=local"
+      state: present
+
+  - name: Ensure Accounts OU is present 
+    community.windows.win_domain_ou:
+      name: Accounts
+      path: "ou=blue1,dc=blue1,dc=local"
+      state: present
+    
+  - name: Ensure Groups OU is present 
+    community.windows.win_domain_ou:
+      name: Groups
+      path: "ou=Accounts,ou=blue1,dc=blue1,dc=local"
+      state: present
+
+  - name: Ensure Computers OU is present 
+    community.windows.win_domain_ou:
+      name: Computers
+      path: "ou=blue1,dc=blue1,dc=local"
+      state: present
+
+  - name: Ensure Servers OU is present 
+    community.windows.win_domain_ou:
+      name: Servers
+      path: "ou=Computers,ou=blue1,dc=blue1,dc=local"
+      state: present
+    
+  - name: Ensure Workstations OU is present 
+    community.windows.win_domain_ou:
+      name: Workstations
+      path: "ou=Computers,ou=blue1,dc=blue1,dc=local"
+      state: present
