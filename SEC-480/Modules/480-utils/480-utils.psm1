@@ -222,7 +222,7 @@ function Get-VMIP ([string]$VMName = "",[string]$defaultJSON=""){
             [array]$MacVmInfo = (Get-NetworkAdapter -VM $VMName).MacAddress
 
             # Desginated output gather certain information from general (hostname, NIC 1, IPv4 address) and the corressponding MAC information of the first network adapter (through $MacVMInfo)
-            $output = "{0} hostname={1} mac={2}" -f $GenVmInfo.nics.IPAddress[0].ToString(), $VMName, $MacVmInfo[0].ToString()
+            $output = "{0} hostname={1} mac={2}" -f $GenVmInfo.IPAddress[0].ToString(), $VMName, $MacVmInfo[0].ToString()
             Write-Host $output -ForegroundColor White
         }
     }
