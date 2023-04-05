@@ -9,5 +9,3 @@ windows:
   vars:
     ansible_user: deployer
     ansible_shell_type: powershell
-    domain_admin_user: oliver.mustoe-adm
-    ou_array: '"OU=Servers,OU=Computers,OU=blue1,DC=blue1,DC=local","ou=Computers,ou=blue1,dc=blue1,dc=local"'

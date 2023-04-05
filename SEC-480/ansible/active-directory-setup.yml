@@ -1,4 +1,4 @@
-# run with: ansible-playbook -i inventories/windows.yaml active-directory-setup.yaml --ask-pass -K
+# run with: ansible-playbook -i inventories/windows.yaml active-directory-setup.yml --ask-pass -K
 # need to run "install-windows-setup.sh" before above
 - name: create ad
   hosts: windows
