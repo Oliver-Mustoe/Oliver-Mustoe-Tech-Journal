@@ -57,7 +57,7 @@ def main(args):
 
             # Go through each of the rows in the Dictreader
             for r in read_file:
-                # Add a new key, 'Password, that is set to a random 16 length string
+                # Add a new key, 'Password', that is set to a random 16 length string
                 r['Password'] = random_password(16)
 
                 # Write a new row in the new file inculding the fields Name,Group,Password
