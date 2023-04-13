@@ -1,0 +1,21 @@
+windows:
+  hosts:
+  children:
+    domain_controller:
+      hosts:
+        10.0.5.5:
+          hostname: dc-blue1
+    file_server:
+      hosts:
+        10.0.5.6:
+          hostname: fs-blue1
+    desktop:
+      hosts:
+        # Change below to whatever the workstation name will actually be
+        10.0.5.85:
+          hostname: wks01-blue1
+  
+  vars:
+    ansible_user: deployer
+    ansible_shell_type: powershell
+    csv_path: files/windows/usersandgroupsandpasswords.csv.vault

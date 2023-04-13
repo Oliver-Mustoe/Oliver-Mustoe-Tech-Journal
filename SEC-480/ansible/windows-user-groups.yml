@@ -1,0 +1,38 @@
+# run with: ansible-playbook windows-user-groups.yml --ask-pass -K -i inventories/windows-m10.yaml
+# assumes that "active-directory-setup.yml" has been run with the default ou.txt
+# CURRENTLY NEED TO SOLVE WHY MY 165 users is only being made into 159 (rerunning with proper path/group/no duplicates)
+- name: add users/groups csv
+  hosts: domain_controller
+  tasks:
+    # syntax for accessing column in register variable (list) is "{{ item.column }}" so the Name column would be "{{ item.Name }}" in a loop
+  - name: "read csv '{{ csv_path }}'"
+    community.general.read_csv:
+      path: "{{ csv_path }}"
+    register: usersandgroups
+    delegate_to: localhost
+  
+  - name: create domain groups
+    community.windows.win_domain_group:
+      name: "{{ item.Group }}"
+      scope: domainlocal
+      organizational_unit: OU=Groups,OU=Accounts,OU=blue1,DC=blue1,DC=local
+    loop: "{{ usersandgroups.list }}"
+    # no_log: true
+  
+  - name: create domain admin users
+    community.windows.win_domain_user:
+      name: "{{ item.Name }}"
+      password: "{{ item.Password }}"
+      state: present
+      groups: "{{ item.Group }}"
+      path: OU=Accounts,OU=blue1,DC=blue1,DC=local
+    loop: "{{ usersandgroups.list }}"
+    # no_log: true
+    
+
+  # - debug:
+  #    msg: "{{ item.Password }}"
+  #   loop: "{{ usersandgroups.list }}"
+  
+  #get-aduser
+  #get-adgroupmember

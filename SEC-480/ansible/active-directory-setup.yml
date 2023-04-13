@@ -1,5 +1,5 @@
 # run with: ansible-playbook -i inventories/windows.yaml active-directory-setup.yml --ask-pass -K
-# need to run "install-windows-setup.sh" before above
+# need to run "install-windows-setup.sh" before above, CHANGE THE HOSTS TO A DIFFERENT HOST DEPENDING ON THE INVENTORY
 - name: create ad
   hosts: windows
   vars_prompt:
