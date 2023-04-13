@@ -1,6 +1,5 @@
 # run with: ansible-playbook windows-user-groups.yml --ask-pass -K -i inventories/windows-m10.yaml
 # assumes that "active-directory-setup.yml" has been run with the default ou.txt
-# CURRENTLY NEED TO SOLVE WHY MY 165 users is only being made into 159 (rerunning with proper path/group/no duplicates)
 - name: add users/groups csv
   hosts: domain_controller
   tasks:
@@ -24,9 +23,12 @@
       name: "{{ item.Name }}"
       password: "{{ item.Password }}"
       state: present
-      groups: "{{ item.Group }}"
+      groups: 
+        - "{{ item.Group }}"
+        - Domain Users
       path: OU=Accounts,OU=blue1,DC=blue1,DC=local
     loop: "{{ usersandgroups.list }}"
+    # use this to silence output
     # no_log: true
     
 

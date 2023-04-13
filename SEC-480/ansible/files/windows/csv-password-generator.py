@@ -32,26 +32,40 @@ def args():
     return args
 
 def random_password(length):
-    # Create a list of oks for password in Windows
+    # Create a list of ok characters for passwords in Windows
     password_complexity_req = string.ascii_letters + string.digits + '~!@#$%^&*_-+=`|\(){}[]:;"\'<>.?/'
+
+    # For the length, join a random character from the complexity req, return that new string
     return_str = ''.join(random.choice(password_complexity_req) for i in range(length))
     return return_str
 
 def main(args):
     try:
-        # with open('files/windows/userandgroups.csv.vault', 'r') as file, open("./usersgroupspasswords.csv.vault","w") as nfile:
+        # Open 2 files, 1 where the csv that contains the data is and one where the data will be outputted
         with open(args.inputcsv, 'r') as file, open(args.outputcsv,"w") as nfile:
+            # Created a Dictreader object
             read_file = csv.DictReader(file)
-            # newfile = csv.DictWriter(open("./usersgroupspasswords.csv","w"),fieldnames=read_file.fieldnames + ['Password'])
+
+            # Get the fieldnames from the reader object, add 'Password', (need the new file to have the field since that is where we are writing to)
             newfieldnames = read_file.fieldnames + ['Password']
+
+            # Create a Dictwriter object of the outputted file, use the fieldnames of made above
             newfile = csv.DictWriter(nfile,newfieldnames)
+
+            # Write the fieldnames (same as header)
             newfile.writeheader()
+
+            # Go through each of the rows in the Dictreader
             for r in read_file:
+                # Add a new key, 'Password, that is set to a random 16 length string
                 r['Password'] = random_password(16)
+
+                # Write a new row in the new file inculding the fields Name,Group,Password
                 newfile.writerow(r)
     except Exception as e:
         print(e)
 
+# Check if being executed as a script, if so run args and main function
 if __name__ == "__main__":
     args = args()
     main(args)
