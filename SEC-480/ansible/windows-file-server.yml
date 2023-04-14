@@ -1,0 +1,86 @@
+- name: create ad
+  hosts: file_server
+  vars_prompt:
+    - name: adminpassword
+      prompt: "Please enter your {{ ansible_user }} password"
+      private: true
+
+  tasks:
+  - name: "read csv '{{ csv_path }}'"
+    community.general.read_csv:
+      path: "{{ csv_path }}"
+    register: usersandgroups
+    delegate_to: localhost # delegated since this should be done locally
+
+  # - name: reset administrator password
+  #   ansible.windows.win_user:
+  #     name: Administrator
+  #     password: "{{ adminpassword }}"
+  #     state: present
+  
+  # - name: set hostname to "{{ hostname }}"
+  #   ansible.windows.win_hostname:
+  #     name: "{{ hostname }}"
+  #   register: hostnamereboot
+
+  # - name: reboot to set hostname
+  #   ansible.windows.win_reboot:
+  #   when: hostnamereboot.reboot_required
+  - name: set ip info
+    ansible.windows.shell: |
+      "netsh interface ipv4 set address name='{{ ethernet }}' static {{ lan_ip }} {{ mask }} {{ gateway }}"
+      "netsh interface ipv4 add dns name='{{ ethernet }}' {{ nameserver }} index=1"
+
+
+  - name: add to domain/set hostname
+    ansible.windows.win_domain_membership:
+      dns_domain_name: blue1.local
+      hostname: fs-blue1
+      domain_admin_user: "{{ ansible_user }}"
+      domain_admin_password: "{{ adminpassword }}"
+      domain_ou_path: "OU=Servers,OU=Computers,OU=blue1,DC=blue1,DC=local"
+      state: domain
+    register: domain_state
+
+  - name: reboot if needed
+    ansible.windows.win_reboot:
+    when: domain_state.reboot_required
+
+  - name: install ad feature
+    ansible.windows.win_feature:
+      name: FS-FileServer
+      state: present
+      include_management_tools: yes
+    register: fileserver
+  - debug:
+      var: fileserver.exitcode
+    
+  - name: reboot if needed
+    ansible.windows.win_reboot:
+    when: fileserver.reboot_required
+    
+  - name: create folder on file server to hold shares
+    ansible.windows.win_file:
+      path: C:\Shares
+      state: directory
+  
+  - name: create folders for each group
+    ansible.windows.win_file:
+      path: "C:\Shares\{{ item.Group }}"
+      state: directory
+    loop: "{{ usersandgroups.list }}"
+
+  - name: add the created folders as shares for each group
+    ansible.windows.win_share:
+      name: "{{ item.Group }} share"
+      description: "{{ item.Group }}'s share"
+      path: "C:\Shares\{{ item.Group }}"
+      change: "{{ item.Group }}" # may be full
+      state: present
+    loop: "{{ usersandgroups.list }}"
+
+  # - name: add gpo to map drives per group
+  # current thoughts for this are either:
+  # A: a group policy template created with the correct settings (maybe this https://rakhesh.com/windows/export-and-import-group-policy-objects-gpos/)
+  # B: Registry stuff
+  # still researching for a better way, but I don't know if their really is :(
