@@ -1,7 +1,7 @@
 # makes the groups mapped drives - currently sudo code
 
 # Create the GPO
-$gpo = New-GPO -Name MappedDrives -Comment "GPO to create groups mapped drives"
+$gpo = New-GPO -Name "MappedDrives" -Comment "GPO to create groups mapped drives"
 $gpo | new-gplink -target "OU=blue1,DC=blue1,DC=local"
 
 # Make the GPO path
@@ -62,7 +62,7 @@ $adgroups | Foreach-Object {
     $uid = [guid]::NewGuid().ToString().ToUpper()
     $sid = $_.SID
     $datetime = (get-date).ToString("yyyy-MM-dd HH:mm:ss")
-    $GroupString = '<Drive clsid="{935D1B74-9CB8-4e3c-9914-7DD559B7A417}" name="Z:" status="Z:" image="2" changed="' + $datetime + '" uid="{ + $uid + }" userContext="1" bypassErrors="1"><Properties action="U" thisDrive="NOCHANGE" allDrives="NOCHANGE" userName="" path="\\fs-blue1\' + $name + ' share" label="" persistent="0" useLetter="1" letter="Z"/><Filters><FilterGroup bool="AND" not="0" name="BLUE1\' + $name +'" sid="' + $sid +'" userContext="1" primaryGroup="0" localGroup="0"/></Filters></Drive>`n'  # `n to indicate newline
+    $GroupString = '<Drive clsid="{935D1B74-9CB8-4e3c-9914-7DD559B7A417}" name="Z:" status="Z:" image="2" changed="' + $datetime + '" uid="{' + $uid + '}" userContext="1" bypassErrors="1"><Properties action="U" thisDrive="NOCHANGE" allDrives="NOCHANGE" userName="" path="\\fs-blue1\' + $name + ' share" label="" persistent="0" useLetter="1" letter="Z"/><Filters><FilterGroup bool="AND" not="0" name="BLUE1\' + $name +'" sid="' + $sid +'" userContext="1" primaryGroup="0" localGroup="0"/></Filters></Drive>`n'  # `n to indicate newline
     
     $MapString += $GroupString
 }
