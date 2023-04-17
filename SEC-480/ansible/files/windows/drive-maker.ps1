@@ -1,7 +1,9 @@
-# makes the groups mapped drives - currently sudo code
+# makes the groups mapped drives
 
+# Set gpo name (doubles as a funny counter for how many times I have tried this script :))
+$GpoName = "MappedDrives"
 # Create the GPO
-$gpo = New-GPO -Name "MappedDrives" -Comment "GPO to create groups mapped drives"
+$gpo = New-GPO -Name $GpoName -Comment "GPO to create groups mapped drives"
 $gpo | new-gplink -target "OU=blue1,DC=blue1,DC=local"
 
 # Make the GPO path
