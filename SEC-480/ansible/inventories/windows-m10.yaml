@@ -9,18 +9,14 @@ windows:
       hosts:
         10.0.5.6:
           hostname: fs-blue1
-          lan_ip: 10.0.5.6
-          mask: 255.255.255.0
-          gateway: 10.0.5.2
-          nameserver: 10.0.5.2
-          ethernet: Ethernet0
     desktop:
       hosts:
-        # Change below to whatever the workstation name will actually be
-        10.0.5.85:
+        10.0.5.89:
           hostname: wks01-blue1
   
   vars:
     ansible_user: deployer
+    windowsuser: deployer
     ansible_shell_type: powershell
     csv_path: files/windows/usersandgroupsandpasswords.csv.vault
+    group_csv_path: files/windows/groups.csv.vault

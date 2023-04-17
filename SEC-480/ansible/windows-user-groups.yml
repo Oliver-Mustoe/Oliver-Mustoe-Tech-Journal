@@ -9,16 +9,22 @@
       path: "{{ csv_path }}"
     register: usersandgroups
     delegate_to: localhost
+
+  - name: "read csv '{{ group_csv_path }}'"
+    community.general.read_csv:
+      path: "{{ group_csv_path }}"
+    register: windows_groups
+    delegate_to: localhost
   
   - name: create domain groups
     community.windows.win_domain_group:
       name: "{{ item.Group }}"
       scope: domainlocal
       organizational_unit: OU=Groups,OU=Accounts,OU=blue1,DC=blue1,DC=local
-    loop: "{{ usersandgroups.list }}"
+    loop: "{{ windows_groups.list }}"
     # no_log: true
   
-  - name: create domain admin users
+  - name: create domain users
     community.windows.win_domain_user:
       name: "{{ item.Name }}"
       password: "{{ item.Password }}"
