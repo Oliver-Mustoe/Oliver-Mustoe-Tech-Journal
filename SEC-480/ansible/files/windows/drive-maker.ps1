@@ -1,7 +1,7 @@
 # makes the groups mapped drives
 
 # Set gpo name (doubles as a funny counter for how many times I have tried this script :))
-$GpoName = "MappedDrives"
+$GpoName = "MappedDrives2"
 # Create the GPO
 Write-host "[Creating $GpoName]"
 $gpo = New-GPO -Name $GpoName -Comment "GPO to create groups mapped drives"
@@ -19,8 +19,10 @@ $empty = New-Object System.Security.AccessControl.DirectorySecurity
 # https://blog.netwrix.com/2018/04/18/how-to-manage-file-system-acls-with-powershell-scripts/
 $AccessRule1 = New-Object System.Security.AccessControl.FileSystemAccessRule("BLUE1\Domain Admins","FullControl","Allow")
 $AccessRule2 = New-Object System.Security.AccessControl.FileSystemAccessRule("BLUE1\Enterprise Admins","FullControl","Allow")  # User creating the GPO is a enterprise admin so this MAY affect this in a diff enviro!
-$AccessRule3 = New-Object System.Security.AccessControl.FileSystemAccessRule("NT AUTHORITY\ENTERPRISE DOMAIN CONTROLLERS","ReadAndExecute","Allow","Synchronize")
-$AccessRule4 = New-Object System.Security.AccessControl.FileSystemAccessRule("NT AUTHORITY\Authenticated Users","ReadAndExecute","Allow","Synchronize")
+$AccessRule3 = New-Object System.Security.AccessControl.FileSystemAccessRule("NT AUTHORITY\ENTERPRISE DOMAIN CONTROLLERS","ReadAndExecute","Allow")
+$AccessRule33 = New-Object System.Security.AccessControl.FileSystemAccessRule("NT AUTHORITY\ENTERPRISE DOMAIN CONTROLLERS","Synchronize")
+$AccessRule4 = New-Object System.Security.AccessControl.FileSystemAccessRule("NT AUTHORITY\Authenticated Users","ReadAndExecute","Allow")
+$AccessRule44 = New-Object System.Security.AccessControl.FileSystemAccessRule("NT AUTHORITY\Authenticated Users","Synchronize")
 $AccessRule5 = New-Object System.Security.AccessControl.FileSystemAccessRule("NT AUTHORITY\SYSTEM","FullControl","Allow")
 $AccessRule6 = New-Object System.Security.AccessControl.FileSystemAccessRule("BUILTIN\Administrators","FullControl","Allow")
 $AccessRule7 = New-Object System.Security.AccessControl.FileSystemAccessRule("CREATOR OWNER","FullControl","Allow")
@@ -31,6 +33,8 @@ $empty.SetAccessRule($AccessRule1)
 $empty.SetAccessRule($AccessRule2)
 $empty.SetAccessRule($AccessRule3)
 $empty.SetAccessRule($AccessRule4)
+$empty.SetAccessRule($AccessRule33)
+$empty.SetAccessRule($AccessRule44)
 $empty.SetAccessRule($AccessRule5)
 $empty.SetAccessRule($AccessRule6)
 $empty.SetAccessRule($AccessRule7)
