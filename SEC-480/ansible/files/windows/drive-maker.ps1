@@ -57,7 +57,7 @@ Write-host $BasicString > $GpoPath + "\User\Drives\Drives.xml"
 # Create a hashtable of the desired groups and their ssid's (https://stackoverflow.com/questions/3740128/pscustomobject-to-hashtable)
 # https://activedirectorypro.com/get-adgroup-examples/
 Write-host "[Getting groups]"
-$adgroups = Get-ADGroup -filter * -SearchBase "OU=Groups,OU=Accounts,OU=blue1,DC=blue1,DC=local" | select Name, SID
+$adgroups = Get-ADGroup -filter * -SearchBase "OU=Groups,OU=Accounts,OU=blue1,DC=blue1,DC=local" | Select-Object Name, SID
 # $GroupDrives = @{}
 # $adgroups | Foreach-Object { $GroupDrives[$_.Name] = $_.SID}
 
