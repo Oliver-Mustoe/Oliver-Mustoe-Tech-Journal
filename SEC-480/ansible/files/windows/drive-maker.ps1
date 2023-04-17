@@ -3,6 +3,7 @@
 # Set gpo name (doubles as a funny counter for how many times I have tried this script :))
 $GpoName = "MappedDrives"
 # Create the GPO
+Write-host "[Creating $GpoName]"
 $gpo = New-GPO -Name $GpoName -Comment "GPO to create groups mapped drives"
 $gpo | new-gplink -target "OU=blue1,DC=blue1,DC=local"
 
@@ -12,6 +13,7 @@ $GpoPath = "\\blue1.local\SYSVOL\blue1.local\Policies\{" + $gpouid + "}"
 
 # Get a ACL object with right permissions and owner/group (blue1 references would be changed for different domain)
 # https://serverfault.com/questions/185192/is-there-a-way-to-create-acls-from-scratch-in-powershell-as-opposed-to-copying
+Write-host "[Creating blank ACL]"
 $empty = New-Object System.Security.AccessControl.DirectorySecurity
 
 # https://blog.netwrix.com/2018/04/18/how-to-manage-file-system-acls-with-powershell-scripts/
@@ -36,9 +38,10 @@ $empty.SetOwner($owner)
 $empty.SetGroup($group)
 
 # Create the Drives folder and Drives.xml file (right permissions in acl) in the GPOs Users\Preference directory (blue1 references would be changed for different domain)
-
+Write-host "[Creating Drives folder]"
 $DriveFolder = mkdir $GpoPath + "\User\Drives"
 $DriveFolder | Set-Acl -AclObject $empty
+Write-host "Creating Drives.xml"
 $DriveXml = new-item $GpoPath + "\User\Drives\Drives.xml"
 $DriveXml | Set-Acl -AclObject $empty
 $BasicString = @'
@@ -47,11 +50,13 @@ $BasicString = @'
 </Drives>
 '@
 
+Write-host "[Setting Drives.xml basic structure]"
 Write-host $BasicString > $GpoPath + "\User\Drives\Drives.xml"
 
 
 # Create a hashtable of the desired groups and their ssid's (https://stackoverflow.com/questions/3740128/pscustomobject-to-hashtable)
-https://activedirectorypro.com/get-adgroup-examples/
+# https://activedirectorypro.com/get-adgroup-examples/
+Write-host "[Getting groups]"
 $adgroups = Get-ADGroup -filter * -SearchBase "OU=Groups,OU=Accounts,OU=blue1,DC=blue1,DC=local" | select Name, SID
 # $GroupDrives = @{}
 # $adgroups | Foreach-Object { $GroupDrives[$_.Name] = $_.SID}
@@ -60,6 +65,7 @@ $adgroups = Get-ADGroup -filter * -SearchBase "OU=Groups,OU=Accounts,OU=blue1,DC
 $MapString = ''
 
 $adgroups | Foreach-Object {
+    Write-host "[Creating $names's entry]"
     $name = $_.Name
     $uid = [guid]::NewGuid().ToString().ToUpper()
     $sid = $_.SID
@@ -70,6 +76,7 @@ $adgroups | Foreach-Object {
 }
 
 #https://stackoverflow.com/questions/31957901/add-content-append-to-specific-line
+Write-host "[Setting the xml file to the new entires!]"
 $FileContent = Get-Content -Path $GpoPath + "\User\Drives\Drives.xml"
 $FileContent[-1] = "{0}`r`n{1}" -f $fileContent[-1],$test_out
 
