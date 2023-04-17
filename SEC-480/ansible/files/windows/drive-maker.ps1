@@ -5,7 +5,7 @@ $gpo = New-GPO -Name MappedDrives -Comment "GPO to create groups mapped drives"
 $gpo | new-gplink -target "OU=blue1,DC=blue1,DC=local"
 
 $gpouid = '{}' + $gpo.ToString().ToUpper + '}'
-# Create the Drives folder and Drives.xml file (right permissions in acl) in the GPOs Users\Preference directory (blue1 references would be changed for different domain)
+# Get a ACL object with right permissions and owner/group (blue1 references would be changed for different domain)
 # https://serverfault.com/questions/185192/is-there-a-way-to-create-acls-from-scratch-in-powershell-as-opposed-to-copying
 $empty = New-Object System.Security.AccessControl.DirectorySecurity
 
@@ -30,25 +30,29 @@ $empty.SetAccessRule($AccessRule7)
 $empty.SetOwner($owner)
 $empty.SetGroup($group)
 
+# Create the Drives folder and Drives.xml file (right permissions in acl) in the GPOs Users\Preference directory (blue1 references would be changed for different domain)
 $DriveFolder = mkdir "\\blue1.local\SYSVOL\blue1.local\Policies\" + $gpouid + "User\Drives"
 $DriveFolder | Set-Acl -AclObject $empty
 $DriveXml = new-item "\\blue1.local\SYSVOL\blue1.local\Policies\" + $gpouid + "User\Drive\Drives.xml"
 $DriveXml | Set-Acl -AclObject $empty
 
 
-# # Create a hashtable of the desired groups and their ssid's
-# $GroupDrives = @{}
+# Create a hashtable of the desired groups and their ssid's (https://stackoverflow.com/questions/3740128/pscustomobject-to-hashtable)
+https://activedirectorypro.com/get-adgroup-examples/
+$adgroups = Get-ADGroup -filter * -SearchBase "OU=Groups,OU=Accounts,OU=blue1,DC=blue1,DC=local" | select Name, SID
+$GroupDrives = @{}
+$adgroups | Foreach-Object { $GroupDrives[$_.Name] = $_.Value}
 
-# # Have the string that needs to be inputed, with variables where items need to be
-# $MapString = ""
+# Have the string that needs to be inputed, with variables where items need to be
+$MapString = ""
 
-# # For every group in the GroupDrives
-# foreach ($group in $GroupDrives){
-#     # Create a uid
-#     $uid = [guid]::NewGuid()
+# For every group in the GroupDrives
+foreach ($group in $GroupDrives){
+    # Create a uid
+    $uid = [guid]::NewGuid()
 
-#     # Create a version of the string
-#     $GroupString = ""
+    # Create a version of the string
+    $GroupString = ""
 
-#     # Append the string to the second to last line in the Drives.xml file
-# }
+    # Append the string to the second to last line in the Drives.xml file
+}
