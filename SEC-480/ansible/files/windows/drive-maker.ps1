@@ -9,7 +9,7 @@ $gpo | new-gplink -target "OU=blue1,DC=blue1,DC=local"
 
 # Make the GPO path
 # $gpouid = '{' + $gpo.Id.ToString().ToUpper() + '}'
-$gpouid = '$gpo.Id.ToString().ToUpper()'
+$gpouid = $gpo.Id.ToString().ToUpper()
 $GpoPath = "\\blue1.local\SYSVOL\blue1.local\Policies\$gpouid"
 
 # Get a ACL object with right permissions and owner/group (blue1 references would be changed for different domain)
@@ -75,7 +75,8 @@ $adgroups | Foreach-Object {
     $sid = $_.SID
     $datetime = (get-date).ToString("yyyy-MM-dd HH:mm:ss")
     $GroupString = '<Drive clsid="{935D1B74-9CB8-4e3c-9914-7DD559B7A417}" name="Z:" status="Z:" image="2" changed="' + $datetime + '" uid="{' + $uid + '}" userContext="1" bypassErrors="1"><Properties action="U" thisDrive="NOCHANGE" allDrives="NOCHANGE" userName="" path="\\fs-blue1\' + $name + ' share" label="" persistent="0" useLetter="1" letter="Z"/><Filters><FilterGroup bool="AND" not="0" name="BLUE1\' + $name +'" sid="' + $sid +'" userContext="1" primaryGroup="0" localGroup="0"/></Filters></Drive>`n'  # `n to indicate newline
-    Write-host "[Creating $names's entry]"
+    Write-host "[Creating $names entry]"
+    Write-host "[$sid]"
     $MapString += $GroupString
 }
 
