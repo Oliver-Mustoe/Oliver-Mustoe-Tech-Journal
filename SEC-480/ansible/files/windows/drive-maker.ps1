@@ -1,4 +1,4 @@
-# makes the groups mapped drives - working - cleanup and test on a fresh enviro
+# makes the groups mapped drives - working - cleanup and test on a fresh enviro - MAY NEED TO RESTART WORKSTATION TO TAKE AFFECT
 
 # Set gpo name (doubles as a funny counter for how many times I have tried this script :))
 $GpoName = "MappedDrives15"
