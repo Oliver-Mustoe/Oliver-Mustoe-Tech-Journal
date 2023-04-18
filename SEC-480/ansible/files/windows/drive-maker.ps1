@@ -1,7 +1,7 @@
 # makes the groups mapped drives
 
 # Set gpo name (doubles as a funny counter for how many times I have tried this script :))
-$GpoName = "MappedDrives2"
+$GpoName = "MappedDrives3"
 # Create the GPO
 Write-host "[Creating $GpoName]"
 $gpo = New-GPO -Name $GpoName -Comment "GPO to create groups mapped drives"
@@ -43,10 +43,10 @@ $empty.SetGroup($group)
 
 # Create the Drives folder and Drives.xml file (right permissions in acl) in the GPOs Users\Preference directory (blue1 references would be changed for different domain)
 Write-host "[Creating Drives folder]"
-$DriveFolder = mkdir $GpoPath + "\User\Drives"
+$DriveFolder = mkdir "$GpoPath\User\Drives"
 $DriveFolder | Set-Acl -AclObject $empty
 Write-host "Creating Drives.xml"
-$DriveXml = new-item $GpoPath + "\User\Drives\Drives.xml"
+$DriveXml = new-item "$GpoPath\User\Drives\Drives.xml"
 $DriveXml | Set-Acl -AclObject $empty
 $BasicString = @'
 <?xml version="1.0" encoding="utf-8"?>
@@ -55,7 +55,7 @@ $BasicString = @'
 '@
 
 Write-host "[Setting Drives.xml basic structure]"
-Write-host $BasicString > $GpoPath + "\User\Drives\Drives.xml"
+Write-host $BasicString > "$GpoPath\User\Drives\Drives.xml"
 
 
 # Create a hashtable of the desired groups and their ssid's (https://stackoverflow.com/questions/3740128/pscustomobject-to-hashtable)
@@ -81,10 +81,10 @@ $adgroups | Foreach-Object {
 
 #https://stackoverflow.com/questions/31957901/add-content-append-to-specific-line
 Write-host "[Setting the xml file to the new entires!]"
-$FileContent = Get-Content -Path $GpoPath + "\User\Drives\Drives.xml"
+$FileContent = Get-Content -Path "$GpoPath\User\Drives\Drives.xml"
 $FileContent[-1] = "{0}`r`n{1}" -f $fileContent[-1],$test_out
 
-$FileContent | Set-Content $GpoPath + "\User\Drives\Drives.xml"
+$FileContent | Set-Content "$GpoPath\User\Drives\Drives.xml"
 
 # # For every group in the GroupDrives
 # foreach ($group in $GroupDrives){
