@@ -1,14 +1,15 @@
 # makes the groups mapped drives
 
 # Set gpo name (doubles as a funny counter for how many times I have tried this script :))
-$GpoName = "MappedDrives4"
+$GpoName = "MappedDrives5"
 # Create the GPO
 Write-host "[Creating $GpoName]"
 $gpo = New-GPO -Name $GpoName -Comment "GPO to create groups mapped drives"
 $gpo | new-gplink -target "OU=blue1,DC=blue1,DC=local"
 
 # Make the GPO path
-$gpouid = '{' + $gpo.Id.ToString().ToUpper() + '}'
+# $gpouid = '{' + $gpo.Id.ToString().ToUpper() + '}'
+$gpouid = '$gpo.Id.ToString().ToUpper()'
 $GpoPath = "\\blue1.local\SYSVOL\blue1.local\Policies\$gpouid"
 
 # Get a ACL object with right permissions and owner/group (blue1 references would be changed for different domain)
