@@ -1,4 +1,5 @@
-# makes the groups mapped drives - working - cleanup and test on a fresh enviro - MAY NEED TO RESTART WORKSTATION TO TAKE AFFECT
+# Special thank yous to (Martin Binder)[https://social.technet.microsoft.com/profile/martin%20binder/] as he is the reason this got done!
+# makes the groups mapped drives
 
 # Set gpo name (doubles as a funny counter for how many times I have tried this script :))
 $GpoName = "MappedDrives24"
