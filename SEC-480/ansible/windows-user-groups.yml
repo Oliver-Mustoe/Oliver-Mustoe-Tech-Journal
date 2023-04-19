@@ -36,11 +36,3 @@
     loop: "{{ usersandgroups.list }}"
     # use this to silence output
     # no_log: true
-    
-
-  # - debug:
-  #    msg: "{{ item.Password }}"
-  #   loop: "{{ usersandgroups.list }}"
-  
-  #get-aduser
-  #get-adgroupmember

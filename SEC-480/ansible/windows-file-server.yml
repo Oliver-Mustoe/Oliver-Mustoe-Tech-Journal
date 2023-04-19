@@ -1,4 +1,19 @@
 # run: ansible-playbook windows-file-server.yml --ask-pass -K -i inventories/windows-m10.yaml
+- name: create mapped drive GPO
+  hosts: domain_controller
+  become_method: runas
+  tasks:
+  - name: copy drive-maker.ps1 file
+    ansible.windows.win_copy:
+      src: files/windows/drive-maker.ps1
+      dest: .\
+
+  - name: running ps1 file to create drives
+    ansible.windows.win_shell: .\drive-maker.ps1
+    register: mappeddrives
+  - debug:
+      var: mappeddrives.stdout_lines
+
 - name: create file server
   hosts: file_server
   vars_prompt:
@@ -17,7 +32,7 @@
     community.general.read_csv:
       path: "{{ group_csv_path }}"
     register: windows_groups
-    delegate_to: localhost # delegated since this should be done locally
+    delegate_to: localhost  # delegated since this should be done locally
   # - debug:
   #    var: windows_groups.list
 
@@ -58,23 +73,6 @@
       path: "C:\\Shares\\{{ item.Group }}"
       state: directory
     loop: "{{ windows_groups.list }}"
-  
-  # - name: set users rights on the folder
-  #   ansible.windows.win_acl:
-  #     user: "{{ item.Group }}"
-  #     type: allow
-  #     path: "C:\\Shares\\{{ item.Group }}"
-  #     rights: Read,Write
-  #   loop: "{{ windows_groups.list }}"
-
-  # - name: make the "Shares" folder a share
-  #   ansible.windows.win_share:
-  #     name: "Shares"
-  #     description: "Shares for users groups"
-  #     path: C:\\Shares
-  #     # change: "{{ item.Group }}" # may be full
-  #     state: present
-  #   # loop: "{{ usersandgroups.list }}"
 
   - name: add the created folders as shares for each group
     ansible.windows.win_share:
@@ -84,9 +82,3 @@
       change: "{{ item.Group }},Domain Admins"  # may be full, NO SPACES FOR MULTIPLE GROUPS
       state: present
     loop: "{{ windows_groups.list }}"
-
-  # - name: add gpo to map drives per group
-  # current thoughts for this are either:
-  # A: a group policy template created with the correct settings (maybe this https://rakhesh.com/windows/export-and-import-group-policy-objects-gpos/)
-  # B: Registry stuff
-  # still researching for a better way, but I don't know if their really is :(
