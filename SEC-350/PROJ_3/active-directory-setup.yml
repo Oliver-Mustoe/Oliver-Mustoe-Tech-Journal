@@ -1,0 +1,79 @@
+# run with: ansible-playbook -i inventories/windows.yaml active-directory-setup.yml --ask-pass -K
+# need to run "install-windows-setup.sh" before above, CHANGE THE HOSTS TO A DIFFERENT HOST DEPENDING ON THE INVENTORY
+- name: create ad
+  hosts: domain_controller
+  vars_prompt:
+    - name: safemodepassword
+      prompt: Please enter your new safemode password
+      private: true
+
+    - name: adminpassword
+      prompt: Please enter your admin password
+      private: true
+
+  tasks:
+  
+  - name: reset administrator password
+    ansible.windows.win_user:
+      name: Administrator
+      password: "{{ adminpassword }}"
+      state: present
+  
+  - name: set hostname to "{{ hostname }}"
+    ansible.windows.win_hostname:
+      name: "{{ hostname }}"
+    register: hostnamereboot
+
+# reboot needed here since trying to install the domain before rebooting with the new hostname will encounter errors!
+  - name: reboot to set hostname
+    ansible.windows.win_reboot:
+    when: hostnamereboot.reboot_required
+  
+  - name: install ad feature
+    ansible.windows.win_feature:
+      name: AD-Domain-Services
+      state: present
+      include_management_tools: yes
+    register: adinstall
+  - debug:
+      var: adinstall.exitcode
+
+# can check below with 'wmic.exe ComputerSystem get DomainRole' https://dirteam.com/sander/2009/09/23/how-to-tell-whether-it-s-a-server-core-domain-controller/
+  - name: create domain 
+    ansible.windows.win_domain:
+      dns_domain_name: sec.local
+      safe_mode_password: "{{ safemodepassword }}"
+      install_dns: true
+    register: domain_install
+  - debug:
+      var: domain_install.reboot_required
+
+  - name: reboot to set domain
+    ansible.windows.win_reboot:
+    when: domain_install.reboot_required
+
+  - name: elevate deployer user
+    community.windows.win_domain_user:
+      name: deployer
+      state: present
+      groups_action: add
+      groups:
+        - Domain Admins
+        - Enterprise Admins
+    
+  # OU structure
+  # - name: copy ps1 file
+  #   ansible.windows.win_copy:
+  #     src: files/windows/ou-creation.ps1
+  #     dest: .\
+
+  # - name: copy txt file containing OUs
+  #   ansible.windows.win_copy:
+  #     src: files/windows/ou.txt
+  #     dest: .\
+
+  # - name: running ps1 file to create OUs
+  #   ansible.windows.win_shell: .\ou-creation.ps1
+  #   register: ou
+  # - debug:
+  #     var: ou.stdout_lines

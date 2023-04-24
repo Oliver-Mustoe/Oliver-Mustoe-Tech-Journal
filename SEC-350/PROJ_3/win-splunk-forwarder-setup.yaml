@@ -1,0 +1,53 @@
+# Script to install a splunk forwarder on a windows system (C:\\Program Files\\SplunkUniversalForwarder)
+# Run: ansible-playbook -i inventories/splunk-inventory.yaml splunk-forwarder-setup.yaml
+
+- name: splunk forwarder config
+  hosts: windows  # eventually just make this all windows hosts
+  vars:
+    ansible_user: deployer@sec.local
+  vars_prompt:
+    - name: splunk_admin_password
+      prompt: Please enter your new splunk admin password
+      private: true
+
+  tasks:
+  - name: copy over msi file
+    ansible.windows.win_copy:
+      src: "files/splunk/{{ splunk_forwarder_msi }}"
+      dest: "Downloads\\{{ splunk_forwarder_msi }}"
+
+  - name: install msi file
+    ansible.windows.win_shell: msiexec.exe /i splunkforwarder-9.0.4-de405f4a7979-x64-release.msi LAUNCHSPLUNK=0 SERVICESTARTTYPE=auto AGREETOLICENSE=yes /quiet
+    register: msiout
+    args:
+      chdir: Downloads
+  - debug:
+      var: msiout.stdout
+  
+  - name: copy over user-seed.conf
+    ansible.windows.win_template:
+      src: files/splunk/user-seed.j2
+      dest: "C:\\Program Files\\SplunkUniversalForwarder\\etc\\system\\local\\user-seed.conf"
+
+  - name: copy over the windows add-on
+    ansible.windows.win_copy:
+      src: files/splunk/Splunk_TA_windows
+      dest: "C:\\Program Files\\SplunkUniversalForwarder\\etc\\apps\\"
+  
+  - name: create necessary local folder
+    ansible.windows.win_file:
+      path: "C:\\Program Files\\SplunkUniversalForwarder\\etc\\apps\\Splunk_TA_windows\\local"
+      state: directory
+
+  - name: template over the inputs.conf
+    ansible.windows.win_template:
+      src: files/splunk/win_inputs.conf.j2
+      dest: "C:\\Program Files\\SplunkUniversalForwarder\\etc\\apps\\Splunk_TA_windows\\local\\inputs.conf"
+  
+  - name: template over the outputs.conf
+    ansible.windows.win_template:
+      src: files/splunk/forwarder_configs/forwarder_outputs.conf.j2
+      dest: "C:\\Program Files\\SplunkUniversalForwarder\\etc\\system\\local\\outputs.conf"
+  
+  - name: reboot system
+    ansible.windows.win_reboot:
