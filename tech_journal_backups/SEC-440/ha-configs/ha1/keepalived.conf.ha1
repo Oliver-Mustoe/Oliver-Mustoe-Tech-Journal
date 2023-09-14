@@ -1,0 +1,14 @@
+vrrp_instance ha {
+	state MASTER
+	interface ens160
+	virtual_router_id 30
+	priority 200
+	advert_int 1
+	authentication {
+		auth_type PASS
+		auth_pass oliver
+	}
+	virtual_ipaddress {
+	  10.0.6.10/24
+	}
+}
