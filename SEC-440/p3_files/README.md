@@ -9,10 +9,10 @@ On xubuntulan I downloaded my git repository and scp'd the needed files to web02
 ```
 sudo apt install git -y
 git clone https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal.git
-cp Oliver-Mustoe-Tech-Journal/SEC-440/p3_files olivermustoe@10.0.5.101:
+scp -r Oliver-Mustoe-Tech-Journal/SEC-440/p3_files olivermustoe@10.0.5.101:
 ```
 
-On web01/02 I added the following to end of`/etc/httpd/conf/httpd.conf`:
+On web01/02 I added the following to end of `/etc/httpd/conf/httpd.conf`:
 ```
 IncludeOptional sites-enabled/*.conf
 LoadModule wsgi_module "/var/www/p3_webapp/env/lib64/python3.6/site-packages/mod_wsgi/server/mod_wsgi-py36.cpython-36m-x86_64-linux-gnu.so"
@@ -22,19 +22,19 @@ WSGIPythonHome "/var/www/p3_webapp/env"
 On web01/02 I created a python virtual environment and installed the necessary requirements (all steps need to be done as root as /var/www is managed by root):
 ```
 sudo -i
-yum install httpd-devel python3 policycoreutils-python -y
-cp /home/olivermustoe/p3_files/p3_webapp /var/www/
+yum install httpd-devel python3 python3-devel policycoreutils-python gcc -y
+cp -r --context=system_u:object_r:httpd_sys_content_t:s0 /home/olivermustoe/p3_files/p3_webapp /var/www/
 python3 -m venv /var/www/p3_webapp/env
 source /var/www/p3_webapp/env/bin/activate
-pip install /var/www/p3_webapp/requirements.txt
+pip install -r /var/www/p3_webapp/requirements.txt
 mkdir -p /etc/httpd/sites-available /etc/httpd/sites-enabled
-cp p3_webapp/p3_webapp.conf /etc/httpd/sites-available/p3_webapp.conf
+cp /home/olivermustoe/p3_files/p3_webapp.conf /etc/httpd/sites-available/p3_webapp.conf
 ln -s /etc/httpd/sites-available/p3_webapp.conf /etc/httpd/sites-enabled/p3_webapp.conf
 # setup selinux settings for the installed webapp
-semanage fcontext -a -t httpd_sys_content_t -s system_u "/var/www/p3_webapp(/.*)?"
-semanage fcontext -a -t httpd_sys_script_exec_t /var/www/p3_webapp/env/lib64/python3.6/site-packages/mod_wsgi/server/mod_wsgi-py36.cpython-36m-x86_64-linux-gnu.so
+semanage fcontext -a -t httpd_sys_script_exec_t -s system_u "/var/www/p3_webapp(/.*)?"
+restorecon -vRF /var/www/p3_webapp
 setsebool -P httpd_can_network_connect_db on
-reboot now
+systemctl restart httpd
 ```
 
 
