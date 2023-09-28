@@ -45,7 +45,8 @@ def login():
             session['id'] = account[0]
             session['username'] = account[1]
             # Redirect to home page
-            return f"Logged in {account[0]}:'{username}' successfully!"
+            # return f"Logged in {account[0]}:'{username}' successfully!"
+            msg = f"Logged in {account[0]}:'{username}' successfully!"
         else:
             # Account doesnt exist or username/password incorrect
             msg = 'Incorrect username/password!'
