@@ -12,6 +12,13 @@ git clone https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal.git
 cp Oliver-Mustoe-Tech-Journal/SEC-440/p3_files olivermustoe@10.0.5.101:
 ```
 
+On web01/02 I added the following to end of`/etc/httpd/conf/httpd.conf`:
+```
+IncludeOptional sites-enabled/*.conf
+LoadModule wsgi_module "/var/www/p3_webapp/env/lib64/python3.6/site-packages/mod_wsgi/server/mod_wsgi-py36.cpython-36m-x86_64-linux-gnu.so"
+WSGIPythonHome "/var/www/p3_webapp/env"
+```
+
 On web01/02 I created a python virtual environment and installed the necessary requirements (all steps need to be done as root as /var/www is managed by root):
 ```
 sudo -i
