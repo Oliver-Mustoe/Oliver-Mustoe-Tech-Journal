@@ -31,8 +31,9 @@ mkdir -p /etc/httpd/sites-available /etc/httpd/sites-enabled
 cp /home/olivermustoe/p3_files/p3_webapp.conf /etc/httpd/sites-available/p3_webapp.conf
 ln -s /etc/httpd/sites-available/p3_webapp.conf /etc/httpd/sites-enabled/p3_webapp.conf
 # setup selinux settings for the installed webapp
-semanage fcontext -a -t httpd_sys_script_exec_t -s system_u "/var/www/p3_webapp(/.*)?"
 restorecon -vRF /var/www/p3_webapp
+chcon -R -h -t httpd_sys_script_exec_t /var/www/p3_webapp/env/lib64/python3.6/site-packages/mod_wsgi/server/mod_wsgi-py36.cpython-36m-x86_64-linux-gnu.so
+semanage fcontext -a -t httpd_sys_script_exec_t /var/www/p3_webapp/env/lib64/python3.6/site-packages/mod_wsgi/server/mod_wsgi-py36.cpython-36m-x86_64-linux-gnu.so
 setsebool -P httpd_can_network_connect_db on
 systemctl restart httpd
 ```
