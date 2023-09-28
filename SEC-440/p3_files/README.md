@@ -37,5 +37,8 @@ setsebool -P httpd_can_network_connect_db on
 systemctl restart httpd
 ```
 
+And inside "app.py" set the correct DB and salt information:
+![image](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/assets/71083461/cf381c74-1619-410b-9cf2-742b3a9143e4)
+
 
 Big credit to https://codeshack.io/login-system-python-flask-mysql/ as they provided a lot of code that I used!!!
