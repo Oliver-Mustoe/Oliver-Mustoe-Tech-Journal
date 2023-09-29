@@ -37,13 +37,14 @@ semanage fcontext -a -t httpd_sys_script_exec_t /var/www/p3_webapp/env/lib64/pyt
 setsebool -P httpd_can_network_connect_db on
 ```
 
-Then update the `/home/olivermustoe/p3_files/p3_webapp.conf` with the IP of the system (either web01 or 02):
+Then update the `/home/olivermustoe/p3_files/p3_webapp.conf` with the IP of the system (either web01 or 02) next to the `ServerName` directive:
+![image](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/assets/71083461/e64dc62b-9a09-4dea-990c-3a1bf0b5111e)
 
-systemctl restart httpd
-```
-
-And inside "app.py" set the correct DB and salt information:  
+And inside `/var/www/p3_webapp/app.py` set the correct DB and salt information:  
 ![image](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/assets/71083461/cf381c74-1619-410b-9cf2-742b3a9143e4)
 
-
+Finally restart httpd
+```
+systemctl restart httpd
+```
 Big credit to https://codeshack.io/login-system-python-flask-mysql/ as they provided a lot of code that I used!!!
