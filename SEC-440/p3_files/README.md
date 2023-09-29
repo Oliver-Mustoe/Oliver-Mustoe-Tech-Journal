@@ -35,6 +35,10 @@ restorecon -vRF /var/www/p3_webapp
 chcon -R -h -t httpd_sys_script_exec_t /var/www/p3_webapp/env/lib64/python3.6/site-packages/mod_wsgi/server/mod_wsgi-py36.cpython-36m-x86_64-linux-gnu.so
 semanage fcontext -a -t httpd_sys_script_exec_t /var/www/p3_webapp/env/lib64/python3.6/site-packages/mod_wsgi/server/mod_wsgi-py36.cpython-36m-x86_64-linux-gnu.so
 setsebool -P httpd_can_network_connect_db on
+```
+
+Then update the `/home/olivermustoe/p3_files/p3_webapp.conf` with the IP of the system (either web01 or 02):
+
 systemctl restart httpd
 ```
 
