@@ -56,6 +56,7 @@ def login():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     msg = ''
+    host = gethostname()
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
         # Create variables for easy access
         username = request.form['username']
@@ -84,7 +85,7 @@ def register():
             msg = 'Successfully registered!' 
     elif request.method == 'POST':
         msg = "Missing data from the forum: please fill it out!"
-    return render_template('register.html', msg=msg)
+    return render_template('register.html', msg=msg, host=host)
 """
 Credits:
 https://codeshack.io/login-system-python-flask-mysql/
