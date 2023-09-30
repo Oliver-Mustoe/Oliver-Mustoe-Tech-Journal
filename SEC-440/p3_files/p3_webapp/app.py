@@ -61,12 +61,15 @@ def register():
         # Create variables for easy access
         username = request.form['username']
         password = request.form['password']
-
+        # Get the password hash
+        password_hash = password+app.secret_key
+        password_hashed = hashlib.sha3_512(password_hash.encode())
+        final_password = password_hashed.hexdigest()
         # Intialize MySQL
         db_connection = database.connect(**db_config)
         # Connect to database, see if account name already exists
         cursor = db_connection.cursor()
-        cursor.execute("SELECT username FROM users WHERE username = %(user)s AND password = %(pass)s", {'user': username, 'pass': password})
+        cursor.execute("SELECT username FROM users WHERE username = %(user)s AND password = %(pass)s", {'user': username, 'pass': final_password})
         account = cursor.fetchone()
 
         if account:
