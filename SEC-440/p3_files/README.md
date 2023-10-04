@@ -47,12 +47,13 @@ Finally restart httpd
 ```bash
 systemctl restart httpd
 ```
-Big credit to https://codeshack.io/login-system-python-flask-mysql/ as they provided a lot of code that I used!!!
 
 Should be able to connect to WAN address and see the following (may be different web connecting to!):
 
-![Uploading image.png…]()
+![image](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/assets/71083461/6a37fc3e-466a-4a2b-9174-a5b9e80ce89f)
 
+
+Big credit to https://codeshack.io/login-system-python-flask-mysql/ as they provided a lot of code that I used!!!
 # All sources used
 - https://testdriven.io/blog/flask-sessions/
 - https://computingforgeeks.com/install-python-3-on-centos-rhel-7/?expand_article=1
