@@ -1,5 +1,5 @@
 # Installation
-On db01 I created the needed database (would be replicated on db02 and 03):
+On db01 I created the needed database (galera would automatically replicate it on db02 and 03):
 ```bash
 wget https://raw.githubusercontent.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/main/SEC-440/p3_files/database.sql 
 mysql -u olivermustoe -p < database.sql
