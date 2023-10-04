@@ -48,7 +48,7 @@ Finally restart httpd
 systemctl restart httpd
 ```
 
-Should be able to connect to WAN address and see the following (may be different web connecting to!):
+Should be able to connect to WAN address at `/p3` and see the following (may be different web connecting to!):
 
 ![image](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/assets/71083461/6a37fc3e-466a-4a2b-9174-a5b9e80ce89f)
 
