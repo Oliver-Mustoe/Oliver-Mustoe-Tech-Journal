@@ -1,7 +1,5 @@
-import getpass, ssl, json
+import getpass, ssl, json, pyVmomi
 from pyVim.connect import SmartConnect
-from os.path import realpath,dirname
-import pyVmomi
 
 __author__ = "Oliver Mustoe"
 
