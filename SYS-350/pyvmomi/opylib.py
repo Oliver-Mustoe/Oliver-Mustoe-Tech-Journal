@@ -20,7 +20,9 @@ def ConnectToVcenter(path=str):
     return si
 
 def SearchVcenter(si, vim_type, name, container=None, recursive=True, error=True):
-    # Heavily inspired by https://github.com/vmware/pyvmomi-community-samples/blob/7020598713aa440c70816edae89f96a0fe742be8/samples/tools/pchelper.py#L103
+    # Modified version of https://github.com/vmware/pyvmomi-community-samples/blob/7020598713aa440c70816edae89f96a0fe742be8/samples/tools/pchelper.py#L103
+    # Returns a singular vim.Virtualmachine object
+
     # Get a content view of vCenter
     content = si.RetrieveContent()
 
@@ -32,7 +34,10 @@ def SearchVcenter(si, vim_type, name, container=None, recursive=True, error=True
     containerview = content.viewManager.CreateContainerView(container, vim_type, recursive)
 
     # Go through this new container view and check each object reference to see if it matchs the name specified - if it does set the "obj" variable to that
-    obj = [managed_obj_ref for managed_obj_ref in containerview.view if managed_obj_ref.name == name]
+    for managed_obj_ref in containerview.view:
+        if managed_obj_ref.name == name:
+            obj = managed_obj_ref
+            break
 
     # destroy the container view
     container.Destroy()
@@ -44,7 +49,9 @@ def SearchVcenter(si, vim_type, name, container=None, recursive=True, error=True
 
 
 def SearchVcenterWithPattern(si, vim_type, name, container=None, recursive=True, error=True):
-    # Heavily inspired by https://github.com/vmware/pyvmomi-community-samples/blob/7020598713aa440c70816edae89f96a0fe742be8/samples/tools/pchelper.py#L103
+    # Modified version of https://github.com/vmware/pyvmomi-community-samples/blob/7020598713aa440c70816edae89f96a0fe742be8/samples/tools/pchelper.py#L103
+    # Returns a list of vms matching a certain pattern
+
     # Get a content view of vCenter
     content = si.RetrieveContent()
 
