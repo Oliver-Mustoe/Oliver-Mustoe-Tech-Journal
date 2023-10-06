@@ -1,4 +1,5 @@
 {
     "username":"olivermustoe.adm",
-    "vcenter":"vcenter.oliver.local"
+    "vcenter":"vcenter.oliver.local",
+    "base_snapshot":"BASE"
 }
