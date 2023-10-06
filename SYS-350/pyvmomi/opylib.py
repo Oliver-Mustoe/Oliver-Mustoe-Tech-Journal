@@ -20,6 +20,15 @@ def ConnectToVcenter(path=str):
     si=SmartConnect(host=uservars["vcenter"], user=uservars["username"], pwd=passw, sslContext=s)
     return si
 
+# def wait(task):
+#     check = False
+#     while not check:
+#         if task.info.state == 'success':
+#             result = True
+#         elif task.info.state == 'error':
+#             print(task.info.error)
+#             check=True
+
 def SearchVcenter(si, vim_type, name, container=None, recursive=True, error=True):
     # Modified version of https://github.com/vmware/pyvmomi-community-samples/blob/7020598713aa440c70816edae89f96a0fe742be8/samples/tools/pchelper.py#L103
     # Returns a singular vim.Virtualmachine object
@@ -97,10 +106,10 @@ def AllVcenter(si, vim_type, container=None, recursive=True, error=True):
 
     # Check if the name was found, if not raise an error
     if not obj and error is True:
-        raise RuntimeError(f"{name} not found!")
+        raise RuntimeError(f"not found!")
     return obj
 
-def CreateClone(si,vmtemplatename,vmname,datacentername,vmfolder,datastorename,poweron,esxiname,resourcepool="",linkedclone=False):
+def CreateClone(si,vmtemplatename,vmname,datacentername,datastorename,poweron,esxiname,vmfolder="",resourcepool="",linkedclone=False):
     # Modified version of https://github.com/vmware/pyvmomi-community-samples/blob/7020598713aa440c70816edae89f96a0fe742be8/samples/clone_vm.py#L28    
     # Get the datastore
     datacenter = SearchVcenter(si,[vim.Datacenter],datacentername)
@@ -147,17 +156,120 @@ def CreateClone(si,vmtemplatename,vmname,datacentername,vmfolder,datastorename,p
         clonespec.template = False
         clonespec.snapshot = vmtemplate.snapshot.rootSnapshotList[0].snapshot
     
-    task = vmtemplate.Clone(folder=destinationfolder, name=vmname, spec=clonespec, powerOn=poweron)
+    task = vmtemplate.Clone(folder=destinationfolder, name=vmname, spec=clonespec)
 
     # Check loop to see if error :( or success :)
     check = False
     while not check:
         if task.info.state == 'success':
-            return task.info.result
+            print(f"created {vmname}")
+            check=True
         elif task.info.state == 'error':
             print(task.info.error)
             check=True
 
+def DeleteVM(si,vmlist=list):
+    # Modified version of https://github.com/vmware/pyvmomi-community-samples/blob/master/samples/destroy_vm.py
+    for vmtodelete in vmlist:
+        vm = SearchVcenter(si,[vim.VirtualMachine],vmtodelete)
+        PowerOff(si,vm)
 
-#def DeleteClone():
-#    
+        task = vm.Destroy_Task()
+        # Check loop to see if error :( or success :)
+        check = False
+        while not check:
+            if task.info.state == 'success':
+                print(f"destroyed {vmtodelete}")
+                check = True
+            elif task.info.state == 'error':
+                print(task.info.error)
+                check=True
+
+def PowerOn(si,vmon):
+    # Adapted from https://github.com/vmware/pyvmomi-community-samples/blob/master/samples/destroy_vm.py
+    if not isinstance(vmon,vim.VirtualMachine):
+        vm = SearchVcenter(si,[vim.VirtualMachine],vmon)
+    else:
+        vm = vmon
+
+    if vm.runtime.powerState == "poweredOff":
+        print(f"powering on {vm.name}")
+        task = vm.PowerOnVM_Task()
+
+        # Check loop to see if error :( or success :)
+        check = False
+        while not check:
+            if task.info.state == 'success':
+                print(f"powered on {vm.name}")
+                check = True
+            elif task.info.state == 'error':
+                print(task.info.error)
+                check=True
+
+def PowerOff(si,vmoff):
+    # Adapted from https://github.com/vmware/pyvmomi-community-samples/blob/master/samples/destroy_vm.py
+    if not isinstance(vmoff,vim.VirtualMachine):
+        vm = SearchVcenter(si,[vim.VirtualMachine],vmoff)
+    else:
+        vm = vmoff
+
+    if vm.runtime.powerState == "poweredOn":
+        print(f"powering off {vm.name}")
+        task = vm.PowerOffVM_Task()
+
+        # Check loop to see if error :( or success :)
+        check = False
+        while not check:
+            if task.info.state == 'success':
+                print(f"powered off {vm.name}")
+                check = True
+            elif task.info.state == 'error':
+                print(task.info.error)
+                check=True
+
+def CreateVMFolder(si,foldername,datacentername,parentfoldername=""):
+    datacenter = SearchVcenter(si,[vim.Datacenter],datacentername)
+    foldercheck = SearchVcenter(si,[vim.Folder],foldername,error=False)
+
+    if foldercheck:
+        print(f"{foldername} already exists!")
+    else:
+        print(f"making {foldername}")
+        try:
+            task = datacenter.vmFolder.CreateFolder(foldername)
+            print(f"made {foldername}")
+        except Exception as E:
+            print(E)
+
+# def wait(task):
+#     check = True
+
+#     while check:
+#         if task.info.state == 'success':
+#             return True
+#         elif task.info.state == 'error':
+#             print('Error has occured')
+#             print(task.info.error)
+#             check = False
+
+def DeleteVMFolder(si,foldername,datacentername):
+    datacenter = SearchVcenter(si,[vim.Datacenter],datacentername)
+    foldercheck = SearchVcenter(si,[vim.Folder],foldername,error=False)
+
+    if foldercheck:
+            print(f"destroying {foldername}")
+            try:
+                task = foldercheck.Destroy_Task()
+                # Check loop to see if error :( or success :)
+                check = False
+                while not check:
+                    if task.info.state == 'success':
+                        print(f"destroyed {foldername} and its contents")
+                        check = True
+                    elif task.info.state == 'error':
+                        print(task.info.error)
+                        check=True
+            except Exception as E:
+                print(E)
+    else:
+        print(f"{foldername} does not exist")
