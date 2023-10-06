@@ -1,5 +1,5 @@
 # Installation
-On db01 I created the needed database (would be replicated on db02 and 03):
+On db01 I created the needed database (galera would automatically replicate it on db02 and 03):
 ```bash
 wget https://raw.githubusercontent.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/main/SEC-440/p3_files/database.sql 
 mysql -u olivermustoe -p < database.sql
@@ -37,18 +37,23 @@ semanage fcontext -a -t httpd_sys_script_exec_t /var/www/p3_webapp/env/lib64/pyt
 setsebool -P httpd_can_network_connect_db on
 ```
 
-Then update the `/etc/httpd/sites-available/p3_webapp.conf` with the IP of the system (either web01 or 02 depending on the system) next to the `ServerName` directive:  
+Then update the `/etc/httpd/sites-available/p3_webapp.conf` with the IP of the system (either web01 or 02 depending on the system) next to the `ServerName` directive (web01/02):  
 ![image](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/assets/71083461/e64dc62b-9a09-4dea-990c-3a1bf0b5111e)
 
-And inside `/var/www/p3_webapp/app.py` set the correct DB and salt information:  
+And inside `/var/www/p3_webapp/app.py` set the correct DB and salt information (web01/02):  
 ![image](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/assets/71083461/cf381c74-1619-410b-9cf2-742b3a9143e4)
 
-Finally restart httpd
+Finally restart httpd (web01/02)
 ```bash
 systemctl restart httpd
 ```
-Big credit to https://codeshack.io/login-system-python-flask-mysql/ as they provided a lot of code that I used!!!
 
+Should be able to connect to WAN address at `/p3` and see the following (may be different web connecting to!):
+
+![image](https://github.com/Oliver-Mustoe/Oliver-Mustoe-Tech-Journal/assets/71083461/6a37fc3e-466a-4a2b-9174-a5b9e80ce89f)
+
+
+Big credit to https://codeshack.io/login-system-python-flask-mysql/ as they provided a lot of code that I used!!!
 # All sources used
 - https://testdriven.io/blog/flask-sessions/
 - https://computingforgeeks.com/install-python-3-on-centos-rhel-7/?expand_article=1
