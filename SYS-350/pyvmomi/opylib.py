@@ -1,8 +1,9 @@
 import getpass, ssl, json, pyVmomi
 from pyVmomi import vim
 from pyVim.connect import SmartConnect
+from datetime import datetime
 
-__author__ = "Oliver Mustoe"
+__author__ = "Oliver Mustoe | SYS-350"
 
 def ConnectToVcenter(path=str):
     # Grab a password
@@ -19,15 +20,6 @@ def ConnectToVcenter(path=str):
     # Connect to vCenter and return a connection object
     si=SmartConnect(host=uservars["vcenter"], user=uservars["username"], pwd=passw, sslContext=s)
     return si
-
-# def wait(task):
-#     check = False
-#     while not check:
-#         if task.info.state == 'success':
-#             result = True
-#         elif task.info.state == 'error':
-#             print(task.info.error)
-#             check=True
 
 def SearchVcenter(si, vim_type, name, container=None, recursive=True, error=True):
     # Modified version of https://github.com/vmware/pyvmomi-community-samples/blob/7020598713aa440c70816edae89f96a0fe742be8/samples/tools/pchelper.py#L103
@@ -154,27 +146,32 @@ def CreateClone(si,vmtemplatename,vmname,datacentername,datastorename,poweron,es
     while not check:
         if task.info.state == 'success':
             print(f"created {vmname}")
-            check=True
+            return task.info.result
         elif task.info.state == 'error':
             print(task.info.error)
             check=True
 
-def DeleteVM(si,vmlist=list):
+def DeleteVM(si,vmtodelete=str,parentfoldername=''):
     # Modified version of https://github.com/vmware/pyvmomi-community-samples/blob/master/samples/destroy_vm.py
-    for vmtodelete in vmlist:
+    if parentfoldername:
+        parentfolder = SearchVcenter(si,[vim.Folder],parentfoldername)
+        vm = SearchVcenter(si,[vim.VirtualMachine],vmtodelete,container=parentfolder)
+    else:
         vm = SearchVcenter(si,[vim.VirtualMachine],vmtodelete)
-        PowerOff(si,vm)
 
-        task = vm.Destroy_Task()
-        # Check loop to see if error :( or success :)
-        check = False
-        while not check:
-            if task.info.state == 'success':
-                print(f"destroyed {vmtodelete}")
-                check = True
-            elif task.info.state == 'error':
-                print(task.info.error)
-                check=True
+    # vm = SearchVcenter(si,[vim.VirtualMachine],vmtodelete)
+    PowerOff(si,vm)
+
+    task = vm.Destroy_Task()
+    # Check loop to see if error :( or success :)
+    check = False
+    while not check:
+        if task.info.state == 'success':
+            print(f"destroyed {vmtodelete}")
+            check = True
+        elif task.info.state == 'error':
+            print(task.info.error)
+            check=True
 
 def PowerOn(si,vmon):
     # Adapted from https://github.com/vmware/pyvmomi-community-samples/blob/master/samples/destroy_vm.py
@@ -196,6 +193,8 @@ def PowerOn(si,vmon):
             elif task.info.state == 'error':
                 print(task.info.error)
                 check=True
+
+__author__ = "Oliver Mustoe"
 
 def PowerOff(si,vmoff):
     # Adapted from https://github.com/vmware/pyvmomi-community-samples/blob/master/samples/destroy_vm.py
@@ -228,30 +227,22 @@ def CreateVMFolder(si,foldername,datacentername,parentfoldername=""):
         parentfolder = datacenter.vmFolder
         foldercheck = SearchVcenter(si,[vim.Folder],foldername,error=False)
 
-    if foldercheck:
-        print(f"{foldername} already exists!")
-    else:
-        print(f"making {foldername}")
-        try:
-            task = parentfolder.CreateFolder(foldername)
-            print(f"made {foldername}")
-        except Exception as E:
-            print(E)
+    print(f"making {foldername}")
+    try:
+        task = parentfolder.CreateFolder(foldername)
+        print(f"made {foldername}")
+    except Exception as E:
+        print(E)
 
-# def wait(task):
-#     check = True
-
-#     while check:
-#         if task.info.state == 'success':
-#             return True
-#         elif task.info.state == 'error':
-#             print('Error has occured')
-#             print(task.info.error)
-#             check = False
-
-def DeleteVMFolder(si,foldername,datacentername):
+def DeleteVMFolder(si,foldername,datacentername,parentfoldername="",prompt=True):
     datacenter = SearchVcenter(si,[vim.Datacenter],datacentername)
-    foldercheck = SearchVcenter(si,[vim.Folder],foldername,error=False)
+    #foldercheck = SearchVcenter(si,[vim.Folder],foldername,error=False)
+    if parentfoldername:
+        parentfolder = SearchVcenter(si,[vim.Folder],parentfoldername)
+        foldercheck = SearchVcenter(si,[vim.Folder],foldername,error=False,container=parentfolder)
+    else:
+        foldercheck = SearchVcenter(si,[vim.Folder],foldername,error=False)
+
 
     if foldercheck:
             print(f"destroying {foldername}")
@@ -270,3 +261,45 @@ def DeleteVMFolder(si,foldername,datacentername):
                 print(E)
     else:
         print(f"{foldername} does not exist")
+
+def TakeSnapshot(si,vm,description,snapshotname=str):
+    if not isinstance(vm,vim.VirtualMachine):
+        vm = SearchVcenter(si,[vim.VirtualMachine],vm)
+    else:
+        vm = vm
+    
+    if not description:
+        session=si.content.sessionManager.currentSession
+        time = datetime.now().strftime("%m/%d/%Y %H:%M:%S")
+        description = f"Taken by {session.userName} at {time}"
+    task = vm.CreateSnapshot_Task(snapshotname,description,False,True)
+    check = False
+    while not check:    
+        if task.info.state == 'success':
+            print(f"created snapshot '{snapshotname}' on {vm.name}")
+            check = True
+        elif task.info.state == 'error':
+            print(task.info.error)
+            check=True
+
+def RevertToSnapshot(si,vm,snapshotname):
+    if not isinstance(vm,vim.VirtualMachine):
+        vm = SearchVcenter(si,[vim.VirtualMachine],vm)
+    else:
+        vm = vm
+
+    snapshotlist = vm.snapshot.rootSnapshotList
+
+    for snapshot in snapshotlist:
+        if snapshot.name == snapshotname:
+            print (f"reverting {vm.name} to snapshot {snapshotname}")
+
+            task = snapshot.snapshot.RevertToSnapshot_Task()
+            check = False
+            while not check:    
+                if task.info.state == 'success':
+                    print(f"reverted {vm.name} to snapshot {snapshotname}")
+                    check = True
+                elif task.info.state == 'error':
+                    print(task.info.error)
+                    check=True
