@@ -29,7 +29,11 @@ si = opylib.ConnectToVcenter(scriptdirectory)
 # print(t2)
 # opylib.CreateClone(si,vmtemplatename="pf.base",vmname="otest1",vmfolder='nottie',datacentername="SYS350",poweron=False,datastorename="datastore2-super10",esxiname="super10.oliver.local",linkedclone=True)
 # opylib.CreateClone(si,vmtemplatename="pf.base",vmname="otest2",vmfolder='nottie',datacentername="SYS350",poweron=False,datastorename="datastore2-super10",esxiname="super10.oliver.local",linkedclone=True)
-opylib.CreateClone(si,vmtemplatename="pf.base",vmname="otest3",vmfolder='nottie',datacentername="SYS350",poweron=False,datastorename="datastore2-super10",esxiname="super10.oliver.local",linkedclone=False)
+opylib.CreateClone(si,vmtemplatename="pf.base",
+                   vmname="otest4",vmfolder='nottie',
+                   datacentername="SYS350",poweron=False,
+                   datastorename="datastore2-super10",esxiname="super10.oliver.local",
+                   linkedclone=False)
 #opylib.TakeSnapshot(si,'test3andfinal',"Base")
 # opylib.DeleteVM(si,vmtodelete='test3andfinal')
 
