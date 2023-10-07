@@ -1,7 +1,7 @@
 from os.path import realpath,dirname
 from pyVmomi import vim
 import opylib
-
+# TODO: Add some more functions
 # Get file path
 scriptdirectory = dirname(realpath(__file__))
 
@@ -17,6 +17,7 @@ si = opylib.ConnectToVcenter(scriptdirectory)
 #opylib.PowerOn(si,'xubuntu')
 
 #opylib.DeleteVM(si,vmlist=['xubuntu2'])
-#opylib.CreateVMFolder(si,"nottie","SYS350")
+# opylib.CreateVMFolder(si,"nottie","SYS350")
+# opylib.CreateVMFolder(si,foldername="fottie",datacentername="SYS350",parentfoldername="nottie")
 #opylib.CreateClone(si,vmtemplatename="pf.base",vmname="test3andfinal",vmfolder="nottie",datacentername="SYS350",poweron=False,datastorename="datastore2-super10",esxiname="super10.oliver.local",linkedclone=True)
-opylib.DeleteVMFolder(si,foldername="nottie",datacentername="SYS350")
+# opylib.DeleteVMFolder(si,foldername="TESTING",datacentername="SYS350")

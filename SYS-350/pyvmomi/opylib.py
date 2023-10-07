@@ -50,9 +50,6 @@ def SearchVcenter(si, vim_type, name, container=None, recursive=True, error=True
             obj = managed_obj_ref
             break
 
-    # destroy the container view
-    container.Destroy()
-
     # Check if the name was found, if not raise an error
     if not obj and error is True:
         raise RuntimeError(f"{name} not found!")
@@ -76,9 +73,6 @@ def SearchVcenterWithPattern(si, vim_type, name, container=None, recursive=True,
     # Go through this new container view and check if the name is in the object reference - if it does set the "obj" variable to that
     obj = [managed_obj_ref for managed_obj_ref in containerview.view if name in managed_obj_ref.name]
 
-    # destroy the container view
-    container.Destroy()
-
     # Check if the name was found, if not raise an error
     if not obj and error is True:
         raise RuntimeError(f"{name} not found!")
@@ -100,9 +94,6 @@ def AllVcenter(si, vim_type, container=None, recursive=True, error=True):
 
     # Go through this new container view and check if the name is in the object reference - if it does set the "obj" variable to that
     obj = [managed_obj_ref for managed_obj_ref in containerview.view]
-
-    # destroy the container view
-    container.Destroy()
 
     # Check if the name was found, if not raise an error
     if not obj and error is True:
@@ -228,15 +219,21 @@ def PowerOff(si,vmoff):
                 check=True
 
 def CreateVMFolder(si,foldername,datacentername,parentfoldername=""):
+    #Modified version of https://github.com/vmware/pyvmomi-community-samples/blob/master/samples/create_folder_in_datacenter.py
     datacenter = SearchVcenter(si,[vim.Datacenter],datacentername)
-    foldercheck = SearchVcenter(si,[vim.Folder],foldername,error=False)
+    if parentfoldername:
+        parentfolder = SearchVcenter(si,[vim.Folder],parentfoldername)
+        foldercheck = SearchVcenter(si,[vim.Folder],foldername,error=False,container=parentfolder)
+    else:
+        parentfolder = datacenter.vmFolder
+        foldercheck = SearchVcenter(si,[vim.Folder],foldername,error=False)
 
     if foldercheck:
         print(f"{foldername} already exists!")
     else:
         print(f"making {foldername}")
         try:
-            task = datacenter.vmFolder.CreateFolder(foldername)
+            task = parentfolder.CreateFolder(foldername)
             print(f"made {foldername}")
         except Exception as E:
             print(E)
