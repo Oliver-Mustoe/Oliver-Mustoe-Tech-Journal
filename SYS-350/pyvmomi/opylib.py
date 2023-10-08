@@ -139,6 +139,7 @@ def CreateClone(si,vmtemplatename,vmname,datacentername,datastorename,poweron,es
         clonespec.template = False
         clonespec.snapshot = vmtemplate.snapshot.rootSnapshotList[0].snapshot
     
+    print(f"creating {vmname}")
     task = vmtemplate.Clone(folder=destinationfolder, name=vmname, spec=clonespec)
 
     # Check loop to see if error :( or success :)
@@ -151,15 +152,29 @@ def CreateClone(si,vmtemplatename,vmname,datacentername,datastorename,poweron,es
             print(task.info.error)
             check=True
 
-def DeleteVM(si,vmtodelete=str,parentfoldername=''):
+def DeleteVM(si,vmtodelete,parentfoldername=''):
     # Modified version of https://github.com/vmware/pyvmomi-community-samples/blob/master/samples/destroy_vm.py
-    if parentfoldername:
-        parentfolder = SearchVcenter(si,[vim.Folder],parentfoldername)
-        vm = SearchVcenter(si,[vim.VirtualMachine],vmtodelete,container=parentfolder)
-    else:
-        vm = SearchVcenter(si,[vim.VirtualMachine],vmtodelete)
 
-    # vm = SearchVcenter(si,[vim.VirtualMachine],vmtodelete)
+    # Check to see if a parent folder is specified
+    if parentfoldername:
+        # Find the parent folder
+        parentfolder = SearchVcenter(si,[vim.Folder],parentfoldername)
+
+        # If the parent exists - then find the virtual machine inside that parent (must be a string since the search has to be done with the parent as the container - in future think about support for the seach string in "SearchVcenter" to support a object but just getting the name of it???)
+        if not isinstance(vmtodelete,vim.VirtualMachine):
+            vm = SearchVcenter(si,[vim.VirtualMachine],vmtodelete,container=parentfolder)
+        else:
+            print(f'To look within a parent folder the vmtodelete must be a string value, it is currently {type(vmtodelete)}')
+            return None 
+    else:
+        # If no parent then find the virtual machine or if it is already a VirtualMachine object continue
+        if not isinstance(vmtodelete,vim.VirtualMachine):
+            vm = SearchVcenter(si,[vim.VirtualMachine],vmtodelete)
+            vmdisplay = vmtodelete
+        else:
+            vm = vmtodelete
+            vmdisplay = vmtodelete.name
+
     PowerOff(si,vm)
 
     task = vm.Destroy_Task()
@@ -167,7 +182,7 @@ def DeleteVM(si,vmtodelete=str,parentfoldername=''):
     check = False
     while not check:
         if task.info.state == 'success':
-            print(f"destroyed {vmtodelete}")
+            print(f"destroyed {vmdisplay}")
             check = True
         elif task.info.state == 'error':
             print(task.info.error)

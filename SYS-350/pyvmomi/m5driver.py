@@ -16,23 +16,47 @@ def args():
     arg_parser.add_argument(
         "-ts","--takesnapshot",
         action='store_true',
-        help="Whether or not to take snapshots of VMs"
+        help="Whether or not to take snapshots of the searched VMs VMs (REQUIRES '-s')"
     )
 
     arg_parser.add_argument(
         "-rs","--restoresnapshot",
         action='store_true',
-        help="Whether or not to revert to a snapshot"
+        help="Whether or not to revert to a snapshot of the searched VMS (REQUIRES '-s')"
     )
 
     arg_parser.add_argument(
         "-sd","--snapshotdescription",
-        help="Description of the snapshot to take (REQUIRES '--ts')"
+        help="Description of the snapshot to take (REQUIRES '-ts')"
     )
 
     arg_parser.add_argument(
         "-sn","--snapshotname",
-        help="Name of the snapshot to take (REQUIRES '--ts' or '--rs')"
+        help="Name of the snapshot to take (REQUIRES '-ts' or '-rs')"
+    )
+
+    arg_parser.add_argument(
+        "-on","--poweron",
+        action='store_true',
+        help="Poweron virtual machines from seach (REQUIRES '-s')"
+    )
+
+    arg_parser.add_argument(
+        "-off","--poweroff",
+        action='store_true',
+        help="Poweroff virtual machines from seach (REQUIRES '-s')"
+    )
+
+    arg_parser.add_argument(
+        "-d","--deletevm",
+        action='store_true',
+        help="Delete virtual machines that match search (REQUIRES '-s')"
+    )
+
+    arg_parser.add_argument(
+        "-dc","--disabledeletecheck",
+        action='store_true',
+        help="Disable the delete check for virtual machines that match search (REQUIRES '-s')"
     )
 
     arg_parser.add_argument(
@@ -66,27 +90,40 @@ if __name__ == "__main__":
 
     si = opylib.ConnectToVcenter(scriptdirectory)
 
-    if args.takesnapshot and args.searchvms or args.restoresnapshot and args.searchvms:
+    # See if takesnapshot or restoresnapshot has happened with a search
+    if args.searchvms:
         # possible have vms for operations that support that (everything except vm creation and deletion) then only have a single search for those operations?
         vms = opylib.SearchVcenterWithPattern(si,[vim.VirtualMachine],args.searchvms)
 
+    # For each VM in the search, either take a snapshot or revert to a certain snapshot
         for vm in vms:
             if args.takesnapshot and not args.restoresnapshot:
                 opylib.TakeSnapshot(si,vm,args.snapshotdescription,args.snapshotname)
 
-            if args.restoresnapshot and not args.takesnapshot:
+            elif args.restoresnapshot and not args.takesnapshot:
                 opylib.RevertToSnapshot(si,vm,args.snapshotname)
+            
+            if args.poweron:
+                opylib.PowerOn(si,vm)
+            
+            if args.poweroff:
+                opylib.PowerOff(si,vm)
+            
+            if args.deletevm:
+                if not args.disabledeletecheck:
+                    print('-')
+                    print(vm.name)
+                    uinput = input("Do you want to delete the above VMs? [y/N]")
+                else:
+                    uinput = 'y'
+
+                if uinput.lower() == 'y':
+                    opylib.DeleteVM(si,vm)
+                else:
+                    continue
 
     elif args.clonevm:
-        print(args.clonevm)
-        # Since cloning only supports 1 vm - only search for exact matches
-        if args.clonevm['vmfolder']:
-            parentfolder = opylib.SearchVcenter(si,[vim.Folder],args.clonevm['vmfolder'])
-            vm = opylib.SearchVcenter(si,[vim.VirtualMachine],args.clonevm['vmname'],container=parentfolder,error=False)
-        else:
-            vm = opylib.SearchVcenter(si,[vim.VirtualMachine],args.clonevm['vmname'],error=False)
-
-        # If the search doesnt find anything, then make VM
+        # Make VM with JSON inputted actions
         opylib.CreateClone(si,
                         args.clonevm['vmtemplate'],
                         args.clonevm['vmname'],
