@@ -3,7 +3,7 @@ from pyVmomi import vim
 from pyVim.connect import SmartConnect
 from datetime import datetime
 
-__author__ = "Oliver Mustoe | SYS-350"
+__author__ = "OM | SYS-350"
 
 def ConnectToVcenter(path=str):
     # Grab a password
@@ -20,6 +20,7 @@ def ConnectToVcenter(path=str):
     # Connect to vCenter and return a connection object
     si=SmartConnect(host=uservars["vcenter"], user=uservars["username"], pwd=passw, sslContext=s)
     return si
+
 
 def SearchVcenter(si, vim_type, name, container=None, recursive=True, error=True):
     # Modified version of https://github.com/vmware/pyvmomi-community-samples/blob/7020598713aa440c70816edae89f96a0fe742be8/samples/tools/pchelper.py#L103
@@ -70,6 +71,7 @@ def SearchVcenterWithPattern(si, vim_type, name, container=None, recursive=True,
         raise RuntimeError(f"{name} not found!")
     return obj
 
+
 def AllVcenter(si, vim_type, container=None, recursive=True, error=True):
     # Modified version of https://github.com/vmware/pyvmomi-community-samples/blob/7020598713aa440c70816edae89f96a0fe742be8/samples/tools/pchelper.py#L103
     # Returns a list of vms matching a certain pattern
@@ -91,6 +93,19 @@ def AllVcenter(si, vim_type, container=None, recursive=True, error=True):
     if not obj and error is True:
         raise RuntimeError(f"not found!")
     return obj
+
+
+def TaskWait(task,message):
+    check = False
+    while not check:
+        if task.info.state == 'success':
+            print(message)
+            check = True
+        elif task.info.state == 'error':
+            print(task.info.error)
+            check=True
+    return task.info.result
+
 
 def CreateClone(si,vmtemplatename,vmname,datacentername,datastorename,poweron,esxiname,vmfolder="",resourcepool="",linkedclone=False):
     # Modified version of https://github.com/vmware/pyvmomi-community-samples/blob/7020598713aa440c70816edae89f96a0fe742be8/samples/clone_vm.py#L28    
@@ -141,20 +156,13 @@ def CreateClone(si,vmtemplatename,vmname,datacentername,datastorename,poweron,es
     
     print(f"creating {vmname}")
     task = vmtemplate.Clone(folder=destinationfolder, name=vmname, spec=clonespec)
-
+    message = f"created {vmname}"
     # Check loop to see if error :( or success :)
-    check = False
-    while not check:
-        if task.info.state == 'success':
-            print(f"created {vmname}")
-            return task.info.result
-        elif task.info.state == 'error':
-            print(task.info.error)
-            check=True
+    TaskWait(task,message)
+
 
 def DeleteVM(si,vmtodelete,parentfoldername=''):
     # Modified version of https://github.com/vmware/pyvmomi-community-samples/blob/master/samples/destroy_vm.py
-
     # Check to see if a parent folder is specified
     if parentfoldername:
         # Find the parent folder
@@ -175,18 +183,14 @@ def DeleteVM(si,vmtodelete,parentfoldername=''):
             vm = vmtodelete
             vmdisplay = vmtodelete.name
 
+    # Poweroff VM and destroy it
     PowerOff(si,vm)
 
     task = vm.Destroy_Task()
+    message = f"destroyed {vmdisplay}"
     # Check loop to see if error :( or success :)
-    check = False
-    while not check:
-        if task.info.state == 'success':
-            print(f"destroyed {vmdisplay}")
-            check = True
-        elif task.info.state == 'error':
-            print(task.info.error)
-            check=True
+    TaskWait(task,message)
+
 
 def PowerOn(si,vmon):
     # Adapted from https://github.com/vmware/pyvmomi-community-samples/blob/master/samples/destroy_vm.py
@@ -198,16 +202,9 @@ def PowerOn(si,vmon):
     if vm.runtime.powerState == "poweredOff":
         print(f"powering on {vm.name}")
         task = vm.PowerOnVM_Task()
-
+        message = f"powered on {vm.name}"
         # Check loop to see if error :( or success :)
-        check = False
-        while not check:
-            if task.info.state == 'success':
-                print(f"powered on {vm.name}")
-                check = True
-            elif task.info.state == 'error':
-                print(task.info.error)
-                check=True
+        TaskWait(task,message)
 
 __author__ = "Oliver Mustoe"
 
@@ -232,15 +229,14 @@ def PowerOff(si,vmoff):
                 print(task.info.error)
                 check=True
 
+
 def CreateVMFolder(si,foldername,datacentername,parentfoldername=""):
     #Modified version of https://github.com/vmware/pyvmomi-community-samples/blob/master/samples/create_folder_in_datacenter.py
     datacenter = SearchVcenter(si,[vim.Datacenter],datacentername)
     if parentfoldername:
         parentfolder = SearchVcenter(si,[vim.Folder],parentfoldername)
-        foldercheck = SearchVcenter(si,[vim.Folder],foldername,error=False,container=parentfolder)
     else:
         parentfolder = datacenter.vmFolder
-        foldercheck = SearchVcenter(si,[vim.Folder],foldername,error=False)
 
     print(f"making {foldername}")
     try:
@@ -248,6 +244,7 @@ def CreateVMFolder(si,foldername,datacentername,parentfoldername=""):
         print(f"made {foldername}")
     except Exception as E:
         print(E)
+
 
 def DeleteVMFolder(si,foldername,datacentername,parentfoldername="",prompt=True):
     datacenter = SearchVcenter(si,[vim.Datacenter],datacentername)
@@ -263,19 +260,14 @@ def DeleteVMFolder(si,foldername,datacentername,parentfoldername="",prompt=True)
             print(f"destroying {foldername}")
             try:
                 task = foldercheck.Destroy_Task()
+                message = f"destroyed {foldername} and its contents"
                 # Check loop to see if error :( or success :)
-                check = False
-                while not check:
-                    if task.info.state == 'success':
-                        print(f"destroyed {foldername} and its contents")
-                        check = True
-                    elif task.info.state == 'error':
-                        print(task.info.error)
-                        check=True
+                TaskWait(task,message)
             except Exception as E:
                 print(E)
     else:
         print(f"{foldername} does not exist")
+
 
 def TakeSnapshot(si,vm,description,snapshotname=str):
     if not isinstance(vm,vim.VirtualMachine):
@@ -284,18 +276,16 @@ def TakeSnapshot(si,vm,description,snapshotname=str):
         vm = vm
     
     if not description:
+        # If no description is given, create a default description of a username and time
         session=si.content.sessionManager.currentSession
         time = datetime.now().strftime("%m/%d/%Y %H:%M:%S")
         description = f"Taken by {session.userName} at {time}"
+
+    # Create the snapshot and have a while loop to check if it is working
     task = vm.CreateSnapshot_Task(snapshotname,description,False,True)
-    check = False
-    while not check:    
-        if task.info.state == 'success':
-            print(f"created snapshot '{snapshotname}' on {vm.name}")
-            check = True
-        elif task.info.state == 'error':
-            print(task.info.error)
-            check=True
+    message = f"created snapshot '{snapshotname}' on {vm.name}"
+    TaskWait(task,message)
+
 
 def RevertToSnapshot(si,vm,snapshotname):
     if not isinstance(vm,vim.VirtualMachine):
@@ -303,18 +293,37 @@ def RevertToSnapshot(si,vm,snapshotname):
     else:
         vm = vm
 
+    # Get a list of all of the snapshots
+    allsnapshots = []
     snapshotlist = vm.snapshot.rootSnapshotList
-
+    
+    # Get all of the snapshots down each tree - some code inspired by https://stackoverflow.com/questions/36501306/how-to-revert-a-vm-snapshot-with-pyvmomi
     for snapshot in snapshotlist:
+        allsnapshots.append(snapshot)
+        # If there is a child snapshot list
+        if snapshot.childSnapshotList:
+            children = True
+            while children:
+                # Go through each of the child snapshots
+                for childsnapshot in snapshot.childSnapshotList:
+                    # Append them to the list
+                    allsnapshots.append(childsnapshot)
+                # If that child has a list
+                if childsnapshot.childSnapshotList:
+                    # Make snapshot the childsnapshot - this way the for look above will go through the children of our snapshot
+                    snapshot = childsnapshot
+                else:
+                    # Kill the while loop if there is no more children
+                    children = False
+
+
+    # For each snapsnapshot - if the snapshots name is equal to the specified name...
+    for snapshot in allsnapshots:
+        print(snapshot.name)
         if snapshot.name == snapshotname:
             print (f"reverting {vm.name} to snapshot {snapshotname}")
 
+            # Create a task to revert to the snapshot - wait until it is done
             task = snapshot.snapshot.RevertToSnapshot_Task()
-            check = False
-            while not check:    
-                if task.info.state == 'success':
-                    print(f"reverted {vm.name} to snapshot {snapshotname}")
-                    check = True
-                elif task.info.state == 'error':
-                    print(task.info.error)
-                    check=True
+            message = f"reverted {vm.name} to snapshot {snapshotname}"
+            TaskWait(task,message)

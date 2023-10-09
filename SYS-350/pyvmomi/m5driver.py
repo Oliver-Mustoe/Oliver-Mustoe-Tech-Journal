@@ -3,6 +3,7 @@ from pyVmomi import vim
 import opylib, argparse, json
 
 def args():
+    # Function to gather arguments
     arg_parser = argparse.ArgumentParser(
         prog="rtd",
         description="driver for SYS350 Milestone 5.1",
@@ -88,19 +89,20 @@ if __name__ == "__main__":
     # Get file path
     scriptdirectory = dirname(realpath(__file__))
 
+    # Connect to vcenter
     si = opylib.ConnectToVcenter(scriptdirectory)
 
-    # See if takesnapshot or restoresnapshot has happened with a search
+    # See if a search is taking place
     if args.searchvms:
-        # possible have vms for operations that support that (everything except vm creation and deletion) then only have a single search for those operations?
         vms = opylib.SearchVcenterWithPattern(si,[vim.VirtualMachine],args.searchvms)
 
-    # For each VM in the search, either take a snapshot or revert to a certain snapshot
+    # For each VM in the search, do operation
         for vm in vms:
             if args.takesnapshot and not args.restoresnapshot:
                 opylib.TakeSnapshot(si,vm,args.snapshotdescription,args.snapshotname)
 
             elif args.restoresnapshot and not args.takesnapshot:
+                print(vm.name)
                 opylib.RevertToSnapshot(si,vm,args.snapshotname)
             
             if args.poweron:
