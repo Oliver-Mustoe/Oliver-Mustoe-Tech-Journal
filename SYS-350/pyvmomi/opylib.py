@@ -319,7 +319,6 @@ def RevertToSnapshot(si,vm,snapshotname):
 
     # For each snapsnapshot - if the snapshots name is equal to the specified name...
     for snapshot in allsnapshots:
-        print(snapshot.name)
         if snapshot.name == snapshotname:
             print (f"reverting {vm.name} to snapshot {snapshotname}")
 
