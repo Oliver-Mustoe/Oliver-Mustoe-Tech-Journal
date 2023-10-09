@@ -81,9 +81,6 @@ EX: python3 m5driver.py -c '{"vmtemplate":"pf.base","vmname":"otest6","datacente
     parsed_args = arg_parser.parse_args()
     return parsed_args
 
-def takesnapshot(si,snapshotname):
-    opylib.TakeSnapshot
-
 if __name__ == "__main__":
     args = args()
     # Get file path

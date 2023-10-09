@@ -96,6 +96,7 @@ def AllVcenter(si, vim_type, container=None, recursive=True, error=True):
 
 
 def TaskWait(task,message):
+    # Modified version of https://github.com/vmware/pyvmomi-community-samples/blob/7020598713aa440c70816edae89f96a0fe742be8/samples/clone_vm.py#L28    
     check = False
     while not check:
         if task.info.state == 'success':
@@ -171,6 +172,7 @@ def DeleteVM(si,vmtodelete,parentfoldername=''):
         # If the parent exists - then find the virtual machine inside that parent (must be a string since the search has to be done with the parent as the container - in future think about support for the seach string in "SearchVcenter" to support a object but just getting the name of it???)
         if not isinstance(vmtodelete,vim.VirtualMachine):
             vm = SearchVcenter(si,[vim.VirtualMachine],vmtodelete,container=parentfolder)
+            vmdisplay = vmtodelete
         else:
             print(f'To look within a parent folder the vmtodelete must be a string value, it is currently {type(vmtodelete)}')
             return None 
@@ -218,16 +220,9 @@ def PowerOff(si,vmoff):
     if vm.runtime.powerState == "poweredOn":
         print(f"powering off {vm.name}")
         task = vm.PowerOffVM_Task()
-
+        message = f"powered off {vm.name}"
         # Check loop to see if error :( or success :)
-        check = False
-        while not check:
-            if task.info.state == 'success':
-                print(f"powered off {vm.name}")
-                check = True
-            elif task.info.state == 'error':
-                print(task.info.error)
-                check=True
+        TaskWait(task,message)
 
 
 def CreateVMFolder(si,foldername,datacentername,parentfoldername=""):
