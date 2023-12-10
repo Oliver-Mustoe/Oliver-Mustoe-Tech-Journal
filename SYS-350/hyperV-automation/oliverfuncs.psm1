@@ -51,35 +51,103 @@ function Set-VMPowerState([string]$vm,[switch]$on,[switch]$off) {
     }
 }
 
+# https://www.unitrends.com/blog/how-to-use-powershell-to-assign-ram-in-hyper-v
+function Set-VMAttributes([string]$vm,[int]$memorygb,[int]$cpu) {
+    # Get the state of the VM
+    $vmState = (Get-VM -Name $vm).State
+
+    # Check to see if it is running, if so prompt the user
+    if ($vmState -eq "Running"){
+        $userResponse = Read-Host -Prompt "The host is currently running, shutdown now? [y/N]"
+
+        if ($userResponse.ToLower() -eq 'y'){
+            Stop-VM $vm
+        }
+        else {
+            Write-Error -Exception "THE VM MUST BE STOPPED BEFORE SETTING ATTRIBUTES" -ErrorAction Stop
+        }
+    }
+
+    # Check if user specified wanting to change memory in GB, if so change the memory
+    if ($memorygb) {
+        $memory = $memorygb * 1GB
+        Set-VM $vm -MemoryStartupBytes $memory
+    }
+    
+    # Check if user specified wanting to change cpu count, if so change the cpu count
+    if ($cpu) {
+        Set-VM $vm -ProcessorCount $cpu
+    }
+}
+
+function Remove-VMFull([string]$vmname,[switch]$force=$false) {
+    # Get the path and the state of the VM
+    $vm = Get-VM -Name $vmname
+    $vmPath = $vm.Path
+    $vmState = $vm.State
+
+    # See if user wants to force or not
+    if ($force) {
+        Stop-VM $vm
+        
+        # Get and remove needed VMs in hyper-v (Out-Null to wait until VM is removed to actually remove the folder)
+        Get-VM -Name $vmname | Remove-VM -Force | Out-Null
+
+        # Remove the host directory aswell
+        Remove-Item -Path (Get-Item ($vmPath)).parent.fullname -Recurse -Force
+    }
+    else {
+        # Check if the VM is running, if so prompt the user to stop it
+        if ($vmState -eq "Running"){
+            $userResponse = Read-Host -Prompt "The host is currently running, shutdown now? [y/N]"
+    
+            if ($userResponse.ToLower() -eq 'y'){
+                Stop-VM $vm
+            }
+            else {
+                Write-Error -Exception "THE VM MUST BE STOPPED BEFORE REMOVAL" -ErrorAction Stop
+            }
+        }
+        # Get and remove needed VMs in hyper-v
+        Get-VM -Name $vmname | Remove-VM | Out-Null
+
+        # Remove the host directory aswell
+        Remove-Item -Path (Get-Item ($vmPath)).parent.fullname -Recurse
+    }
+    # https://stackoverflow.com/questions/18261658/trim-or-go-up-one-level-of-directory-tree-in-powershell-variable
+}
+
 function New-VMFromTemplate([string]$configpath,[int]$count=1) {
+    # Go through the count, starting at 1 (so it needs a "equal to" operator)
     for($i=1; $i -le $count; $i++){
-        Write-Host $num
         try {
             # Get the specified config
             $jsonConfig = Get-Content -Raw -Path $configpath | ConvertFrom-Json
             
-            # Change VM named based on if count is specified
+            # Change VM named based on if count is specified (default is 1 VM)
             if($count -ge 2){
                 $vmName = $jsonConfig.vmname + "0$i"
             }
             else {
                 $vmName = $jsonConfig.vmname
             }
-            # Get the needed paths
+            # Get the needed paths of new VM and it's vhdx
             $rootVMDirectory = $jsonConfig.rootdirectory + "\" + $vmName
             $VMVHDXPath = $rootVMDirectory + "\" + $vmName + ".vhdx"
     
-            # Convert into to byte size
+            # Convert memory and size into to gigabyte size
             $memory = $jsonConfig.memorygb * 1GB
             $size = $jsonConfig.sizegb * 1GB
     
-            # Create the path
+            # Create the VM path
             mkdir -Path $rootVMDirectory -ErrorAction SilentlyContinue
-    
+            
+            # If config specifies a linked clone
             if($jsonConfig.linkedclone){
+                # Get the parent VM
                 $parentVHDX = Get-VM -Name $jsonConfig.parent | Select-Object VMId | Get-VHD
     
-                # Account for snapshots - assuming base vhdx is the parent
+                # Find the path to the parent vhdx, account for snapshots - assuming base vhdx is the parent
                 if($parentVHDX.ParentPath){
                     $parentVHDXPath = $parentVHDX.ParentPath
                 }
@@ -87,7 +155,6 @@ function New-VMFromTemplate([string]$configpath,[int]$count=1) {
                     $parentVHDXPath = $parentVHDX.Path
                 }
     
-                # Write-Host $parentVHDXPath
                 # Create the differencing hard drive and the new vm with said hard drive
                 New-VHD -ParentPath $parentVHDXPath -Path $VMVHDXPath -Differencing
                 New-VM -Name $vmName -MemoryStartupBytes $memory -Path $rootVMDirectory -VHDPath $VMVHDXPath -Generation 2 -SwitchName $jsonConfig.defaultswitch
@@ -95,11 +162,9 @@ function New-VMFromTemplate([string]$configpath,[int]$count=1) {
             else{
                 # If not a linked clone, assume creating a new VM
                 New-VM -Name $vmName -MemoryStartupBytes $memory -Path $rootVMDirectory -NewVHDPath $VMVHDXPath -NewVHDSizeBytes $size -Generation 2 -SwitchName $jsonConfig.defaultswitch
-            }
-            # Create the VM with parameters from JSON (setting up default VM with a CPU count)
-            # New-VM -Name $jsonConfig.vmname -MemoryStartupBytes $memory -Path $rootVMDirectory -NewVHDPath $VMVHDXPath -NewVHDSizeBytes $size -Generation 2 -SwitchName $jsonConfig.defaultswitch
+            }            
             
-            
+            # Set the processor count
             Set-VMProcessor $vmName -Count $jsonConfig.cpucount
     
             # If secure boot is set to turn off, do so
@@ -121,34 +186,5 @@ function New-VMFromTemplate([string]$configpath,[int]$count=1) {
         catch {
             Write-Host "ERROR: $_" -ForegroundColor Red
         }
-
     }
-
-}
-
-# https://www.unitrends.com/blog/how-to-use-powershell-to-assign-ram-in-hyper-v
-function Set-VMAttributes([string]$vm,[string]$memory,[int]$cpu) {
-    
-}
-
-# Will need to find a root directory
-function Remove-VMFull([string]$vmname,[switch]$force=$false) {
-    $vmPath = (Get-VM -Name $vmname).Path
-
-    # See if user wants to force or not
-    if ($force) {
-        # Get and remove needed VMs in hyper-v (Out-Null to wait until VM is removed to actually remove the folder)
-        Get-VM -Name $vmname | Remove-VM -Force | Out-Null
-
-        # Remove the host directory aswell
-         Remove-Item -Path (Get-Item ($vmPath)).parent.fullname -Recurse -Force
-    }
-    else {
-        # Get and remove needed VMs in hyper-v
-        Get-VM -Name $vmname | Remove-VM | Out-Null
-
-        # Remove the host directory aswell
-         Remove-Item -Path (Get-Item ($vmPath)).parent.fullname -Recurse
-    }
-    # https://stackoverflow.com/questions/18261658/trim-or-go-up-one-level-of-directory-tree-in-powershell-variable
 }

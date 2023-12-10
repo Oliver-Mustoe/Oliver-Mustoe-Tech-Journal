@@ -1,0 +1,13 @@
+{
+	"rootdirectory": "F:\\VM_FILES",
+	"vmname": "ubuntutest2",
+	"memorygb": 1,
+	"sizegb": 16,
+	"defaultswitch": "LAN-INTERNAL",
+	"cpucount": "1",
+	"securebootoff": true,
+	"dvdpath": "F:\\ISO\\ubuntu-22.04-live-server-amd64.iso",
+	"startvm": false,
+    "parent": "ubuntu22.04-base",
+    "linkedclone": false
+}
