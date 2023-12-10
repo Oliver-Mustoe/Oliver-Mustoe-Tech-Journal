@@ -3,7 +3,7 @@ function Get-VMSummary([string]$vm) {
     $vmBasicInformation = Get-VM -Name $vm | Select-Object -Property Name,State
     $networkInformation = Get-VMNetworkAdapter -VMName $vm | Select-Object SwitchName,IPAddresses
 
-    # Get a custome object of VM information
+    # Get a custom object of VM information
     $vmInfo = [PSCustomObject]@{
         VMName = $vmBasicInformation.Name
         VMState = $vmBasicInformation.State
