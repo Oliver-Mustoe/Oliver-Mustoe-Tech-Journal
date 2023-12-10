@@ -28,8 +28,9 @@ function Get-AdvancedVMSummary([string]$vm) {
         VMName = $vmBasicInformation.Name
         VMState = $vmBasicInformation.State
         VMCPUUsage = $vmBasicInformation.CPUUsage
-        VMMemoryAssigned = $vmBasicInformation.MemoryAssigned
+        VMMemoryAssignedMB = $vmBasicInformation.MemoryAssigned / 1MB
         VMSwitch = $networkInformation.SwitchName
+        VMIPAddresses = $networkInformation.IPAddresses
         VMMacAddress = $networkInformation.MacAddress
         VMVHDPath = $vhdPath.Path
         VMUptime = $vmBasicInformation.Uptime
@@ -78,43 +79,6 @@ function Set-VMAttributes([string]$vm,[int]$memorygb,[int]$cpu) {
     if ($cpu) {
         Set-VM $vm -ProcessorCount $cpu
     }
-}
-
-function Remove-VMFull([string]$vmname,[switch]$force=$false) {
-    # Get the path and the state of the VM
-    $vm = Get-VM -Name $vmname
-    $vmPath = $vm.Path
-    $vmState = $vm.State
-
-    # See if user wants to force or not
-    if ($force) {
-        Stop-VM $vm
-        
-        # Get and remove needed VMs in hyper-v (Out-Null to wait until VM is removed to actually remove the folder)
-        Get-VM -Name $vmname | Remove-VM -Force | Out-Null
-
-        # Remove the host directory aswell
-        Remove-Item -Path (Get-Item ($vmPath)).parent.fullname -Recurse -Force
-    }
-    else {
-        # Check if the VM is running, if so prompt the user to stop it
-        if ($vmState -eq "Running"){
-            $userResponse = Read-Host -Prompt "The host is currently running, shutdown now? [y/N]"
-    
-            if ($userResponse.ToLower() -eq 'y'){
-                Stop-VM $vm
-            }
-            else {
-                Write-Error -Exception "THE VM MUST BE STOPPED BEFORE REMOVAL" -ErrorAction Stop
-            }
-        }
-        # Get and remove needed VMs in hyper-v
-        Get-VM -Name $vmname | Remove-VM | Out-Null
-
-        # Remove the host directory aswell
-        Remove-Item -Path (Get-Item ($vmPath)).parent.fullname -Recurse
-    }
-    # https://stackoverflow.com/questions/18261658/trim-or-go-up-one-level-of-directory-tree-in-powershell-variable
 }
 
 function New-VMFromTemplate([string]$configpath,[int]$count=1) {
@@ -174,7 +138,6 @@ function New-VMFromTemplate([string]$configpath,[int]$count=1) {
             
             # If a DVD path is specified, set it
             if($jsonConfig.dvdpath){
-                Write-Host "1"
                 Add-VMDvdDrive -VMName $vmName -Path $jsonConfig.dvdpath
             }
     
@@ -187,4 +150,40 @@ function New-VMFromTemplate([string]$configpath,[int]$count=1) {
             Write-Host "ERROR: $_" -ForegroundColor Red
         }
     }
+}
+function Remove-VMFull([string]$vmname,[switch]$force=$false) {
+    # Get the path and the state of the VM
+    $vm = Get-VM -Name $vmname
+    $vmPath = $vm.Path
+    $vmState = $vm.State
+
+    # See if user wants to force or not
+    if ($force) {
+        Stop-VM $vm
+        
+        # Get and remove needed VMs in hyper-v (Out-Null to wait until VM is removed to actually remove the folder)
+        Get-VM -Name $vmname | Remove-VM -Force | Out-Null
+
+        # Remove the host directory aswell
+        Remove-Item -Path (Get-Item ($vmPath)).parent.fullname -Recurse -Force
+    }
+    else {
+        # Check if the VM is running, if so prompt the user to stop it
+        if ($vmState -eq "Running"){
+            $userResponse = Read-Host -Prompt "The host is currently running, shutdown now? [y/N]"
+    
+            if ($userResponse.ToLower() -eq 'y'){
+                Stop-VM $vm
+            }
+            else {
+                Write-Error -Exception "THE VM MUST BE STOPPED BEFORE REMOVAL" -ErrorAction Stop
+            }
+        }
+        # Get and remove needed VMs in hyper-v
+        Get-VM -Name $vmname | Remove-VM | Out-Null
+
+        # Remove the host directory aswell
+        Remove-Item -Path (Get-Item ($vmPath)).parent.fullname -Recurse
+    }
+    # https://stackoverflow.com/questions/18261658/trim-or-go-up-one-level-of-directory-tree-in-powershell-variable
 }
